@@ -1,61 +1,61 @@
-### Concepts
-* [Terraform_overview](../1_terraform_overview.md)
-* If you were unable to generate a service account keyfile due to organizational policies, refer to the instructions [below](#fallback)
+### 개념
+* [Terraform 개요](../1_terraform_overview.md)
+* 조직 정책 때문에 서비스 계정 키 파일을 생성할 수 없다면 [아래](#fallback) 안내를 참고하세요
 
-### Execution
+### 실행
 
 ```shell
-# Refresh service-account's auth-token for this session
+# 이 세션에서 서비스 계정 인증 토큰 갱신
 gcloud auth application-default login
 
-# Initialize state file (.tfstate)
+# 상태 파일(.tfstate) 초기화
 terraform init
 
-# Check changes to new infra plan
+# 새 인프라 계획의 변경 사항 확인
 terraform plan -var="project=<your-gcp-project-id>"
 ```
 
 ```shell
-# Create new infra
+# 새 인프라 생성
 terraform apply -var="project=<your-gcp-project-id>"
 ```
 
 ```shell
-# Delete infra after your work, to avoid costs on any running services
+# 작업이 끝나면 실행 중인 서비스로 인한 비용이 발생하지 않도록 인프라 삭제
 terraform destroy
 ```
 
-### Warning
-Remember to use a [proper gitignore](https://github.com/github/gitignore/blob/main/Terraform.gitignore) file before publishing your code on GitHub
+### 경고
+GitHub에 코드를 공개하기 전에 [적절한 gitignore](https://github.com/github/gitignore/blob/main/Terraform.gitignore) 파일을 사용하는 것을 잊지 마세요
 
 ### Fallback
-1. Give yourself the token creator role on the pertinent service account
+1. 해당 서비스 계정에 대해 자신에게 토큰 생성자(token creator) 역할을 부여하세요
     ```bash
     gcloud iam service-accounts add-iam-policy-binding \
         <SERVICE_ACCOUNT_EMAIL> \
         --member="user:YOUR_EMAIL@gmail.com" \
         --role="roles/iam.serviceAccountTokenCreator"
     ```
-2. Add the sections below the first block to your main terraform configuration
+2. 메인 terraform 설정에서 첫 번째 블록 아래에 다음 섹션들을 추가하세요
    ```terraform
-    # Connect to gcp using ADC (identity verification)
+    # ADC(신원 확인)를 사용해 gcp에 연결
     provider "google" {
       project = var.project
       region  = var.region
       zone    = var.zone
     }
 
-    /* add these data blocks */
-    
-    # This data source gets a temporary token for the service account
+    /* 아래 data 블록들을 추가하세요 */
+
+    # 이 data 소스는 서비스 계정용 임시 토큰을 가져옵니다
     data "google_service_account_access_token" "default" {
       provider               = google
       target_service_account = "<SERVICE_ACCOUNT_EMAIL>"
       scopes                 = ["https://www.googleapis.com/auth/cloud-platform"]
       lifetime               = "3600s"
     }
-    
-    # This second provider block uses that temporary token and does the real work
+
+    # 이 두 번째 provider 블록이 임시 토큰을 사용해 실제 작업을 수행합니다
     provider "google" {
       alias        = "impersonated"
       access_token = data.google_service_account_access_token.default.access_token
@@ -65,4 +65,4 @@ Remember to use a [proper gitignore](https://github.com/github/gitignore/blob/ma
     }
    ```
 
-3. Now, you can follow the instructions [above](#execution)
+3. 이제 [위](#실행)의 안내를 따라 진행하면 됩니다

@@ -1,10 +1,10 @@
 # Docker Compose
 
-**[↑ Up](README.md)** | **[← Previous](08-dockerizing-ingestion.md)** | **[Next →](10-sql-refresher.md)**
+**[↑ 위로](README.md)** | **[← 이전](08-dockerizing-ingestion.md)** | **[다음 →](10-sql-refresher.md)**
 
-`docker-compose` allows us to launch multiple containers using a single configuration file, so that we don't have to run multiple complex `docker run` commands separately.
+`docker-compose`를 사용하면 하나의 설정 파일로 여러 컨테이너를 실행할 수 있어서, 복잡한 `docker run` 명령어를 각각 따로 실행할 필요가 없습니다.
 
-Docker compose makes use of YAML files. Here's the `docker-compose.yaml` file:
+Docker compose는 YAML 파일을 사용합니다. 다음은 `docker-compose.yaml` 파일입니다:
 
 ```yaml
 services:
@@ -36,62 +36,62 @@ volumes:
   pgadmin_data:
 ```
 
-### Explanation
+### 설명
 
-* We don't have to specify a network because `docker compose` takes care of it: every single container (or "service", as the file states) will run within the same network and will be able to find each other according to their names (`pgdatabase` and `pgadmin` in this example).
-* All other details from the `docker run` commands (environment variables, volumes and ports) are mentioned accordingly in the file following YAML syntax.
+* 네트워크를 지정할 필요가 없습니다. `docker compose`가 알아서 처리해 주기 때문입니다: 모든 컨테이너(파일에서는 "서비스"라고 부름)가 같은 네트워크 안에서 실행되며, 각자의 이름(이 예제에서는 `pgdatabase`와 `pgadmin`)으로 서로를 찾을 수 있습니다.
+* `docker run` 명령어의 나머지 세부 사항들(환경 변수, 볼륨, 포트)은 YAML 문법에 맞게 파일에 그대로 기술되어 있습니다.
 
-## Start Services with Docker Compose
+## Docker Compose로 서비스 시작하기
 
-We can now run Docker compose by running the following command from the same directory where `docker-compose.yaml` is found. Make sure that all previous containers aren't running anymore:
+이제 `docker-compose.yaml`이 있는 디렉터리에서 다음 명령어를 실행하면 Docker compose를 실행할 수 있습니다. 이전에 실행한 컨테이너들이 모두 중지되어 있는지 확인하세요:
 
 ```bash
 docker-compose up
 ```
 
-### Detached Mode
+### 백그라운드(Detached) 모드
 
-If you want to run the containers again in the background rather than in the foreground (thus freeing up your terminal), you can run them in detached mode:
+컨테이너를 포그라운드가 아닌 백그라운드에서 실행하고 싶다면(터미널을 계속 사용할 수 있도록), detached 모드로 실행할 수 있습니다:
 
 ```bash
 docker-compose up -d
 ```
 
-## Stop Services
+## 서비스 중지하기
 
-You will have to press `Ctrl+C` in order to shut down the containers when running in foreground mode. The proper way of shutting them down is with this command:
+포그라운드 모드로 실행 중일 때는 `Ctrl+C`를 눌러 컨테이너를 종료해야 합니다. 올바른 종료 방법은 다음 명령어입니다:
 
 ```bash
 docker-compose down
 ```
 
-## Other Useful Commands
+## 기타 유용한 명령어
 
 ```bash
-# View logs
+# 로그 보기
 docker-compose logs
 
-# Stop and remove volumes
+# 중지하고 볼륨까지 삭제
 docker-compose down -v
 ```
 
-## Benefits of Docker Compose
+## Docker Compose의 장점
 
-- Single command to start all services
-- Automatic network creation
-- Easy configuration management
-- Declarative infrastructure
+- 명령어 하나로 모든 서비스 시작
+- 자동 네트워크 생성
+- 손쉬운 설정 관리
+- 선언적(declarative) 인프라
 
-## Running the Ingestion Script with Docker Compose
+## Docker Compose 환경에서 수집 스크립트 실행하기
 
-If you want to re-run the dockerized ingest script when you run Postgres and pgAdmin with `docker compose`, you will have to find the name of the virtual network that Docker compose created for the containers.
+`docker compose`로 Postgres와 pgAdmin을 실행한 상태에서 도커라이징한 수집 스크립트를 다시 실행하려면, Docker compose가 컨테이너들을 위해 생성한 가상 네트워크의 이름을 찾아야 합니다.
 
 ```bash
-# check the network link:
+# 네트워크 확인:
 docker network ls
 
-# it's pipeline_default (or similar based on directory name)
-# now run the script:
+# pipeline_default입니다 (디렉터리 이름에 따라 다를 수 있음)
+# 이제 스크립트를 실행합니다:
 docker run -it --rm\
   --network=pipeline_default \
   taxi_ingest:v001 \
@@ -103,4 +103,4 @@ docker run -it --rm\
     --target-table=yellow_taxi_trips
 ```
 
-**[↑ Up](README.md)** | **[← Previous](08-dockerizing-ingestion.md)** | **[Next →](10-sql-refresher.md)**
+**[↑ 위로](README.md)** | **[← 이전](08-dockerizing-ingestion.md)** | **[다음 →](10-sql-refresher.md)**

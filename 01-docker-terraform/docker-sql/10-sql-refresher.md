@@ -1,21 +1,21 @@
-# SQL Refresher
+# SQL 복습
 
-**[↑ Up](README.md)** | **[← Previous](09-docker-compose.md)** | **[Next →](11-cleanup.md)**
+**[↑ 위로](README.md)** | **[← 이전](09-docker-compose.md)** | **[다음 →](11-cleanup.md)**
 
 [![](images/thumbnail-QEcps_iskgg.jpg)](https://youtu.be/QEcps_iskgg&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=10)
 
-Pre-Requisites: If you followed the course in the given order, Docker Compose should already be running with pgdatabase and pgAdmin.
+사전 준비: 지금까지 순서대로 진행했다면, pgdatabase와 pgAdmin이 Docker Compose로 이미 실행 중일 것입니다.
 
-Once done, you can go to http://localhost:8085/browser/ to access pgAdmin.
-Don't forget to Right Click on the server or database to refresh it in case you don't see the new table.
+준비가 되면 http://localhost:8085/browser/ 로 이동해 pgAdmin에 접속하세요.
+새 테이블이 보이지 않으면 서버나 데이터베이스에서 우클릭해 새로고침(Refresh)하는 것을 잊지 마세요.
 
-Now start querying!
+이제 쿼리를 시작해 봅시다!
 
-## Inner Joins
+## Inner Join
 
-### Implicit INNER JOIN
+### 암시적(Implicit) INNER JOIN
 
-Joining Yellow Taxi table with Zones Lookup table (implicit INNER JOIN):
+Yellow Taxi 테이블과 Zones Lookup 테이블 조인하기 (암시적 INNER JOIN):
 
 ```sql
 SELECT
@@ -34,7 +34,7 @@ WHERE
 LIMIT 100;
 ```
 
-### Explicit INNER JOIN
+### 명시적(Explicit) INNER JOIN
 
 ```sql
 SELECT
@@ -46,16 +46,16 @@ SELECT
 FROM
     yellow_taxi_trips t
 JOIN
--- or INNER JOIN but it's less used, when writing JOIN, postgreSQL understands implicitly that we want to use an INNER JOIN
+-- INNER JOIN이라고 써도 되지만 덜 쓰입니다. JOIN이라고만 쓰면 postgreSQL은 암묵적으로 INNER JOIN으로 이해합니다
     zones zpu ON t."PULocationID" = zpu."LocationID"
 JOIN
     zones zdo ON t."DOLocationID" = zdo."LocationID"
 LIMIT 100;
 ```
 
-## Data Quality Checks
+## 데이터 품질 점검
 
-### Checking for NULL Location IDs
+### NULL인 Location ID 확인하기
 
 ```sql
 SELECT
@@ -72,7 +72,7 @@ WHERE
 LIMIT 100;
 ```
 
-### Checking for Location IDs NOT IN Zones Table
+### Zones 테이블에 없는 Location ID 확인하기
 
 ```sql
 SELECT
@@ -89,9 +89,9 @@ WHERE
 LIMIT 100;
 ```
 
-## LEFT, RIGHT, and OUTER JOINS
+## LEFT, RIGHT, OUTER JOIN
 
-Using LEFT, RIGHT, and OUTER JOINS when some Location IDs are not in either Tables:
+일부 Location ID가 어느 한쪽 테이블에 없을 때 LEFT, RIGHT, OUTER JOIN 사용하기:
 
 ```sql
 DELETE FROM zones WHERE "LocationID" = 142;
@@ -145,7 +145,7 @@ LIMIT 100;
 
 ## GROUP BY
 
-### Calculate Number of Trips Per Day
+### 일별 운행 횟수 계산하기
 
 ```sql
 SELECT
@@ -160,7 +160,7 @@ LIMIT 100;
 
 ## ORDER BY
 
-### Ordering by Day
+### 날짜순 정렬
 
 ```sql
 SELECT
@@ -175,7 +175,7 @@ ORDER BY
 LIMIT 100;
 ```
 
-### Ordering by Count
+### 횟수순 정렬
 
 ```sql
 SELECT
@@ -190,7 +190,7 @@ ORDER BY
 LIMIT 100;
 ```
 
-## Other Aggregations
+## 기타 집계 함수
 
 ```sql
 SELECT
@@ -207,7 +207,7 @@ ORDER BY
 LIMIT 100;
 ```
 
-## Grouping by Multiple Fields
+## 여러 필드로 그룹화하기
 
 ```sql
 SELECT
@@ -226,4 +226,4 @@ ORDER BY
 LIMIT 100;
 ```
 
-**[↑ Up](README.md)** | **[← Previous](09-docker-compose.md)** | **[Next →](11-cleanup.md)**
+**[↑ 위로](README.md)** | **[← 이전](09-docker-compose.md)** | **[다음 →](11-cleanup.md)**

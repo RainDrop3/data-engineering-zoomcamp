@@ -1,32 +1,32 @@
-## GCP and Terraform on Windows
+## Windows에서 GCP와 Terraform 사용하기
 
-You don't need these instructions if you use WSL. It's only for "plain Windows" 
+WSL을 사용한다면 이 안내는 필요 없습니다. "순수 Windows" 환경에서만 필요합니다.
 
 ### Google Cloud SDK
 
-* For this tutorial, you'll need a Linux-like environment, e.g. [GitBash](https://gitforwindows.org/), [MinGW](https://www.mingw-w64.org/) or [cygwin](https://www.cygwin.com/)
-  * Power Shell should also work, but will require adjustments 
-* Download SDK in zip: https://dl.google.com/dl/cloudsdk/channels/rapid/google-cloud-sdk.zip
-  * source: https://cloud.google.com/sdk/docs/downloads-interactive
-* Unzip it and run the `install.sh` script
+* 이 튜토리얼에는 Linux와 유사한 환경이 필요합니다. 예: [GitBash](https://gitforwindows.org/), [MinGW](https://www.mingw-w64.org/), [cygwin](https://www.cygwin.com/)
+  * Power Shell도 가능하지만 약간의 수정이 필요합니다
+* SDK를 zip으로 다운로드: https://dl.google.com/dl/cloudsdk/channels/rapid/google-cloud-sdk.zip
+  * 출처: https://cloud.google.com/sdk/docs/downloads-interactive
+* 압축을 풀고 `install.sh` 스크립트를 실행하세요
 
-When installing it, you might see something like that:
+설치 중에 다음과 같은 메시지가 보일 수 있습니다:
 
 ```
 The installer is unable to automatically update your system PATH. Please add
   C:\tools\google-cloud-sdk\bin
 ```
 
-* To fix that, adjust your `.bashrc` to include this in `PATH` ([instructions](https://unix.stackexchange.com/questions/26047/how-to-correctly-add-a-path-to-path))
-* You can also do it system-wide ([instructions](https://gist.github.com/nex3/c395b2f8fd4b02068be37c961301caa7))
+* 이를 해결하려면 `.bashrc`에서 해당 경로를 `PATH`에 추가하세요 ([안내](https://unix.stackexchange.com/questions/26047/how-to-correctly-add-a-path-to-path))
+* 시스템 전역으로 설정할 수도 있습니다 ([안내](https://gist.github.com/nex3/c395b2f8fd4b02068be37c961301caa7))
 
-Now we need to point it to correct Python installation. Assuming you use [Anaconda](https://www.anaconda.com/products/individual):
+이제 올바른 Python 설치 경로를 지정해야 합니다. [Anaconda](https://www.anaconda.com/products/individual)를 사용한다고 가정하면:
 
 ```bash
 export CLOUDSDK_PYTHON=~/Anaconda3/python
 ```
 
-Now let's check that it works:
+이제 잘 동작하는지 확인해 봅시다:
 
 ```bash
 $ gcloud version
@@ -36,35 +36,35 @@ core 2021.12.10
 gsutil 5.5
 ```
 
-### Google Cloud SDK Authentication 
+### Google Cloud SDK 인증
 
-* Now create a service account and generate keys like shown in the videos
-* Download the key and put it to some location, e.g. `.gc/ny-rides.json`
-* Set `GOOGLE_APPLICATION_CREDENTIALS` to point to the file
+* 이제 영상에서 보여준 대로 서비스 계정을 만들고 키를 생성하세요
+* 키를 다운로드해서 적당한 위치에 두세요. 예: `.gc/ny-rides.json`
+* `GOOGLE_APPLICATION_CREDENTIALS` 환경 변수가 그 파일을 가리키도록 설정하세요
 
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=~/.gc/ny-rides.json
 ```
 
-Now authenticate: 
+이제 인증합니다:
 
 ```bash
 gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
 ```
 
-Alternatively, you can authenticate using OAuth like shown in the video
+또는 영상에서 보여준 것처럼 OAuth로 인증할 수도 있습니다:
 
 ```bash
 gcloud auth application-default login
 ```
 
-If you get a message like `quota exceeded`
+`quota exceeded` 같은 메시지가 나온다면:
 
 > WARNING:
-> Cannot find a quota project to add to ADC. You might receive a "quota exceeded" or "API not enabled" error. 
+> Cannot find a quota project to add to ADC. You might receive a "quota exceeded" or "API not enabled" error.
 > Run `$ gcloud auth application-default set-quota-project` to add a quota project.
 
-Then run this:
+다음을 실행하세요:
 
 ```bash
 PROJECT_NAME="ny-rides-alexey"
@@ -72,17 +72,17 @@ gcloud auth application-default set-quota-project ${PROJECT_NAME}
 ```
 
 
-### Terraform 
+### Terraform
 
-* [Download Terraform](https://www.terraform.io/downloads)
-* Put it to a folder in [PATH](https://gist.github.com/nex3/c395b2f8fd4b02068be37c961301caa7)
-* Go to the location with Terraform files and initialize it
+* [Terraform 다운로드](https://www.terraform.io/downloads)
+* [PATH](https://gist.github.com/nex3/c395b2f8fd4b02068be37c961301caa7)에 포함된 폴더에 두세요
+* Terraform 파일이 있는 위치로 이동해서 초기화하세요
 
 ```bash
 terraform init
 ```
 
-Optionally you can configure your terraform files (`variables.tf`) to include your project id:
+선택적으로 terraform 파일(`variables.tf`)에 프로젝트 id를 설정할 수 있습니다:
 
 ```bash
 variable "project" {
@@ -92,16 +92,15 @@ variable "project" {
 }
 ```
 
-* Now [follow the instructions](1_terraform_overview.md#execution-steps)
-  * Run `terraform plan`
-  * Next, run `terraform apply`
+* 이제 [안내를 따라 진행하세요](1_terraform_overview.md#실행-단계)
+  * `terraform plan` 실행
+  * 다음으로 `terraform apply` 실행
 
-If you get an error like that:
+다음과 같은 에러가 나온다면:
 
 > Error: googleapi: Error 403: terraform@ny-rides-alexey.iam.gserviceaccount.com does not have
 > storage.buckets.create access to the Google Cloud project., forbidden
 
+서비스 계정에 필요한 모든 권한을 부여해야 합니다. 영상의 안내를 잘 따라 했는지 확인하세요.
 
-Then you need to give your service account all the permissions. Make sure you follow the instructions in the videos 
-
-* You can also use [this file](https://docs.google.com/document/d/e/2PACX-1vSZapy7gIj0TP-EFzub2OpAlAkuifGEVJ4XpkA1RvxZ45NjiQi29b6OhLuetdXXHWAn2lbbKxnbzMdd/pub), but it doesn't list all the required permissions
+* [이 파일](https://docs.google.com/document/d/e/2PACX-1vSZapy7gIj0TP-EFzub2OpAlAkuifGEVJ4XpkA1RvxZ45NjiQi29b6OhLuetdXXHWAn2lbbKxnbzMdd/pub)도 참고할 수 있지만, 필요한 모든 권한이 나열되어 있지는 않습니다

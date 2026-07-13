@@ -1,19 +1,19 @@
-# Creating the Data Ingestion Script
+# 데이터 수집 스크립트 만들기
 
-**[↑ Up](README.md)** | **[← Previous](05-data-ingestion.md)** | **[Next →](07-pgadmin.md)**
+**[↑ 위로](README.md)** | **[← 이전](05-data-ingestion.md)** | **[다음 →](07-pgadmin.md)**
 
-Now let's convert the notebook to a Python script.
+이제 노트북을 Python 스크립트로 변환해 봅시다.
 
-## Convert Notebook to Script
+## 노트북을 스크립트로 변환하기
 
 ```bash
 uv run jupyter nbconvert --to=script notebook.ipynb
 mv notebook.py ingest_data.py
 ```
 
-## The Complete Ingestion Script
+## 완성된 수집 스크립트
 
-See the `pipeline/` directory for the complete script with click integration. Here's the core structure:
+click이 통합된 전체 스크립트는 `pipeline/` 디렉터리를 참고하세요. 핵심 구조는 다음과 같습니다:
 
 ```python
 import pandas as pd
@@ -45,9 +45,9 @@ parse_dates = [
 ]
 ```
 
-## Click Integration
+## Click 통합
 
-The script uses `click` for command-line argument parsing:
+이 스크립트는 커맨드라인 인자 파싱에 `click`을 사용합니다:
 
 ```python
 import click
@@ -60,15 +60,15 @@ import click
 @click.option('--pg-db', default='ny_taxi', help='PostgreSQL database name')
 @click.option('--target-table', default='yellow_taxi_data', help='Target table name')
 def run(pg_user, pg_pass, pg_host, pg_port, pg_db, target_table):
-    # Ingestion logic here
+    # 여기에 수집 로직 작성
     pass
 ```
 
-## Running the Script
+## 스크립트 실행하기
 
-The script reads data in chunks (100,000 rows at a time) to handle large files efficiently without running out of memory.
+이 스크립트는 메모리 부족 없이 큰 파일을 효율적으로 처리하기 위해 데이터를 청크 단위(한 번에 100,000행)로 읽습니다.
 
-Example usage:
+사용 예시:
 
 ```bash
 uv run python ingest_data.py \
@@ -80,4 +80,4 @@ uv run python ingest_data.py \
   --target-table=yellow_taxi_trips
 ```
 
-**[↑ Up](README.md)** | **[← Previous](05-data-ingestion.md)** | **[Next →](07-pgadmin.md)**
+**[↑ 위로](README.md)** | **[← 이전](05-data-ingestion.md)** | **[다음 →](07-pgadmin.md)**

@@ -1,66 +1,66 @@
-# Introduction
+# 소개
 
 [![](images/thumbnail-JgspdlKXS-w.jpg)](https://www.youtube.com/watch?v=JgspdlKXS-w)
 
 
-We suggest watching videos in the same order as in this document.
+이 문서에 나온 순서대로 영상을 시청하는 것을 권장합니다.
 
 
 # Docker + Postgres
 
-## Workshop
+## 워크숍
 
 [![](images/thumbnail-lP8xXebHmuE.jpg)](https://youtu.be/lP8xXebHmuE&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=10)
 
-* Video: https://www.youtube.com/watch?v=lP8xXebHmuE
-* Follow the instructions here: [docker-sql/](docker-sql/)
+* 영상: https://www.youtube.com/watch?v=lP8xXebHmuE
+* 안내 문서: [docker-sql/](docker-sql/)
 
-## :movie_camera: SQL refresher
+## :movie_camera: SQL 복습
 
 
 [![](images/thumbnail-QEcps_iskgg.jpg)](https://youtu.be/QEcps_iskgg&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=10)
 
-* Video: https://www.youtube.com/watch?v=QEcps_iskgg
-* SQL queries: [10-sql-refresher.md](docker-sql/10-sql-refresher.md)
+* 영상: https://www.youtube.com/watch?v=QEcps_iskgg
+* SQL 쿼리: [10-sql-refresher.md](docker-sql/10-sql-refresher.md)
 
 
 # GCP
 
-## :movie_camera: Introduction to GCP (Google Cloud Platform)
+## :movie_camera: GCP (Google Cloud Platform) 소개
 
 [![](images/thumbnail-18jIzE41fJ4.jpg)](https://youtu.be/18jIzE41fJ4&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=3)
 
 # Terraform
 
-[Code and notes](terraform/)
+[코드와 노트](terraform/)
 
-## :movie_camera: Introduction Terraform: Concepts and Overview, a primer
+## :movie_camera: Terraform 소개: 개념과 개요, 입문
 
 [![](images/thumbnail-s2bOYDCKl_M.jpg)](https://youtu.be/s2bOYDCKl_M&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=11)
 
-## :movie_camera: Terraform Basics: Simple one file Terraform Deployment
+## :movie_camera: Terraform 기초: 파일 하나로 하는 간단한 Terraform 배포
 
 [![](images/thumbnail-Y2ux7gq3Z0o.jpg)](https://youtu.be/Y2ux7gq3Z0o&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=12)
 
-## :movie_camera: Deployment with a Variables File
+## :movie_camera: 변수 파일을 사용한 배포
 
 [![](images/thumbnail-PBi0hHjLftk.jpg)](https://youtu.be/PBi0hHjLftk&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=13)
 
-## Configuring terraform and GCP SDK on Windows
+## Windows에서 terraform과 GCP SDK 설정하기
 
-* [Instructions](terraform/windows.md)
-
-
-
-# Homework
-
-* [Homework](../cohorts/2026/01-docker-terraform/homework.md)
+* [안내 문서](terraform/windows.md)
 
 
-# Community notes
+
+# 숙제
+
+* [숙제](../cohorts/2026/01-docker-terraform/homework.md)
+
+
+# 커뮤니티 노트
 
 <details>
-<summary>Did you take notes? You can share them here</summary>
+<summary>직접 정리한 노트가 있나요? 여기에 공유할 수 있습니다</summary>
 
 * [Notes from Alvaro Navas](https://github.com/ziritrion/dataeng-zoomcamp/blob/main/notes/1_intro.md)
 * [Notes from Abd](https://itnadigital.notion.site/Week-1-Introduction-f18de7e69eb4453594175d0b1334b2f4)
@@ -97,6 +97,6 @@ We suggest watching videos in the same order as in this document.
 * [2025 Setting up the Environment - Notes by Gabi Fonseca](https://github.com/fonsecagabriella/data_engineering/blob/main/01_docker_postgress/_setting_up.md)
 * [Notes from Mercy Markus: Linux/Fedora Tweaks and Tips](https://mercymarkus.com/posts/2025/series/dtc-dez-jan-2025/dtc-dez-2025-module-1/)
 * [[2026 tutorial video - Khanh Nguyen] Setting up the environment for homework-w1](https://youtu.be/_iqCWi_UoOc)
-* Add your notes above this line
+* 이 줄 위에 여러분의 노트를 추가하세요
 
 </details>

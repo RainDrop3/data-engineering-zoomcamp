@@ -1,92 +1,92 @@
-# Cleanup
+# 정리하기
 
-**[↑ Up](README.md)** | **[← Previous](10-sql-refresher.md)** | **[Next →](../README.md)**
+**[↑ 위로](README.md)** | **[← 이전](10-sql-refresher.md)** | **[다음 →](../README.md)**
 
-When you're done with the workshop, clean up Docker resources to free up disk space.
+워크숍을 마쳤다면 디스크 공간 확보를 위해 Docker 리소스를 정리하세요.
 
-## Stop All Running Containers
+## 실행 중인 모든 컨테이너 중지하기
 
 ```bash
 docker-compose down
 ```
 
-## Remove Specific Containers
+## 특정 컨테이너 삭제하기
 
 ```bash
-# List all containers
+# 모든 컨테이너 목록 보기
 docker ps -a
 
-# Remove specific container
+# 특정 컨테이너 삭제
 docker rm <container_id>
 
-# Remove all stopped containers
+# 중지된 모든 컨테이너 삭제
 docker container prune
 ```
 
-## Remove Docker Images
+## Docker 이미지 삭제하기
 
 ```bash
-# List all images
+# 모든 이미지 목록 보기
 docker images
 
-# Remove specific image
+# 특정 이미지 삭제
 docker rmi taxi_ingest:v001
 
-# Remove all unused images
+# 사용하지 않는 모든 이미지 삭제
 docker image prune -a
 ```
 
-## Remove Docker Volumes
+## Docker 볼륨 삭제하기
 
 ```bash
-# List volumes
+# 볼륨 목록 보기
 docker volume ls
 
-# Remove specific volumes
+# 특정 볼륨 삭제
 docker volume rm ny_taxi_postgres_data
 docker volume rm pgadmin_data
 
-# Remove all unused volumes
+# 사용하지 않는 모든 볼륨 삭제
 docker volume prune
 ```
 
-## Remove Docker Networks
+## Docker 네트워크 삭제하기
 
 ```bash
-# List networks
+# 네트워크 목록 보기
 docker network ls
 
-# Remove specific network
+# 특정 네트워크 삭제
 docker network rm pg-network
 
-# Remove all unused networks
+# 사용하지 않는 모든 네트워크 삭제
 docker network prune
 ```
 
-## Complete Cleanup
+## 전체 정리
 
-Removes ALL Docker resources - use with caution!
+모든 Docker 리소스를 삭제합니다 - 주의해서 사용하세요!
 
 ```bash
-# ⚠️ Warning: This removes ALL Docker resources!
+# ⚠️ 경고: 모든 Docker 리소스가 삭제됩니다!
 docker system prune -a --volumes
 ```
 
-## Clean Up Local Files
+## 로컬 파일 정리하기
 
 ```bash
-# Remove parquet files
+# parquet 파일 삭제
 rm *.parquet
 
-# Remove Python cache
+# Python 캐시 삭제
 rm -rf __pycache__ .pytest_cache
 
-# Remove virtual environment (if using venv)
+# 가상환경 삭제 (venv를 사용하는 경우)
 rm -rf .venv
 ```
 
 ---
 
-That's all for today. Happy learning! 🐳📊
+오늘은 여기까지입니다. 즐거운 학습 되세요! 🐳📊
 
-**[↑ Up](README.md)** | **[← Previous](10-sql-refresher.md)** | **[Next →](../README.md)**
+**[↑ 위로](README.md)** | **[← 이전](10-sql-refresher.md)** | **[다음 →](../README.md)**
