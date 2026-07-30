@@ -1,43 +1,43 @@
-# Module 5 Homework: Data Platforms with Bruin
+# Module 5 숙제: Bruin으로 하는 Data Platforms
 
-In this homework, we'll use Bruin to build a complete data pipeline, from ingestion to reporting.
+이번 숙제에서는 Bruin을 사용해 데이터 수집부터 리포팅까지 완전한 데이터 파이프라인을 구축합니다.
 
-## Setup
+## 설정
 
-1. Install Bruin CLI: `curl -LsSf https://getbruin.com/install/cli | sh`
-2. Initialize the zoomcamp template: `bruin init zoomcamp my-pipeline`
-3. Configure your `.bruin.yml` with a DuckDB connection
-4. Follow the tutorial in the [main module README](../../../05-data-platforms/)
+1. Bruin CLI 설치: `curl -LsSf https://getbruin.com/install/cli | sh`
+2. zoomcamp 템플릿 초기화: `bruin init zoomcamp my-pipeline`
+3. `.bruin.yml`에 DuckDB 연결 설정하기
+4. [메인 모듈 README](../../../05-data-platforms/)의 튜토리얼 따라하기
 
-After completing the setup, you should have a working NYC taxi data pipeline.
-
----
-
-### Question 1. Bruin Pipeline Structure
-
-In a Bruin project, what are the required files/directories?
-
-- `bruin.yml` and `assets/`
-- `.bruin.yml` and `pipeline.yml` (assets can be anywhere)
-- `.bruin.yml` and `pipeline/` with `pipeline.yml` and `assets/`
-- `pipeline.yml` and `assets/` only
+설정을 마치면 동작하는 NYC taxi 데이터 파이프라인이 준비되어 있어야 합니다.
 
 ---
 
-### Question 2. Materialization Strategies
+### 질문 1. Bruin 파이프라인 구조
 
-You're building a pipeline that processes NYC taxi data organized by month based on `pickup_datetime`. Which incremental strategy is best for processing a specific interval period by deleting and inserting data for that time period?
+Bruin 프로젝트에서 반드시 있어야 하는 파일/디렉터리는 무엇인가요?
 
-- `append` - always add new rows
-- `replace` - truncate and rebuild entirely
-- `time_interval` - incremental based on a time column
-- `view` - create a virtual table only
+- `bruin.yml`과 `assets/`
+- `.bruin.yml`과 `pipeline.yml` (asset은 아무 곳에나 둘 수 있음)
+- `.bruin.yml`, 그리고 `pipeline.yml`과 `assets/`를 포함한 `pipeline/`
+- `pipeline.yml`과 `assets/`만
 
 ---
 
-### Question 3. Pipeline Variables
+### 질문 2. Materialization 전략
 
-You have the following variable defined in `pipeline.yml`:
+`pickup_datetime`을 기준으로 월별로 정리된 NYC taxi 데이터를 처리하는 파이프라인을 만들고 있습니다. 특정 기간의 데이터를 삭제하고 다시 삽입하는 방식으로 그 구간을 처리하기에 가장 적합한 incremental 전략은 무엇인가요?
+
+- `append` - 항상 새 행을 추가
+- `replace` - 전체를 비우고 다시 생성
+- `time_interval` - 시간 컬럼을 기준으로 incremental 처리
+- `view` - 가상 테이블만 생성
+
+---
+
+### 질문 3. 파이프라인 변수
+
+`pipeline.yml`에 다음과 같은 변수를 정의했습니다:
 
 ```yaml
 variables:
@@ -48,7 +48,7 @@ variables:
     default: ["yellow", "green"]
 ```
 
-How do you override this when running the pipeline to only process yellow taxis?
+파이프라인을 실행할 때 yellow taxi만 처리하도록 이 값을 덮어쓰려면 어떻게 해야 하나요?
 
 - `bruin run --taxi-types yellow`
 - `bruin run --var taxi_types=yellow`
@@ -57,9 +57,9 @@ How do you override this when running the pipeline to only process yellow taxis?
 
 ---
 
-### Question 4. Running with Dependencies
+### 질문 4. 의존성과 함께 실행하기
 
-You've modified the `ingestion/trips.py` asset and want to run it plus all downstream assets. Which command should you use?
+`ingestion/trips.py` asset을 수정했고, 이 asset과 모든 downstream asset을 실행하려고 합니다. 어떤 명령어를 사용해야 하나요?
 
 - `bruin run ingestion.trips --all`
 - `bruin run ingestion/trips.py --downstream`
@@ -68,9 +68,9 @@ You've modified the `ingestion/trips.py` asset and want to run it plus all downs
 
 ---
 
-### Question 5. Quality Checks
+### 질문 5. 품질 검사
 
-You want to ensure the `pickup_datetime` column in your trips table never has NULL values. Which quality check should you add to your asset definition?
+trips 테이블의 `pickup_datetime` 컬럼에 NULL 값이 절대 없도록 보장하고 싶습니다. asset 정의에 어떤 품질 검사를 추가해야 하나요?
 
 - `name: unique`
 - `name: not_null`
@@ -79,9 +79,9 @@ You want to ensure the `pickup_datetime` column in your trips table never has NU
 
 ---
 
-### Question 6. Lineage and Dependencies
+### 질문 6. Lineage와 의존성
 
-After building your pipeline, you want to visualize the dependency graph between assets. Which Bruin command should you use?
+파이프라인을 구축한 뒤 asset 간의 의존성 그래프를 시각화하려고 합니다. 어떤 Bruin 명령어를 사용해야 하나요?
 
 - `bruin graph`
 - `bruin dependencies`
@@ -90,9 +90,9 @@ After building your pipeline, you want to visualize the dependency graph between
 
 ---
 
-### Question 7. First-Time Run
+### 질문 7. 최초 실행
 
-You're running a Bruin pipeline for the first time on a new DuckDB database. What flag should you use to ensure tables are created from scratch?
+새로운 DuckDB 데이터베이스에서 Bruin 파이프라인을 처음 실행하려고 합니다. 테이블이 처음부터 새로 생성되도록 하려면 어떤 플래그를 사용해야 하나요?
 
 - `--create`
 - `--init`
@@ -101,19 +101,19 @@ You're running a Bruin pipeline for the first time on a new DuckDB database. Wha
 
 ---
 
-## Submitting the solutions
+## 풀이 제출하기
 
-- Form for submitting: <https://courses.datatalks.club/de-zoomcamp-2026/homework/hw5>
+- 제출 폼: <https://courses.datatalks.club/de-zoomcamp-2026/homework/hw5>
 
 =======
 
-## Learning in Public
+## 공개적으로 학습하기 (Learning in Public)
 
-We encourage everyone to share what they learned. This is called "learning in public".
+배운 것을 공유하는 것을 권장합니다. 이를 "learning in public"이라고 합니다.
 
-Read more about the benefits [here](https://alexeyondata.substack.com/p/benefits-of-learning-in-public-and).
+이점에 대해서는 [여기](https://alexeyondata.substack.com/p/benefits-of-learning-in-public-and)에서 더 읽어보세요.
 
-### Example post for LinkedIn
+### LinkedIn 게시물 예시
 
 ```
 🚀 Week 5 of Data Engineering Zoomcamp by @DataTalksClub complete!
@@ -135,7 +135,7 @@ Following along with this amazing free course - who else is learning data engine
 You can sign up here: https://github.com/DataTalksClub/data-engineering-zoomcamp/
 ```
 
-### Example post for Twitter/X
+### Twitter/X 게시물 예시
 
 ```
 📊 Module 5 of Data Engineering Zoomcamp done!

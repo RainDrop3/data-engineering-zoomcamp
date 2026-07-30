@@ -1,41 +1,39 @@
-## Course Project
+## 강의 프로젝트
 
-The goal of this project is to apply everything we learned
-in this course and build an end-to-end data pipeline.
+이 프로젝트의 목표는 이 강의에서 배운 모든 것을 적용하여
+end-to-end 데이터 파이프라인을 구축하는 것입니다.
 
-You will have two attempts to submit your project. If you don't have 
-time to submit your project by the end of attempt #1 (you started the 
-course late, you have vacation plans, life/work got in the way, etc.)
-or you fail your first attempt, 
-then you will have a second chance to submit your project as attempt
-#2. 
+프로젝트 제출 기회는 두 번 주어집니다. 1차 시도 기간이 끝날 때까지
+제출할 시간이 없었거나(강의를 늦게 시작했거나, 휴가 일정이 있거나,
+개인 사정이나 업무가 겹쳤거나 등) 1차 시도에서 통과하지 못했다면,
+2차 시도로 프로젝트를 다시 제출할 기회가 있습니다.
 
-There are only two attempts.
+기회는 두 번뿐입니다.
 
-Remember that to pass the project, you must evaluate 3 peers. If you don't do that,
-your project can't be considered complete.
+프로젝트를 통과하려면 반드시 동료 3명의 프로젝트를 평가해야 합니다. 이를 하지 않으면
+프로젝트가 완료된 것으로 인정되지 않습니다.
 
-To find the projects assigned to you, use the peer review assignments link 
-and find your hash in the first column. You will see three rows: you need to evaluate 
-each of these projects. For each project, you need to submit the form once,
-so in total, you will make three submissions. 
+본인에게 배정된 프로젝트를 확인하려면 peer review assignments 링크에서
+첫 번째 열에 있는 본인의 해시를 찾으세요. 세 개의 행이 보일 텐데, 이 프로젝트들을
+각각 평가해야 합니다. 프로젝트마다 폼을 한 번씩 제출해야 하므로
+총 세 번 제출하게 됩니다.
 
 
-### Submitting
+### 제출하기
 
-#### Project Attempt #1
+#### 프로젝트 1차 시도
 
-* Project: https://courses.datatalks.club/de-zoomcamp-2026/project/project1
-* Review: https://courses.datatalks.club/de-zoomcamp-2026/project/project1/eval
+* 프로젝트: https://courses.datatalks.club/de-zoomcamp-2026/project/project1
+* 평가: https://courses.datatalks.club/de-zoomcamp-2026/project/project1/eval
 
-#### Project Attempt #2
+#### 프로젝트 2차 시도
 
-* Project: https://courses.datatalks.club/de-zoomcamp-2026/project/project2
-* Review: https://courses.datatalks.club/de-zoomcamp-2026/project/project2/eval
+* 프로젝트: https://courses.datatalks.club/de-zoomcamp-2026/project/project2
+* 평가: https://courses.datatalks.club/de-zoomcamp-2026/project/project2/eval
 
-> **Important**: update your "Certificate name" here: https://courses.datatalks.club/de-zoomcamp-2026/enrollment -
-this is what we will use when generating certificates for you.
+> **중요**: 여기에서 "Certificate name"을 업데이트하세요: https://courses.datatalks.club/de-zoomcamp-2026/enrollment —
+수료증을 생성할 때 이 이름을 사용합니다.
 
-### Evaluation criteria
+### 평가 기준
 
-See [here](../../projects/README.md)
+[여기](../../projects/README.md)를 참고하세요.

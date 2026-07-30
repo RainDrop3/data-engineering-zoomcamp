@@ -1,34 +1,34 @@
-# Module 6 Homework
+# Module 6 숙제
 
-In this homework we'll put what we learned about Spark in practice.
+이번 숙제에서는 Spark에 대해 배운 것을 실제로 적용해 봅니다.
 
-For this homework we will be using the Yellow 2025-11 data from the official website:
+이번 숙제에서는 공식 웹사이트의 Yellow 2025-11 데이터를 사용합니다:
 
 ```bash
 wget https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-11.parquet
 ```
 
 
-## Question 1: Install Spark and PySpark
+## 질문 1: Spark와 PySpark 설치하기
 
-- Install Spark
-- Run PySpark
-- Create a local spark session
-- Execute spark.version.
+- Spark 설치하기
+- PySpark 실행하기
+- 로컬 spark 세션 생성하기
+- spark.version 실행하기
 
-What's the output?
+출력 결과는 무엇인가요?
 
 > [!NOTE]
-> To install PySpark follow this [guide](https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/06-batch/setup/)
+> PySpark 설치는 이 [가이드](https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/06-batch/setup/)를 따르세요
 
 
-## Question 2: Yellow November 2025
+## 질문 2: 2025년 11월 Yellow 데이터
 
-Read the November 2025 Yellow into a Spark Dataframe.
+2025년 11월 Yellow 데이터를 Spark Dataframe으로 읽어들이세요.
 
-Repartition the Dataframe to 4 partitions and save it to parquet.
+Dataframe을 4개의 partition으로 repartition한 뒤 parquet으로 저장하세요.
 
-What is the average size of the Parquet (ending with .parquet extension) Files that were created (in MB)? Select the answer which most closely matches.
+생성된 Parquet 파일(.parquet 확장자로 끝나는 파일)의 평균 크기는 몇 MB인가요? 가장 가까운 답을 고르세요.
 
 - 6MB
 - 25MB
@@ -36,11 +36,11 @@ What is the average size of the Parquet (ending with .parquet extension) Files t
 - 100MB
 
 
-## Question 3: Count records
+## 질문 3: 레코드 개수 세기
 
-How many taxi trips were there on the 15th of November?
+11월 15일에 있었던 taxi 운행은 몇 건인가요?
 
-Consider only trips that started on the 15th of November.
+11월 15일에 시작된 운행만 고려하세요.
 
 - 62,610
 - 102,340
@@ -48,9 +48,9 @@ Consider only trips that started on the 15th of November.
 - 225,768
 
 
-## Question 4: Longest trip
+## 질문 4: 가장 긴 운행
 
-What is the length of the longest trip in the dataset in hours?
+이 데이터셋에서 가장 긴 운행의 소요 시간은 몇 시간인가요?
 
 - 22.7
 - 58.2
@@ -58,9 +58,9 @@ What is the length of the longest trip in the dataset in hours?
 - 134.5
 
 
-## Question 5: User Interface
+## 질문 5: User Interface
 
-Spark's User Interface which shows the application's dashboard runs on which local port?
+애플리케이션 대시보드를 보여주는 Spark의 User Interface는 로컬의 어떤 포트에서 실행되나요?
 
 - 80
 - 443
@@ -69,36 +69,36 @@ Spark's User Interface which shows the application's dashboard runs on which loc
 
 
 
-## Question 6: Least frequent pickup location zone
+## 질문 6: 가장 빈도가 낮은 승차 위치 zone
 
-Load the zone lookup data into a temp view in Spark:
+zone lookup 데이터를 Spark의 temp view로 불러오세요:
 
 ```bash
 wget https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv
 ```
 
-Using the zone lookup data and the Yellow November 2025 data, what is the name of the LEAST frequent pickup location Zone?
+zone lookup 데이터와 2025년 11월 Yellow 데이터를 사용할 때, 빈도가 가장 낮은 승차 위치 Zone의 이름은 무엇인가요?
 
 - Governor's Island/Ellis Island/Liberty Island
 - Arden Heights
 - Rikers Island
 - Jamaica Bay
 
-If multiple answers are correct, select any
+정답이 여러 개라면 아무거나 선택하세요.
 
-## Submitting the solutions
+## 풀이 제출하기
 
-- Form for submitting: https://courses.datatalks.club/de-zoomcamp-2026/homework/hw6
-- Deadline: See the website
+- 제출 폼: https://courses.datatalks.club/de-zoomcamp-2026/homework/hw6
+- 마감일: 웹사이트를 참고하세요
 
 
-## Learning in Public
+## 공개적으로 학습하기 (Learning in Public)
 
-We encourage everyone to share what they learned. This is called "learning in public".
+배운 것을 공유하는 것을 권장합니다. 이를 "learning in public"이라고 합니다.
 
-Read more about the benefits [here](https://alexeyondata.substack.com/p/benefits-of-learning-in-public-and).
+이점에 대해서는 [여기](https://alexeyondata.substack.com/p/benefits-of-learning-in-public-and)에서 더 읽어보세요.
 
-### Example post for LinkedIn
+### LinkedIn 게시물 예시
 
 ```
 🚀 Week 6 of Data Engineering Zoomcamp by @DataTalksClub complete!
@@ -120,7 +120,7 @@ Following along with this amazing free course - who else is learning data engine
 You can sign up here: https://github.com/DataTalksClub/data-engineering-zoomcamp/
 ```
 
-### Example post for Twitter/X
+### Twitter/X 게시물 예시
 
 ```
 ⚡ Module 6 of Data Engineering Zoomcamp done!
