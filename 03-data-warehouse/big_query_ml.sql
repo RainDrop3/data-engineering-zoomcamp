@@ -1,8 +1,8 @@
--- SELECT THE COLUMNS INTERESTED FOR YOU
+-- 관심 있는 컬럼만 선택하기
 SELECT passenger_count, trip_distance, PULocationID, DOLocationID, payment_type, fare_amount, tolls_amount, tip_amount
 FROM `taxi-rides-ny.nytaxi.yellow_tripdata_partitioned` WHERE fare_amount != 0;
 
--- CREATE A ML TABLE WITH APPROPRIATE TYPE
+-- 적절한 타입으로 ML용 테이블 생성하기
 CREATE OR REPLACE TABLE `taxi-rides-ny.nytaxi.yellow_tripdata_ml` (
 `passenger_count` INTEGER,
 `trip_distance` FLOAT64,
@@ -18,7 +18,7 @@ CAST(payment_type AS STRING), fare_amount, tolls_amount, tip_amount
 FROM `taxi-rides-ny.nytaxi.yellow_tripdata_partitioned` WHERE fare_amount != 0
 );
 
--- CREATE MODEL WITH DEFAULT SETTING
+-- 기본 설정으로 모델 생성하기
 CREATE OR REPLACE MODEL `taxi-rides-ny.nytaxi.tip_model`
 OPTIONS
 (model_type='linear_reg',
@@ -31,10 +31,10 @@ FROM
 WHERE
 tip_amount IS NOT NULL;
 
--- CHECK FEATURES
+-- 피처 확인하기
 SELECT * FROM ML.FEATURE_INFO(MODEL `taxi-rides-ny.nytaxi.tip_model`);
 
--- EVALUATE THE MODEL
+-- 모델 평가하기
 SELECT
 *
 FROM
@@ -48,7 +48,7 @@ WHERE
 tip_amount IS NOT NULL
 ));
 
--- PREDICT THE MODEL
+-- 모델로 예측하기
 SELECT
 *
 FROM
@@ -62,7 +62,7 @@ WHERE
 tip_amount IS NOT NULL
 ));
 
--- PREDICT AND EXPLAIN
+-- 예측하고 설명(기여도)까지 보기
 SELECT
 *
 FROM
@@ -76,7 +76,7 @@ WHERE
 tip_amount IS NOT NULL
 ), STRUCT(3 as top_k_features));
 
--- HYPER PARAM TUNNING
+-- 하이퍼파라미터 튜닝
 CREATE OR REPLACE MODEL `taxi-rides-ny.nytaxi.tip_hyperparam_model`
 OPTIONS
 (model_type='linear_reg',

@@ -1,62 +1,62 @@
-# Data Warehouse and BigQuery
+# Data Warehouse와 BigQuery
 
-- [Slides](https://docs.google.com/presentation/d/1a3ZoBAXFk8-EhUsd7rAZd-5p_HpltkzSeujjRGB2TAI/edit?usp=sharing)  
-- [Big Query basic SQL](big_query.sql)
+- [슬라이드](https://docs.google.com/presentation/d/1a3ZoBAXFk8-EhUsd7rAZd-5p_HpltkzSeujjRGB2TAI/edit?usp=sharing)  
+- [BigQuery 기본 SQL](big_query.sql)
 
-# Videos
+# 영상
 
 ## Data Warehouse
 
-- Data Warehouse and BigQuery
+- Data Warehouse와 BigQuery
 
 [![](images/thumbnail-jrHljAoD6nM.jpg)](https://youtu.be/jrHljAoD6nM&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=34)
 
-## :movie_camera: Partitioning and clustering
+## :movie_camera: 파티셔닝과 클러스터링
 
-- Partitioning vs Clustering
+- 파티셔닝 vs 클러스터링
 
 [![](images/thumbnail--CqXf7vhhDs.jpg)](https://youtu.be/-CqXf7vhhDs?si=p1sYQCAs8dAa7jIm&t=193&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=35)
 
-## :movie_camera: Best practices
+## :movie_camera: 모범 사례
 
 [![](images/thumbnail-k81mLJVX08w.jpg)](https://youtu.be/k81mLJVX08w&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=36)
 
-## :movie_camera: Internals of BigQuery
+## :movie_camera: BigQuery 내부 구조
 
 [![](images/thumbnail-eduHi1inM4s.jpg)](https://youtu.be/eduHi1inM4s&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=37)
 
-## Advanced topics
+## 심화 주제
 
-### :movie_camera: Machine Learning in Big Query
+### :movie_camera: BigQuery에서의 머신러닝
 
 [![](images/thumbnail-B-WtpB0PuG4.jpg)](https://youtu.be/B-WtpB0PuG4&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=34)
 
-* [SQL for ML in BigQuery](big_query_ml.sql)
+* [BigQuery ML용 SQL](big_query_ml.sql)
 
-**Important links**
+**중요 링크**
 
-- [BigQuery ML Tutorials](https://cloud.google.com/bigquery-ml/docs/tutorials)
-- [BigQuery ML Reference Parameter](https://cloud.google.com/bigquery-ml/docs/analytics-reference-patterns)
-- [Hyper Parameter tuning](https://cloud.google.com/bigquery-ml/docs/reference/standard-sql/bigqueryml-syntax-create-glm)
-- [Feature preprocessing](https://cloud.google.com/bigquery-ml/docs/reference/standard-sql/bigqueryml-syntax-preprocess-overview)
+- [BigQuery ML 튜토리얼](https://cloud.google.com/bigquery-ml/docs/tutorials)
+- [BigQuery ML 레퍼런스 파라미터](https://cloud.google.com/bigquery-ml/docs/analytics-reference-patterns)
+- [하이퍼파라미터 튜닝](https://cloud.google.com/bigquery-ml/docs/reference/standard-sql/bigqueryml-syntax-create-glm)
+- [피처 전처리](https://cloud.google.com/bigquery-ml/docs/reference/standard-sql/bigqueryml-syntax-preprocess-overview)
 
-### :movie_camera: Deploying Machine Learning model from BigQuery
+### :movie_camera: BigQuery에서 만든 머신러닝 모델 배포하기
 
 [![](images/thumbnail-BjARzEWaznU.jpg)](https://youtu.be/BjARzEWaznU&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=39)
 
-- [Steps to extract and deploy model with docker](extract_model.md)  
+- [Docker로 모델을 추출하고 배포하는 단계](extract_model.md)  
 
 
 
-# Homework
+# 숙제
 
-* [2026 Homework](../cohorts/2026/03-data-warehouse/homework.md)
+* [2026 숙제](../cohorts/2026/03-data-warehouse/homework.md)
 
 
-# Community notes
+# 커뮤니티 노트
 
 <details>
-<summary>Did you take notes? You can share them here</summary>
+<summary>직접 정리한 노트가 있나요? 여기에 공유할 수 있습니다</summary>
 
 * [Notes by Alvaro Navas](https://github.com/ziritrion/dataeng-zoomcamp/blob/main/notes/3_data_warehouse.md)
 * [Isaac Kargar's blog post](https://kargarisaac.github.io/blog/data%20engineering/jupyter/2022/01/30/data-engineering-w3.html)
@@ -80,6 +80,6 @@
 * [2025 Gitbook Notes Tinker0425](https://data-engineering-zoomcamp-2025-t.gitbook.io/tinker0425/module-3/introduction-to-module-3)
 * [2025 Notes from Daniel Lachner](https://drive.google.com/file/d/105zjtLFi0sRqqFFgdMSCTzfcLPx2rfv4/view?usp=sharing)
 * [2026 Notes from Catherine Frost](https://docs.google.com/document/d/1j3jeNnBI2fw1nq7JwEauPx2G8FybDfTqmMk7eRu0vSo/edit?tab=t.0)
-* Add your notes here (above this line)
+* 이 줄 위에 여러분의 노트를 추가하세요
 
 </details>

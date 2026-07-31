@@ -1,11 +1,11 @@
--- Query public available table
+-- 공개 데이터셋 테이블 조회하기
 SELECT
     station_id,
     name
 FROM bigquery-public-data.new_york_citibike.citibike_stations
 LIMIT 100;
 
--- Create an external table referencing files in GCS
+-- GCS의 파일을 참조하는 external table 생성하기
 CREATE OR REPLACE EXTERNAL TABLE `taxi-rides-ny.nytaxi.external_yellow_tripdata`
 OPTIONS (
     format = 'CSV',
@@ -15,34 +15,34 @@ OPTIONS (
     ]
 );
 
--- Preview yellow trip data from the external table
+-- external table에서 yellow trip 데이터 미리보기
 SELECT *
 FROM taxi-rides-ny.nytaxi.external_yellow_tripdata
 LIMIT 10;
 
--- Create a non-partitioned table from the external table
+-- external table로부터 파티션 없는 테이블 생성하기
 CREATE OR REPLACE TABLE taxi-rides-ny.nytaxi.yellow_tripdata_non_partitioned AS
 SELECT *
 FROM taxi-rides-ny.nytaxi.external_yellow_tripdata;
 
--- Create a partitioned table from the external table
+-- external table로부터 파티션 테이블 생성하기
 CREATE OR REPLACE TABLE taxi-rides-ny.nytaxi.yellow_tripdata_partitioned
 PARTITION BY DATE(tpep_pickup_datetime) AS
 SELECT *
 FROM taxi-rides-ny.nytaxi.external_yellow_tripdata;
 
--- Impact of partition
--- Scanning 1.6GB of data
+-- 파티션의 효과 비교
+-- 1.6GB 스캔
 SELECT DISTINCT(VendorID)
 FROM taxi-rides-ny.nytaxi.yellow_tripdata_non_partitioned
 WHERE DATE(tpep_pickup_datetime) BETWEEN '2019-06-01' AND '2019-06-30';
 
--- Scanning ~106 MB of DATA
+-- 약 106MB 스캔
 SELECT DISTINCT(VendorID)
 FROM taxi-rides-ny.nytaxi.yellow_tripdata_partitioned
 WHERE DATE(tpep_pickup_datetime) BETWEEN '2019-06-01' AND '2019-06-30';
 
--- Inspect table partitions
+-- 테이블의 파티션 확인하기
 SELECT
     table_name,
     partition_id,
@@ -51,20 +51,20 @@ FROM `nytaxi.INFORMATION_SCHEMA.PARTITIONS`
 WHERE table_name = 'yellow_tripdata_partitioned'
 ORDER BY total_rows DESC;
 
--- Creating a partition and cluster table
+-- 파티션 + 클러스터 테이블 생성하기
 CREATE OR REPLACE TABLE taxi-rides-ny.nytaxi.yellow_tripdata_partitioned_clustered
 PARTITION BY DATE(tpep_pickup_datetime)
 CLUSTER BY VendorID AS
 SELECT * 
 FROM taxi-rides-ny.nytaxi.external_yellow_tripdata;
 
--- Query scans 1.1 GB
+-- 이 쿼리는 1.1GB를 스캔
 SELECT count(*) as trips
 FROM taxi-rides-ny.nytaxi.yellow_tripdata_partitioned
 WHERE DATE(tpep_pickup_datetime) BETWEEN '2019-06-01' AND '2020-12-31'
   AND VendorID=1;
 
--- Query scans 864.5 MB
+-- 이 쿼리는 864.5MB를 스캔
 SELECT count(*) as trips
 FROM taxi-rides-ny.nytaxi.yellow_tripdata_partitioned_clustered
 WHERE DATE(tpep_pickup_datetime) BETWEEN '2019-06-01' AND '2020-12-31'

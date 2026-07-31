@@ -1,6 +1,6 @@
-## Model deployment
-[Tutorial](https://cloud.google.com/bigquery-ml/docs/export-model-tutorial)
-### Steps
+## 모델 배포하기
+[튜토리얼](https://cloud.google.com/bigquery-ml/docs/export-model-tutorial)
+### 단계
 - gcloud auth login
 - bq --project_id taxi-rides-ny extract -m nytaxi.tip_model gs://taxi_ml_model/tip_model
 - mkdir /tmp/model
