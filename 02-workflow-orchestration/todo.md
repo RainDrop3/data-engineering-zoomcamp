@@ -7,56 +7,56 @@
 
 ## 0. 사전 준비
 
-- [ ] Module 1 완료 확인 — Docker, Docker Compose, GCP 서비스 계정, `GOOGLE_APPLICATION_CREDENTIALS` 설정
-- [ ] Module 1에서 만든 GCS 버킷과 BigQuery 데이터셋이 살아있는지 확인 (없으면 2.4에서 flow로 생성 가능)
-- [ ] 이번 주 영상 재생목록 확인: [YouTube Playlist](https://go.kestra.io/de-zoomcamp/yt-playlist)
-- [ ] [README.md](README.md) 훑어보기 — 전체 흐름 파악
+- [x] Module 1 완료 확인 — Docker, Docker Compose, GCP 서비스 계정, `GOOGLE_APPLICATION_CREDENTIALS` 설정
+- [x] Module 1에서 만든 GCS 버킷과 BigQuery 데이터셋이 살아있는지 확인 (없으면 2.4에서 flow로 생성 가능)
+- [x] 이번 주 영상 재생목록 확인: [YouTube Playlist](https://go.kestra.io/de-zoomcamp/yt-playlist)
+- [x] [README.md](README.md) 훑어보기 — 전체 흐름 파악
 
 ## 1. Workflow Orchestration 소개 (2.1)
 
-- [ ] [2.1.1 - Workflow Orchestration이란?](https://youtu.be/-JLnp-iLins) — orchestrator의 역할, 스케줄/이벤트 기반 실행
-- [ ] [2.1.2 - Kestra란?](https://youtu.be/ZvVN_NmB_1s) — YAML 기반 flow, 플러그인 생태계
-- [ ] 참고: [What is an Orchestrator?](https://go.kestra.io/de-zoomcamp/what-is-an-orchestrator)
+- [x] [2.1.1 - Workflow Orchestration이란?](https://youtu.be/-JLnp-iLins) — orchestrator의 역할, 스케줄/이벤트 기반 실행
+- [x] [2.1.2 - Kestra란?](https://youtu.be/ZvVN_NmB_1s) — YAML 기반 flow, 플러그인 생태계
+- [x] 참고: [What is an Orchestrator?](https://go.kestra.io/de-zoomcamp/what-is-an-orchestrator)
 
 ## 2. Kestra 시작하기 (2.2)
 
-- [ ] [2.2.1 - Kestra 설치하기](https://youtu.be/wgPxC4UjoLM)
-  - [ ] [docker-compose.yml](docker-compose.yml) 확인 — Kestra + Postgres 서비스, 볼륨 설정
-  - [ ] `docker compose up -d` 실행
-  - [ ] [http://localhost:8080](http://localhost:8080) 접속 확인
-  - [ ] 포트 충돌 시 [문제 해결 팁](README.md#문제-해결-팁) 참고 (pgAdmin이 8080을 쓰고 있을 수 있음)
-- [ ] [2.2.2 - Kestra 개념](https://youtu.be/MNOKVx8780E)
-  - [ ] Flow / Task / Input / Output / Trigger / Execution / Variable / Plugin Default / Concurrency 개념 정리
-  - [ ] [`flows/01_hello_world.yaml`](flows/01_hello_world.yaml) 실행 — 위 개념이 한 flow에 모두 들어있음
-- [ ] [2.2.3 - Python 코드 orchestration하기](https://youtu.be/VAHm0R_XjqI)
-  - [ ] [`flows/02_python.yaml`](flows/02_python.yaml) 실행 — Python 스크립트의 결과를 output으로 받기
+- [x] [2.2.1 - Kestra 설치하기](https://youtu.be/wgPxC4UjoLM)
+  - [x] [docker-compose.yml](docker-compose.yml) 확인 — Kestra + Postgres 서비스, 볼륨 설정
+  - [x] `docker compose up -d` 실행
+  - [x] [http://localhost:8080](http://localhost:8080) 접속 확인
+  - [x] 포트 충돌 시 [문제 해결 팁](README.md#문제-해결-팁) 참고 (pgAdmin이 8080을 쓰고 있을 수 있음)
+- [x] [2.2.2 - Kestra 개념](https://youtu.be/MNOKVx8780E)
+  - [x] Flow / Task / Input / Output / Trigger / Execution / Variable / Plugin Default / Concurrency 개념 정리
+  - [x] [`flows/01_hello_world.yaml`](flows/01_hello_world.yaml) 실행 — 위 개념이 한 flow에 모두 들어있음
+- [x] [2.2.3 - Python 코드 orchestration하기](https://youtu.be/VAHm0R_XjqI)
+  - [x] [`flows/02_python.yaml`](flows/02_python.yaml) 실행 — Python 스크립트의 결과를 output으로 받기
 
 ## 3. 로컬 ETL 파이프라인: Postgres (2.3)
 
-- [ ] [2.3.1 - 시작용 파이프라인](https://youtu.be/-KmwrCqRhic)
-  - [ ] [`flows/03_getting_started_data_pipeline.yaml`](flows/03_getting_started_data_pipeline.yaml) 실행
-  - [ ] Gantt 탭과 Logs 탭에서 실행 과정 확인
-- [ ] [2.3.2 - Taxi 데이터를 Postgres에 적재하기](https://youtu.be/Z9ZmmwtXDcU)
-  - [ ] [`flows/04_postgres_taxi.yaml`](flows/04_postgres_taxi.yaml) 실행
-  - [ ] 연/월 input을 바꿔가며 실행해 보기
-  - [ ] 월별 테이블 → 최종 테이블 병합(merge) 방식 이해하기
-- [ ] [2.3.3 - 스케줄링과 backfill](https://youtu.be/1pu_C_oOAMA)
-  - [ ] [`flows/05_postgres_taxi_scheduled.yaml`](flows/05_postgres_taxi_scheduled.yaml) 실행
-  - [ ] 2019년 green taxi 데이터로 backfill 실행해 보기 (데이터가 크므로 green만!)
+- [x] [2.3.1 - 시작용 파이프라인](https://youtu.be/-KmwrCqRhic)
+  - [x] [`flows/03_getting_started_data_pipeline.yaml`](flows/03_getting_started_data_pipeline.yaml) 실행
+  - [x] Gantt 탭과 Logs 탭에서 실행 과정 확인
+- [x] [2.3.2 - Taxi 데이터를 Postgres에 적재하기](https://youtu.be/Z9ZmmwtXDcU)
+  - [x] [`flows/04_postgres_taxi.yaml`](flows/04_postgres_taxi.yaml) 실행
+  - [x] 연/월 input을 바꿔가며 실행해 보기
+  - [x] 월별 테이블 → 최종 테이블 병합(merge) 방식 이해하기
+- [x] [2.3.3 - 스케줄링과 backfill](https://youtu.be/1pu_C_oOAMA)
+  - [x] [`flows/05_postgres_taxi_scheduled.yaml`](flows/05_postgres_taxi_scheduled.yaml) 실행
+  - [x] 2019년 green taxi 데이터로 backfill 실행해 보기 (데이터가 크므로 green만!)
 
 ## 4. 클라우드 ELT 파이프라인: GCS + BigQuery (2.4)
 
-- [ ] [2.4.1 - ETL vs ELT](https://youtu.be/E04yurp1tSU) — 클라우드에서 순서를 바꾸는 이유 이해하기
-- [ ] [2.4.2 - GCP 설정하기](https://youtu.be/TLGFAOHpOYM)
-  - [ ] [`flows/06_gcp_kv.yaml`](flows/06_gcp_kv.yaml)에 KV Store 값 채우기 — `GCP_PROJECT_ID`, `GCP_LOCATION`, `GCP_BUCKET_NAME`, `GCP_DATASET`
-  - [ ] ⚠️ `GCP_CREDS` 서비스 계정 키를 Git에 커밋하지 않기
-  - [ ] (버킷/데이터셋이 없다면) [`flows/07_gcp_setup.yaml`](flows/07_gcp_setup.yaml)로 생성
-- [ ] [2.4.3 - GCS와 BigQuery로 ELT 파이프라인 만들기](https://youtu.be/52u9X_bfTAo)
-  - [ ] [`flows/08_gcp_taxi.yaml`](flows/08_gcp_taxi.yaml) 실행
-  - [ ] External Table → 월별 테이블 → 메인 테이블 병합 흐름 이해하기
-- [ ] [2.4.4 - 스케줄링과 전체 backfill](https://youtu.be/b-6KhfWfk2M)
-  - [ ] [`flows/09_gcp_taxi_scheduled.yaml`](flows/09_gcp_taxi_scheduled.yaml) 실행
-  - [ ] yellow/green 전체 데이터셋 backfill (클라우드라 로컬과 달리 리소스 걱정 없음)
+- [x] [2.4.1 - ETL vs ELT](https://youtu.be/E04yurp1tSU) — 클라우드에서 순서를 바꾸는 이유 이해하기
+- [x] [2.4.2 - GCP 설정하기](https://youtu.be/TLGFAOHpOYM)
+  - [x] [`flows/06_gcp_kv.yaml`](flows/06_gcp_kv.yaml)에 KV Store 값 채우기 — `GCP_PROJECT_ID`, `GCP_LOCATION`, `GCP_BUCKET_NAME`, `GCP_DATASET`
+  - [x] ⚠️ `GCP_CREDS` 서비스 계정 키를 Git에 커밋하지 않기
+  - [x] (버킷/데이터셋이 없다면) [`flows/07_gcp_setup.yaml`](flows/07_gcp_setup.yaml)로 생성
+- [x] [2.4.3 - GCS와 BigQuery로 ELT 파이프라인 만들기](https://youtu.be/52u9X_bfTAo)
+  - [x] [`flows/08_gcp_taxi.yaml`](flows/08_gcp_taxi.yaml) 실행
+  - [x] External Table → 월별 테이블 → 메인 테이블 병합 흐름 이해하기
+- [x] [2.4.4 - 스케줄링과 전체 backfill](https://youtu.be/b-6KhfWfk2M)
+  - [x] [`flows/09_gcp_taxi_scheduled.yaml`](flows/09_gcp_taxi_scheduled.yaml) 실행
+  - [x] yellow/green 전체 데이터셋 backfill (클라우드라 로컬과 달리 리소스 걱정 없음)
 
 ## 5. 데이터 엔지니어링에 AI 활용하기 (2.5)
 
