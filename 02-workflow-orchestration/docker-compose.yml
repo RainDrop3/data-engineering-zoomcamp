@@ -60,6 +60,11 @@ services:
       - kestra_data:/app/storage
       - /var/run/docker.sock:/var/run/docker.sock
       - kestra_tmp:/tmp/kestra-wd
+    # SECRET_<KEY>=<base64 encoded value> 형태로 작성 (예: SECRET_GCP_CREDS=ewogICJ0eXBlIj...)
+    # 플로우에서는 {{ secret('GCP_CREDS') }} 로 참조
+    env_file:
+      - path: .env_encoded
+        required: false
     environment:
       KESTRA_CONFIGURATION: |
         datasources:
@@ -84,10 +89,9 @@ services:
           tasks:
             tmpDir:
               path: /tmp/kestra-wd/tmp
-          url: http://localhost:8080/
+          url: http://localhost:8090/
     ports:
-      - "8080:8080"
-      - "8081:8081"
+      - "8090:8080"
     depends_on:
       kestra_postgres:
         condition: service_started

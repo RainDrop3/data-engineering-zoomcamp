@@ -8,6 +8,7 @@
 **google_credentials.json
 **logs/
 **.env
+**.env_encoded
 **__pycache__/
 .history
 **/ny_taxi_postgres_data/*
