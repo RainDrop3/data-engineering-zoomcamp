@@ -1,6 +1,6 @@
-# Local Setup Guide
+# Local Setup 가이드
 
-This guide walks you through setting up a local analytics engineering environment using DuckDB and dbt.
+이 가이드는 DuckDB와 dbt를 사용해 로컬 analytics engineering 환경을 셋업하는 과정을 안내합니다.
 
 <div align="center">
 
@@ -10,40 +10,40 @@ This guide walks you through setting up a local analytics engineering environmen
 </div>
 
 >[!NOTE]
->*This guide will explain how to do the setup manually. If you want an additional challenge, try to run this setup using Docker Compose or a Python virtual environment.*
+>*이 가이드는 셋업을 수동으로 하는 방법을 설명합니다. 추가 도전을 원한다면 Docker Compose나 Python 가상환경으로 이 셋업을 해보세요.*
 
-**Important**: All dbt commands must be run from inside the `taxi_rides_ny/` directory. The setup steps below will guide you through:
+**중요**: 모든 dbt 명령어는 `taxi_rides_ny/` 디렉토리 안에서 실행해야 합니다. 아래 셋업 단계는 다음을 안내합니다:
 
-1. Installing the necessary tools
-2. Configuring your connection to DuckDB
-3. Loading the NYC taxi data
-4. Verifying everything works
+1. 필요한 도구 설치
+2. DuckDB 연결 설정
+3. NYC taxi 데이터 적재
+4. 모든 것이 동작하는지 검증
 
-## Step 1: Install DuckDB
+## Step 1: DuckDB 설치
 
-DuckDB is a fast, in-process SQL database that works great for local analytics workloads. To install DuckDB, follow the instruction on the [official site](https://duckdb.org/docs/installation) for your specific operating system.
+DuckDB는 빠른 in-process SQL 데이터베이스로 로컬 분석 워크로드에 잘 맞습니다. DuckDB를 설치하려면 [공식 사이트](https://duckdb.org/docs/installation)에서 사용 중인 운영체제에 맞는 안내를 따르세요.
 
 > [!TIP]
-> *You can install DuckDB in two ways. You can install the CLI or install the client API for your favorite programming language (in the case of Python, you can use `pip install duckdb`). I personally prefer installing the CLI, but either way is fine.*
+> *DuckDB는 두 가지 방식으로 설치할 수 있습니다. CLI를 설치하거나, 선호하는 프로그래밍 언어의 client API를 설치할 수 있습니다(Python이라면 `pip install duckdb`). 강사 개인적으로는 CLI 설치를 선호하지만 어느 쪽이든 괜찮습니다.*
 
-## Step 2: Install dbt
+## Step 2: dbt 설치
 
 ```bash
 pip install dbt-duckdb
 ```
 
-This installs:
+이 명령은 다음을 설치합니다:
 
-* `dbt-core`: The core dbt framework
-* `dbt-duckdb`: The DuckDB adapter for dbt
+* `dbt-core`: dbt 코어 프레임워크
+* `dbt-duckdb`: dbt용 DuckDB adapter
 
-## Step 3: Configure dbt Profile
+## Step 3: dbt Profile 설정
 
-Since this repository already contains a dbt project (`taxi_rides_ny/`), you don't need to run `dbt init`. Instead, you need to configure your dbt profile to connect to DuckDB.
+이 저장소에는 이미 dbt 프로젝트(`taxi_rides_ny/`)가 들어 있으므로 `dbt init`을 실행할 필요가 없습니다. 대신 DuckDB에 연결하도록 dbt profile을 설정해야 합니다.
 
-### Create or Update `~/.dbt/profiles.yml`
+### `~/.dbt/profiles.yml` 생성 또는 수정
 
-The dbt profile tells dbt how to connect to your database. Create or update the file `~/.dbt/profiles.yml` with the following content:
+dbt profile은 데이터베이스에 어떻게 연결할지 dbt에게 알려줍니다. `~/.dbt/profiles.yml` 파일을 다음 내용으로 생성하거나 수정하세요:
 
 ```yaml
 taxi_rides_ny:
@@ -73,15 +73,15 @@ taxi_rides_ny:
         memory_limit: '2GB'
         preserve_insertion_order: false
 
-# Troubleshooting:
-# - If you have less than 4GB RAM, try setting memory_limit to '1GB'
-# - If you have 16GB+ RAM, you can increase to '4GB' for faster builds
-# - Expected build time: 5-10 minutes on most systems
+# 문제 해결:
+# - RAM이 4GB 미만이라면 memory_limit을 '1GB'로 설정해 보세요
+# - RAM이 16GB 이상이라면 '4GB'로 올려 빌드를 빠르게 할 수 있습니다
+# - 예상 빌드 시간: 대부분의 시스템에서 5~10분
 ```
 
-## Step 4: Download and Ingest Data
+## Step 4: 데이터 다운로드 및 적재
 
-Now that your dbt profile is configured, let's load the taxi data into DuckDB. Navigate to the dbt project directory and run the ingestion script
+dbt profile 설정이 끝났으니 taxi 데이터를 DuckDB에 적재합시다. dbt 프로젝트 디렉토리로 이동해 적재 스크립트를 실행하세요.
 
 ```python
 import duckdb
@@ -156,54 +156,54 @@ if __name__ == "__main__":
     con.close()
 ```
 
-This script downloads yellow and green taxi data from 2019-2020, creates the `prod` schema, and loads the raw data into DuckDB. The download may take several minutes depending on your internet connection.
+이 스크립트는 2019~2020년 yellow와 green taxi 데이터를 다운로드하고, `prod` schema를 만들고, raw 데이터를 DuckDB에 적재합니다. 인터넷 연결 속도에 따라 다운로드에 몇 분이 걸릴 수 있습니다.
 
-## Step 5: Test the dbt Connection
+## Step 5: dbt 연결 테스트
 
-Verify dbt can connect to your DuckDB database:
+dbt가 DuckDB 데이터베이스에 연결할 수 있는지 확인하세요:
 
 ```bash
 dbt debug
 ```
 
-## Step 6: Install dbt Power User Extension (VS Code Users)
+## Step 6: dbt Power User 확장 설치 (VS Code 사용자)
 
-If you're using Visual Studio Code, install the **dbt Power User** extension to enhance your dbt development experience.
+Visual Studio Code를 쓴다면 dbt 개발 경험을 개선하는 **dbt Power User** 확장을 설치하세요.
 
-### What is dbt Power User?
+### dbt Power User란?
 
-dbt Power User is a VS Code extension that provides:
+dbt Power User는 다음을 제공하는 VS Code 확장입니다:
 
-* SQL syntax highlighting and formatting for dbt models
-* Inline column-level lineage visualization
-* Auto-completion for dbt models, sources, and macros
-* Interactive documentation preview
-* Model compilation and execution directly from the editor
+* dbt model에 대한 SQL 구문 강조와 포매팅
+* 인라인 컬럼 수준 lineage 시각화
+* dbt model, source, macro 자동 완성
+* 대화형 문서 미리보기
+* 에디터에서 바로 model 컴파일 및 실행
 
-### Why Not Use the Official dbt Extension?
+### 공식 dbt 확장을 쓰지 않는 이유는?
 
-dbt Labs released an official VS Code extension called [dbt Extension](https://marketplace.visualstudio.com/items?itemName=dbtLabsInc.dbt) powered by the new dbt Fusion engine. However, this extension **requires dbt Fusion** and does not support dbt Core.
+dbt Labs가 새로운 dbt Fusion 엔진 기반의 공식 VS Code 확장 [dbt Extension](https://marketplace.visualstudio.com/items?itemName=dbtLabsInc.dbt)을 출시했습니다. 하지만 이 확장은 **dbt Fusion을 요구하며** dbt Core를 지원하지 않습니다.
 
-Since we're using **dbt Core** with DuckDB for local development, we need the community-maintained **dbt Power User by AltimateAI** extension instead. This extension:
+우리는 로컬 개발에 DuckDB와 **dbt Core**를 쓰므로, 커뮤니티가 유지보수하는 **dbt Power User by AltimateAI** 확장이 필요합니다. 이 확장은:
 
-* Works seamlessly with dbt Core (not just dbt Cloud)
-* Supports all dbt adapters, including DuckDB
-* Is actively maintained and open source
-* Provides a rich feature set for local development
+* dbt Core와 매끄럽게 동작합니다 (dbt Cloud 전용이 아님)
+* DuckDB를 포함한 모든 dbt adapter를 지원합니다
+* 활발히 유지보수되는 오픈소스입니다
+* 로컬 개발을 위한 풍부한 기능을 제공합니다
 
-### Installation
+### 설치
 
-1. Open VS Code
-2. Go to Extensions (Ctrl+Shift+X / Cmd+Shift+X)
-3. Search for "dbt Power User"
-4. Install **dbt Power User by AltimateAI** (not the dbt Labs version)
+1. VS Code를 엽니다
+2. Extensions로 이동합니다 (Ctrl+Shift+X / Cmd+Shift+X)
+3. "dbt Power User"를 검색합니다
+4. **dbt Power User by AltimateAI**를 설치합니다 (dbt Labs 버전이 아님)
 
-Alternatively, install it from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=innoverio.vscode-dbt-power-user).
+또는 [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=innoverio.vscode-dbt-power-user)에서 설치하세요.
 
 > [!NOTE]
-> At this point, your local dbt environment is fully configured and ready to use. The next steps (running models, tests, and building documentation) will be covered in the tutorial videos.
+> 여기까지 하면 로컬 dbt 환경이 완전히 설정되어 사용할 준비가 됩니다. 다음 단계(model 실행, 테스트, 문서 빌드)는 튜토리얼 영상에서 다룹니다.
 
-## Additional Resources
+## 추가 자료
 
 * [DuckDB Documentation](https://duckdb.org/docs/)
 * [dbt Documentation](https://docs.getdbt.com/)

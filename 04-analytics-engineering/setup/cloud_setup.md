@@ -1,6 +1,6 @@
-# Cloud Setup Guide
+# Cloud Setup 가이드
 
-This guide walks you through setting up dbt to work with the BigQuery data warehouse you created in Module 3.
+이 가이드는 Module 3에서 만든 BigQuery 데이터 웨어하우스와 함께 동작하도록 dbt를 셋업하는 과정을 안내합니다.
 
 <div align="center">
 
@@ -10,60 +10,60 @@ This guide walks you through setting up dbt to work with the BigQuery data wareh
 </div>
 
 > [!NOTE]
-> This guide assumes you've completed [Module 3: Data Warehouse](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main/03-data-warehouse) where you:
-> - Created a GCP project and enabled the BigQuery API
-> - Created a service account with BigQuery permissions
-> - Learned how to load data into BigQuery (in the `nytaxi` dataset)
+> 이 가이드는 [Module 3: Data Warehouse](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main/03-data-warehouse)를 완료했다고 가정합니다. 거기서 다음을 했습니다:
+> - GCP 프로젝트를 만들고 BigQuery API를 활성화
+> - BigQuery 권한을 가진 service account 생성
+> - BigQuery에 데이터를 적재하는 법 학습 (`nytaxi` dataset에)
 >
-> Module 4 uses **different data** than Module 3 (green and yellow taxi data for 2019-2020 instead of yellow-only 2024). You'll load the new data in [Step 1](#load-the-taxi-data) below.
+> Module 4는 Module 3과 **다른 데이터**를 씁니다 (2024년 yellow만이 아니라 2019~2020년 green과 yellow taxi 데이터). 새 데이터는 아래 [Step 1](#load-the-taxi-data)에서 적재합니다.
 
-## Step 1: Verify Your BigQuery Setup
+## Step 1: BigQuery 셋업 확인
 
-Before setting up dbt Cloud, confirm you have the required data and credentials from Module 3.
+dbt Cloud를 셋업하기 전에 Module 3에서 만든 데이터와 자격 증명이 있는지 확인하세요.
 
-### Check Your Service Account
+### Service Account 확인
 
-You should already have a service account JSON key file from Module 3. Make sure it has these permissions:
+Module 3에서 만든 service account JSON 키 파일이 이미 있어야 합니다. 다음 권한이 있는지 확인하세요:
 
 - **BigQuery Data Editor**
 - **BigQuery Job User**
 - **BigQuery User**
 
-If you need to create a new service account or download a new key, follow the instructions below.
+새 service account를 만들거나 새 키를 받아야 한다면 아래 안내를 따르세요.
 
-### How to Download Service Account JSON Key
+### Service Account JSON 키 다운로드 방법
 
-If you don't have the JSON key file or need to download a new one:
+JSON 키 파일이 없거나 새로 받아야 한다면:
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+1. [Google Cloud Console](https://console.cloud.google.com/)로 이동합니다
 
-2. Navigate to **IAM & Admin** > **Service Accounts**
-   - Or use the search bar and type "Service Accounts"
+2. **IAM & Admin** > **Service Accounts**로 이동합니다
+   - 또는 검색창에 "Service Accounts"를 입력합니다
 
-3. Find your service account in the list
-   - It should look like: `service-account-name@project-id.iam.gserviceaccount.com`
-   - If you don't have a service account yet, click **+ CREATE SERVICE ACCOUNT** and:
-     - Enter a name (e.g., `dbt-bigquery-service-account`)
-     - Click **CREATE AND CONTINUE**
-     - Add these roles:
-       - **BigQuery Admin** (or at minimum: BigQuery Data Editor, BigQuery Job User, BigQuery User)
-     - Click **CONTINUE** > **DONE**
+3. 목록에서 service account를 찾습니다
+   - `service-account-name@project-id.iam.gserviceaccount.com` 형태여야 합니다
+   - 아직 service account가 없다면 **+ CREATE SERVICE ACCOUNT**를 클릭하고:
+     - 이름을 입력합니다 (예: `dbt-bigquery-service-account`)
+     - **CREATE AND CONTINUE**를 클릭합니다
+     - 다음 역할을 추가합니다:
+       - **BigQuery Admin** (또는 최소한: BigQuery Data Editor, BigQuery Job User, BigQuery User)
+     - **CONTINUE** > **DONE**을 클릭합니다
 
-4. Click on your service account name to open its details
+4. service account 이름을 클릭해 상세 정보를 엽니다
 
-5. Go to the **KEYS** tab
+5. **KEYS** 탭으로 이동합니다
 
-6. Click **ADD KEY** > **Create new key**
+6. **ADD KEY** > **Create new key**를 클릭합니다
 
-7. Select **JSON** as the key type
+7. 키 타입으로 **JSON**을 선택합니다
 
-8. Click **CREATE**
+8. **CREATE**를 클릭합니다
 
-9. The JSON key file will automatically download to your computer
-   - Save it in a secure location
-   - **Never commit this file to Git or share it publicly** - it contains credentials to access your GCP resources
+9. JSON 키 파일이 컴퓨터에 자동으로 다운로드됩니다
+   - 안전한 위치에 보관하세요
+   - **이 파일을 절대 Git에 커밋하거나 공개적으로 공유하지 마세요** — GCP 리소스에 접근할 수 있는 자격 증명이 들어 있습니다
 
-The downloaded JSON file will look something like this:
+다운로드된 JSON 파일은 대략 이런 모습입니다:
 
 ```json
 {
@@ -76,158 +76,158 @@ The downloaded JSON file will look something like this:
 }
 ```
 
-You'll use this JSON file in Step 4 to connect dbt Cloud to BigQuery.
+이 JSON 파일은 Step 4에서 dbt Cloud를 BigQuery에 연결할 때 사용합니다.
 
-### Load the Taxi Data
+### Taxi 데이터 적재하기
 
-This module uses **yellow and green taxi data for 2019-2020**, which is different from the data you loaded in Module 3. Using the same approach you learned in Module 3, load the following data into your BigQuery `nytaxi` dataset:
+이 모듈은 **2019~2020년 yellow와 green taxi 데이터**를 사용합니다. Module 3에서 적재한 데이터와는 다릅니다. Module 3에서 배운 것과 같은 방식으로 다음 데이터를 BigQuery `nytaxi` dataset에 적재하세요:
 
-- **Yellow taxi trip records** for all months of 2019 and 2020
-- **Green taxi trip records** for all months of 2019 and 2020
+- 2019년과 2020년 전체 월의 **Yellow taxi trip 레코드**
+- 2019년과 2020년 전체 월의 **Green taxi trip 레코드**
 
 > [!IMPORTANT]
-> Download the data from the [DataTalksClub NYC TLC Data repository](https://github.com/DataTalksClub/nyc-tlc-data/releases), **not** from the official NYC TLC website. The official site has been retroactively updated over the years, so its data differs from what the homework answers are based on.
+> 데이터는 공식 NYC TLC 웹사이트가 **아니라** [DataTalksClub NYC TLC Data 저장소](https://github.com/DataTalksClub/nyc-tlc-data/releases)에서 받으세요. 공식 사이트는 수년에 걸쳐 소급 갱신되어 왔기 때문에, 숙제 정답의 기준이 된 데이터와 다릅니다.
 
-After loading, verify your data:
+적재 후 데이터를 확인하세요:
 
-1. Go to [BigQuery Console](https://console.cloud.google.com/bigquery)
-2. In the Explorer panel on the left, expand your project
-3. You should see the `nytaxi` dataset
-4. Expand the `nytaxi` dataset - you should see tables:
+1. [BigQuery Console](https://console.cloud.google.com/bigquery)로 이동합니다
+2. 왼쪽 Explorer 패널에서 프로젝트를 펼칩니다
+3. `nytaxi` dataset이 보여야 합니다
+4. `nytaxi` dataset을 펼치면 다음 테이블이 보여야 합니다:
    - `green_tripdata`
    - `yellow_tripdata`
 
-### Note Your Dataset Location
+### Dataset 위치 확인해두기
 
-When you created your BigQuery datasets in Module 3, you chose a location (e.g., `US`, `EU`, `us-central1`). You'll need to use the same location when configuring dbt.
+Module 3에서 BigQuery dataset을 만들 때 위치를 골랐습니다 (예: `US`, `EU`, `us-central1`). dbt를 설정할 때 같은 위치를 써야 합니다.
 
-**To check your dataset location:**
-1. In BigQuery Console, click on the `nytaxi` dataset
-2. Look for **Data location** in the dataset details
+**dataset 위치 확인 방법:**
+1. BigQuery Console에서 `nytaxi` dataset을 클릭합니다
+2. dataset 상세 정보에서 **Data location**을 확인합니다
 
-## Step 2: Sign Up for dbt Platform
+## Step 2: dbt Platform 가입
 
-dbt Platform is dbt's cloud-based development environment with a web IDE, scheduler, and collaboration features. dbt offers a **free Developer plan**. This should be more than enough to learn dbt and follow the course.
+dbt Platform은 웹 IDE, 스케줄러, 협업 기능을 갖춘 dbt의 클라우드 기반 개발 환경입니다. dbt는 **무료 Developer 플랜**을 제공합니다. dbt를 배우고 강의를 따라가기에는 차고 넘칩니다.
 
-## Step 3: Create a New dbt Project
+## Step 3: 새 dbt 프로젝트 만들기
 
-Now you'll create a fresh dbt project from scratch in dbt Cloud.
+이제 dbt Cloud에서 새 dbt 프로젝트를 처음부터 만듭니다.
 
-1. Navigate to **Account settings** (gear icon in the top-right corner) and click **+ New Project**
+1. **Account settings**(오른쪽 위 톱니바퀴 아이콘)로 이동해 **+ New Project**를 클릭합니다
 
-2. Enter a project name:
-   - Project name: `taxi_rides_ny`
+2. 프로젝트 이름을 입력합니다:
+   - 프로젝트 이름: `taxi_rides_ny`
 
-3. Click **Continue**
+3. **Continue**를 클릭합니다
 
-## Step 4: Configure BigQuery Connection
+## Step 4: BigQuery 연결 설정
 
-After clicking **Continue** in the previous step, dbt Cloud will prompt you to configure your data warehouse connection.
+이전 단계에서 **Continue**를 클릭하면 dbt Cloud가 데이터 웨어하우스 연결을 설정하라고 안내합니다.
 
 > [!TIP]
-> If you're not automatically taken to the connection setup, you can also configure it from **Account settings** > **Projects** > **taxi_rides_ny** > **Connection**.
+> 연결 설정 화면으로 자동으로 넘어가지 않는다면 **Account settings** > **Projects** > **taxi_rides_ny** > **Connection**에서도 설정할 수 있습니다.
 
-### Upload Service Account JSON
+### Service Account JSON 업로드
 
-1. For the connection type, select **BigQuery**
+1. 연결 타입으로 **BigQuery**를 선택합니다
 
-2. Click **Upload a Service Account JSON file**
+2. **Upload a Service Account JSON file**을 클릭합니다
 
-3. Select the service account JSON key file from Module 3
+3. Module 3의 service account JSON 키 파일을 선택합니다
 
-4. dbt will automatically extract:
-   - Your GCP project ID
-   - Authentication credentials
+4. dbt가 자동으로 다음을 추출합니다:
+   - GCP 프로젝트 ID
+   - 인증 자격 증명
 
-### Configure Connection Settings
+### 연결 설정 구성
 
-1. **Dataset**: Enter `dbt_prod`
-   - This is the base schema name where dbt will create datasets
-   - dbt will organize your models into schemas like:
-     - `dbt_prod_staging` - for staging models
-     - `dbt_prod_intermediate` - for intermediate models
-     - `dbt_prod_marts` - for final analytics tables
+1. **Dataset**: `dbt_prod`를 입력합니다
+   - dbt가 dataset을 만들 기준 schema 이름입니다
+   - dbt가 model을 다음과 같은 schema로 정리합니다:
+     - `dbt_prod_staging` — staging model용
+     - `dbt_prod_intermediate` — intermediate model용
+     - `dbt_prod_marts` — 최종 분석 테이블용
 
-2. **Location**: Select the same location as your `nytaxi` dataset from Module 3
-   - Example: `US`, `EU`, or `us-central1`
-   - **This must match your nytaxi dataset location**
-   - You can find this under **Optional Settings** or **Advanced Settings** depending on your UI version
+2. **Location**: Module 3의 `nytaxi` dataset과 같은 위치를 선택합니다
+   - 예: `US`, `EU`, 또는 `us-central1`
+   - **반드시 nytaxi dataset 위치와 일치해야 합니다**
+   - UI 버전에 따라 **Optional Settings** 또는 **Advanced Settings** 아래에서 찾을 수 있습니다
 
-3. **Timeout**: `300` seconds
+3. **Timeout**: `300`초
 
-4. **Maximum Bytes Billed**: (optional)
-   - Leave blank for unlimited, OR
-   - Set a limit like `1000000000` (1 GB) to prevent runaway queries
+4. **Maximum Bytes Billed**: (선택)
+   - 무제한으로 두려면 비워두거나,
+   - 폭주하는 쿼리를 막기 위해 `1000000000`(1 GB) 같은 한도를 설정합니다
 
-### Test the Connection
+### 연결 테스트
 
-1. Click **Test Connection**
+1. **Test Connection**을 클릭합니다
 
-2. You should see a success message: "Connection test succeeded"
+2. 성공 메시지가 보여야 합니다: "Connection test succeeded"
 
-3. Click **Continue**
+3. **Continue**를 클릭합니다
 
-## Step 5: Set Up Your Repository
+## Step 5: 저장소 설정
 
-dbt Cloud needs a Git repository to store your project code. You have two options:
+dbt Cloud는 프로젝트 코드를 저장할 Git 저장소가 필요합니다. 두 가지 선택지가 있습니다:
 
-- Let dbt Manage the Repository (Recommended for Beginners)
-- Connect Your Own GitHub Repository (Recommended for Production)
+- dbt가 저장소를 관리하게 하기 (초보자에게 권장)
+- 자신의 GitHub 저장소 연결하기 (프로덕션에 권장)
 
-It doesn't matter which one you prefer for this course.
+이 강의에서는 어느 쪽을 선호하든 상관없습니다.
 
-## Step 6: Verify Your Development Environment
+## Step 6: 개발 환경 확인
 
-### What Are Environments in dbt?
+### dbt에서 환경(Environment)이란?
 
-In dbt, **environments** define different contexts where your data transformations run:
+dbt에서 **환경**은 데이터 변환이 실행되는 서로 다른 맥락을 정의합니다:
 
-- **Development Environment**: Your personal workspace for building and testing models
-  - Uses your personal credentials
-  - Creates temporary schemas with your name (e.g., `dbt_<your_name>`)
-  - Changes only affect your work, not production
-  - Used when working in the dbt Cloud IDE
+- **Development 환경**: model을 만들고 테스트하는 개인 작업 공간
+  - 개인 자격 증명을 사용합니다
+  - 이름이 붙은 임시 schema를 만듭니다 (예: `dbt_<your_name>`)
+  - 변경 사항이 프로덕션이 아니라 본인 작업에만 영향을 줍니다
+  - dbt Cloud IDE에서 작업할 때 사용됩니다
 
-- **Deployment Environment**: The production workspace where final models run on schedule
-  - Uses service account credentials
-  - Creates production schemas (e.g., `dbt_prod_staging`, `dbt_prod_marts`)
-  - Used by scheduled jobs that keep your data warehouse updated
+- **Deployment 환경**: 최종 model이 스케줄에 따라 실행되는 프로덕션 작업 공간
+  - service account 자격 증명을 사용합니다
+  - 프로덕션 schema를 만듭니다 (예: `dbt_prod_staging`, `dbt_prod_marts`)
+  - 데이터 웨어하우스를 최신으로 유지하는 예약 작업이 사용합니다
 
-Think of it like having a draft folder (development) and a published folder (deployment) for your analytics code.
+분석 코드를 위한 초안 폴더(development)와 발행 폴더(deployment)를 갖는 것이라고 생각하면 됩니다.
 
-### Check Your Development Environment
+### 개발 환경 확인하기
 
-dbt Cloud **automatically creates a development environment** when you set up a project. You don't need to create one manually.
+dbt Cloud는 프로젝트를 셋업할 때 **개발 환경을 자동으로 만듭니다.** 수동으로 만들 필요가 없습니다.
 
-To verify it was created:
+만들어졌는지 확인하려면:
 
-1. Navigate to **Deploy** > **Environments** in the top navigation bar
-2. You should see a **Development** environment already listed
+1. 상단 내비게이션 바에서 **Deploy** > **Environments**로 이동합니다
+2. **Development** 환경이 이미 목록에 있어야 합니다
 
-### Customize Your Development Credentials (Optional)
+### 개발 자격 증명 커스터마이즈 (선택)
 
-If you need to change how dbt connects to BigQuery during development, or adjust your development schema:
+개발 중 dbt가 BigQuery에 연결하는 방식을 바꾸거나 개발 schema를 조정해야 한다면:
 
-1. Click your profile icon (bottom-left corner) > **Your Profile** > **Credentials**
-2. Select the credential linked to your project
-3. From here you can update:
-   - **Development Schema**: Where your personal development models will be created
-     - dbt automatically suggests: `dbt_<your_name>` (e.g., `dbt_john_smith`)
-     - This schema is separate from production (`dbt_prod`)
-   - **Target Name**: Leave as `dev` (default)
+1. 프로필 아이콘(왼쪽 아래 모서리) > **Your Profile** > **Credentials**를 클릭합니다
+2. 프로젝트에 연결된 자격 증명을 선택합니다
+3. 여기서 다음을 갱신할 수 있습니다:
+   - **Development Schema**: 개인 개발 model이 생성될 위치
+     - dbt가 자동으로 제안합니다: `dbt_<your_name>` (예: `dbt_john_smith`)
+     - 이 schema는 프로덕션(`dbt_prod`)과 분리되어 있습니다
+   - **Target Name**: `dev`(기본값)로 두세요
 
-## Step 7: Start Developing
+## Step 7: 개발 시작하기
 
-Once your project, connection, and repository are configured, you're ready to start building dbt models.
+프로젝트, 연결, 저장소 설정이 끝나면 dbt model을 만들 준비가 된 것입니다.
 
-1. Click **Start developing in the Studio IDE**
-   - If you don't see this option, navigate to **Develop** in the top navigation bar
+1. **Start developing in the Studio IDE**를 클릭합니다
+   - 이 옵션이 보이지 않으면 상단 내비게이션 바의 **Develop**로 이동합니다
 
-2. dbt Cloud will initialize your workspace (this may take a minute)
+2. dbt Cloud가 작업 공간을 초기화합니다 (1분 정도 걸릴 수 있습니다)
 
-3. Once the IDE loads, you'll have a fresh project ready for development!
+3. IDE가 로드되면 개발 준비가 된 새 프로젝트가 준비되어 있습니다!
 
-## Additional Resources
+## 추가 자료
 
 * [BigQuery Documentation](https://cloud.google.com/bigquery/docs)
 * [dbt Documentation](https://docs.getdbt.com/docs/cloud/about-cloud/dbt-cloud-features)

@@ -1,6 +1,6 @@
-# SQL Refresher
+# SQL 복습
 
-### Table of contents
+### 목차
 
 
 - [Window Functions](#window-funtions)
@@ -15,67 +15,67 @@
 
 ## Window Functions    
 
-A window function performs a calculation across a set of table rows that are related to the current row within a specific "window" or subset of data. This is comparable to the type of calculation that can be done with an aggregate function  (such as SUM(), AVG(), COUNT(), etc.).
+window function은 특정 "window", 즉 데이터의 부분집합 안에서 현재 행과 관련된 테이블 행들의 집합에 걸쳐 계산을 수행합니다. 집계 함수(SUM(), AVG(), COUNT() 등)로 할 수 있는 계산과 비슷합니다.
 
-But unlike regular aggregate functions, use of a window function does not cause rows to become grouped into a single output row — the rows retain their separate identities.
+하지만 일반적인 집계 함수와 달리, window function을 쓴다고 해서 행들이 하나의 출력 행으로 묶이지 않습니다 — 각 행은 개별 정체성을 유지합니다.
 
 
-**Syntax:**
+**문법:**
 
 ```sql
 FUNCTION() OVER (PARTITION BY column_name ORDER BY column_name)
 ```
 
-A window function always has two components. This second part here defines your window:
+window function은 항상 두 개의 구성 요소를 가집니다. 여기 두 번째 부분이 window를 정의합니다:
 
 ```sql
 OVER (PARTITION BY column_name ORDER BY column_name)
 ```
 
-Your window here is how you want to be viewing your data when you're applying your function
+여기서 window란 함수를 적용할 때 데이터를 어떤 시각으로 바라볼 것인가를 뜻합니다.
 
-- PARTITION BY: divides the result set into groups (optional).
+- PARTITION BY: 결과 집합을 그룹으로 나눕니다 (선택).
 
-- ORDER BY: defines the order of processing rows within the partition.
+- ORDER BY: 파티션 안에서 행을 처리하는 순서를 정의합니다.
 
 
-**Common Window Functions:**
+**흔한 Window Function들:**
 
-Ranking Functions:
+순위 함수(Ranking Functions):
 
-- ROW_NUMBER(): Assigns a unique row number within a partition.
-- RANK(): Similar to ROW_NUMBER(), but assigns the same rank to duplicate values, skipping numbers.
-- DENSE_RANK(): Like RANK(), but without gaps in numbering.
+- ROW_NUMBER(): 파티션 안에서 고유한 행 번호를 부여합니다.
+- RANK(): ROW_NUMBER()와 비슷하지만, 중복 값에는 같은 순위를 주고 번호를 건너뜁니다.
+- DENSE_RANK(): RANK()와 비슷하지만 번호에 빈틈이 생기지 않습니다.
 
-Aggregate Functions as Window Functions:
+Window Function으로 쓰는 집계 함수:
 
-- SUM() OVER(): Computes a running total.
-- AVG() OVER(): Computes a moving average.
+- SUM() OVER(): 누적 합계를 계산합니다.
+- AVG() OVER(): 이동 평균을 계산합니다.
 
-Lag and Lead Functions:
+Lag와 Lead 함수:
 
-- LAG(): Retrieves the value from a previous row.
-- LEAD(): Retrieves the value from the next row.
+- LAG(): 이전 행의 값을 가져옵니다.
+- LEAD(): 다음 행의 값을 가져옵니다.
 
 ### Row Number
 
-ROW_NUMBER() does just what it sounds like—displays the number of a given row. It starts at 1 and numbers the rows according to the ORDER BY part of the window statement. Using the PARTITION BY clause will allow you to begin counting 1 again in each partition.
+ROW_NUMBER()는 이름 그대로의 일을 합니다 — 주어진 행의 번호를 보여줍니다. 1부터 시작해 window 문의 ORDER BY 부분에 따라 행에 번호를 매깁니다. PARTITION BY 절을 쓰면 각 파티션마다 다시 1부터 세기 시작합니다.
 
-**Syntax:**
+**문법:**
 
 ```sql
 ROW_NUMBER() OVER (PARTITION BY column_name ORDER BY column_name)
 ```
 
-**Common Uses:**
+**흔한 용도:**
 
-- Removing Duplicates: You can use ROW_NUMBER() to identify duplicate rows and keep only one by filtering out rows with a row number greater than 1.
+- 중복 제거: ROW_NUMBER()로 중복 행을 식별하고, 행 번호가 1보다 큰 행을 걸러내 하나만 남길 수 있습니다.
 
-- Ranking Data: Used when ranking rows based on specific criteria but requiring unique row numbers.
+- 데이터 순위 매기기: 특정 기준으로 행에 순위를 매기되 고유한 행 번호가 필요할 때 사용합니다.
 
-- Selecting the Latest Record: Helps in selecting the most recent entry per category when combined with PARTITION BY.
+- 최신 레코드 선택: PARTITION BY와 조합하면 카테고리별 가장 최근 항목을 고르는 데 도움이 됩니다.
 
-**Example 1:**
+**예제 1:**
 
 ```sql
 
@@ -88,7 +88,7 @@ LIMIT 10;
 
 ```
 
-The query returns the top 10 highest total_amount values from the table, along with a row number indicating their ranking.
+이 쿼리는 테이블에서 total_amount가 가장 높은 상위 10개 값을 순위를 나타내는 행 번호와 함께 반환합니다.
 
 
 | total_amount | ranking |
@@ -104,11 +104,11 @@ The query returns the top 10 highest total_amount values from the table, along w
 | 1762.8 | 9      |
 | 1600.8 | 10     |
 
-The column generated with ROW_NUMBER() is temporary and does not modify the original table. It is just a calculation applied to the data in the query result.
+ROW_NUMBER()로 생성된 컬럼은 임시이며 원본 테이블을 수정하지 않습니다. 쿼리 결과의 데이터에 적용된 계산일 뿐입니다.
 
-**Example 2:**
+**예제 2:**
 
-Let's modify the previous query to add a partition by pick up location ID
+앞의 쿼리를 수정해 pick up location ID로 파티션을 추가해 봅시다.
 
 ```sql
 
@@ -123,8 +123,7 @@ LIMIT 10;
 
 ```
 
-This SQL query  assigns a ranking to each row based on total_amount in descending order within each 
-PULocationID group:
+이 SQL 쿼리는 각 PULocationID 그룹 안에서 total_amount 내림차순을 기준으로 각 행에 순위를 부여합니다:
 
 | total_amount | PULocationID | ranking |
 |-----------|-----------|-----------|
@@ -139,15 +138,15 @@ PULocationID group:
 | 61.94     | 234       | 4         |
 | 61.94     | 234       | 5         |
 
-Using the PARTITION BY clause will allow you to begin counting 1 again in each partition.
+PARTITION BY 절을 쓰면 각 파티션마다 다시 1부터 세기 시작합니다.
 
 ### Rank and Dense Rank
 
-ROW_NUMBER(), RANK(), and DENSE_RANK() are window functions used to assign a ranking to rows based on a specified order. However, they behave differently when there are duplicate values in the ranking column.
+ROW_NUMBER(), RANK(), DENSE_RANK()는 지정된 순서를 기준으로 행에 순위를 부여하는 window function입니다. 다만 순위를 매기는 컬럼에 중복 값이 있을 때 서로 다르게 동작합니다.
 
-RANK() assigns a ranking, but skips numbers if there are ties. DENSE_RANK() its similar to RANK(), but does not skip numbers when there are ties.
+RANK()는 순위를 부여하되 동점이 있으면 번호를 건너뜁니다. DENSE_RANK()는 RANK()와 비슷하지만 동점이 있어도 번호를 건너뛰지 않습니다.
 
-For example:
+예를 들어:
 
 | Score | ROW_NUMBER() | RANK() | DENSE_RANK() |
 |-------|--------------|--------|--------------|
@@ -159,22 +158,22 @@ For example:
 
 ### Lag and Lead
 
-It can often be useful to compare rows to preceding or following rows. You can use LAG or LEAD to create columns that pull values from other rows without the need for a self-join. All you need to do is enter which column to pull from and how many rows away you'd like to do the pull. LAG pulls from previous rows and LEAD pulls from following rows
+행을 앞이나 뒤의 행과 비교하는 것이 유용할 때가 많습니다. LAG나 LEAD를 쓰면 self-join 없이 다른 행에서 값을 끌어오는 컬럼을 만들 수 있습니다. 어느 컬럼에서 가져올지, 몇 행 떨어진 곳에서 가져올지만 지정하면 됩니다. LAG는 이전 행에서, LEAD는 다음 행에서 가져옵니다.
 
 
-**Syntax:**
+**문법:**
 
 ```sql
 
 LAG(expression) OVER (PARTITION BY partition_expression ORDER BY order_expression)
 ```
 
-- expression: The column whose value you want to retrieve from the previous row
-- offset (optional): The number of rows back from the current row to look. The default is 1, meaning it looks at the immediate previous row.
-- PARTITION BY (optional): Divides the result set into partitions to apply the function to each partition separately.
-- ORDER BY: Specifies the order in which the rows are processed.
+- expression: 이전 행에서 값을 가져오고 싶은 컬럼
+- offset (선택): 현재 행에서 몇 행 뒤를 볼지. 기본값은 1이며 바로 이전 행을 봅니다.
+- PARTITION BY (선택): 결과 집합을 파티션으로 나눠 각 파티션에 함수를 개별 적용합니다.
+- ORDER BY: 행이 처리되는 순서를 지정합니다.
 
-**Example:**
+**예제:**
 
 ```sql
 
@@ -190,7 +189,7 @@ ORDER BY lpep_pickup_datetime
 
 ```
 
-The query retrieves the lpep_pickup_datetime, total_amount, the previous trip's total_amount, and the next trip's total_amount.
+이 쿼리는 lpep_pickup_datetime, total_amount, 이전 trip의 total_amount, 다음 trip의 total_amount를 가져옵니다.
 
 | lpep_pickup_datetime      | total_amount | prev_total_amount | next_total_amount |
 |---------------------------|--------------|-------------------|-------------------|
@@ -203,18 +202,18 @@ The query retrieves the lpep_pickup_datetime, total_amount, the previous trip's 
 
 ### Percentile Cont
 
-Computes the specified percentile value for the value_expression, with linear interpolation.
+value_expression에 대해 지정된 백분위수 값을 선형 보간으로 계산합니다.
 
-**Syntax:**
+**문법:**
 
 ```sql
 
 PERCENTILE_CONT(value_expression, percentile ) OVER (PARTITION BY partition_expression)
 ```
 
-**Example:**
+**예제:**
 
-Let's calculate the 90th percentile of total_amount for each unique pickup location (PULocationID)
+각 고유한 pickup location(PULocationID)별로 total_amount의 90 백분위수를 계산해 봅시다.
 
 ```sql
 
@@ -227,11 +226,11 @@ FROM `greentaxi_trips`
 
 ```
 
-- PERCENTILE_CONT(total_amount, 0.9): calculates the 90th percentile (p90) of total_amount
-- PARTITION BY PULocationID: This groups the calculations by PULocationID, so the 90th percentile is computed separately for each location.
+- PERCENTILE_CONT(total_amount, 0.9): total_amount의 90 백분위수(p90)를 계산합니다
+- PARTITION BY PULocationID: 계산을 PULocationID별로 묶어, 90 백분위수가 각 위치마다 따로 계산되게 합니다.
 
 
-Query results looks like this:
+쿼리 결과는 다음과 같습니다:
 
 | PULocationID | total_amount  | p90  |
 |------|-------|-------|
@@ -247,19 +246,18 @@ Query results looks like this:
 | 224  | 37    | 51.9  |
 
 
-The P90 value is essentially the amount below which 90% of the values fall. In this table, the P90 
-is constant at 51.9, which means that for location "224", 90% of the total amounts are below 51.9.
+P90 값은 본질적으로 값의 90%가 그 아래에 놓이는 금액입니다. 이 표에서 P90은 51.9로 일정한데, 이는 위치 "224"에서 total amount의 90%가 51.9 미만이라는 뜻입니다.
 
 
 ## Common Table Expression
 
-A CTE, short for Common Table Expression, is like a query within a query. With the WITH statement, you can create temporary tables to store results, making complex queries more readable and maintainable. These temporary tables exist only for the duration of the main query.
+CTE(Common Table Expression의 줄임말)는 쿼리 안의 쿼리 같은 것입니다. WITH 문으로 결과를 담는 임시 테이블을 만들어 복잡한 쿼리를 더 읽기 쉽고 유지보수하기 좋게 만들 수 있습니다. 이 임시 테이블은 메인 쿼리가 도는 동안에만 존재합니다.
 
-CTEs and subqueries are both powerful tools and can be used to achieve similar goals, but they have different use cases and advantages. Differences are CTE is reusable during the entire session and more readable
+CTE와 subquery는 모두 강력한 도구이고 비슷한 목표를 달성하는 데 쓸 수 있지만, 사용 사례와 장점이 다릅니다. 차이점은 CTE가 세션 전체에서 재사용 가능하고 더 읽기 쉽다는 것입니다.
 
-By declaring CTEs at the beginning of the query, you enhance code readability, enabling a clearer grasp of your analysis logic. 
+쿼리 시작 부분에 CTE를 선언하면 코드 가독성이 높아져 분석 로직을 더 명확하게 파악할 수 있습니다.
 
-**Syntax:**
+**문법:**
 
 ```sql
 
@@ -271,7 +269,7 @@ WITH cte_name AS (
 SELECT * FROM cte_name;
 ```
 
-**Example: Let's find the trip with the second largest total_amount**
+**예제: total_amount가 두 번째로 큰 trip을 찾아봅시다**
 
 ```sql
 
@@ -291,12 +289,11 @@ SELECT * FROM cte WHERE rank = 2;
 
 ```
 
-The query starts with a Common Table Expression (CTE) named cte. We use the RANK() window function to 
-assign a ranking (rank) to each row based on total_amount in descending order (from highest to lowest).
+이 쿼리는 cte라는 이름의 Common Table Expression(CTE)으로 시작합니다. RANK() window function을 써서 total_amount 내림차순(가장 높은 것부터 낮은 것 순)으로 각 행에 순위(rank)를 부여합니다.
 
-Now, we use the CTE in the main query: ```SELECT * FROM cte WHERE rank = 2;```
+이제 메인 쿼리에서 CTE를 사용합니다: ```SELECT * FROM cte WHERE rank = 2;```
 
-Result of the query:
+쿼리 결과:
 
 
 | lpep_pickup_datetime      | total_amount | rank | 
@@ -305,11 +302,11 @@ Result of the query:
 
 ## dbt models and CTEs
 
-CTEs and window functions will be used a lot in module 4 on dbt. Let's see an example of application in dbt models
+CTE와 window function은 dbt를 다루는 module 4에서 많이 쓰입니다. dbt model에서의 적용 예를 봅시다.
 
-**Example:**
+**예제:**
 
-Suppose we start from the FHV dataset and we want to create a dbt model that enriches the data by calculating the trip duration and the 90th percentile.
+FHV 데이터셋에서 시작해, trip duration과 90 백분위수를 계산해 데이터를 풍부하게 만드는 dbt model을 만들고 싶다고 가정합시다.
 
 ```sql
 
@@ -334,21 +331,19 @@ FROM trip_duration_calculated
 
 ```
 
-**Step 1: Understanding the CTE**
+**Step 1: CTE 이해하기**
 
-The WITH clause creates a CTE named trip_duration_calculated. This CTE acts as a temporary table that 
-contains all columns from the fhv_trips table. Additionally, it calculates the trip duration for each ride
+WITH 절이 trip_duration_calculated라는 CTE를 만듭니다. 이 CTE는 fhv_trips 테이블의 모든 컬럼을 담은 임시 테이블 역할을 합니다. 추가로 각 운행의 trip duration을 계산합니다.
 
-**Step 2: Main Query using the CTE and Window Function**
+**Step 2: CTE와 Window Function을 사용하는 메인 쿼리**
 
-This query computes the 90th percentile of trip duration for each PUlocationID using a window function:
+이 쿼리는 window function을 써서 각 PUlocationID별 trip duration의 90 백분위수를 계산합니다:
 
-The PARTITION BY PUlocationID clause ensures that the percentile calculation is performed separately 
-for each unique PUlocationID.
+PARTITION BY PUlocationID 절은 백분위수 계산이 각 고유한 PUlocationID마다 따로 수행되도록 보장합니다.
 
-The percentile 90 means that 90% of the trips have a duration equal to or below this value
+백분위수 90은 trip의 90%가 이 값 이하의 duration을 가진다는 뜻입니다.
 
-**Query result looks like this:**
+**쿼리 결과는 다음과 같습니다:**
 
 | PUlocationID | trip_duration | trip_duration_p90 |
 |-------------|---------------|--------------------|
@@ -364,5 +359,5 @@ The percentile 90 means that 90% of the trips have a duration equal to or below 
 | 32          | 888           | 1988.0            |
 
 
-- For PUlocationID = 190, 90% of trips have a duration ≤ 2170.0   seconds.
-- For PUlocationID = 32, 90% of trips have a duration ≤ 1988.0  seconds.
+- PUlocationID = 190이면 trip의 90%가 duration ≤ 2170.0초입니다.
+- PUlocationID = 32면 trip의 90%가 duration ≤ 1988.0초입니다.

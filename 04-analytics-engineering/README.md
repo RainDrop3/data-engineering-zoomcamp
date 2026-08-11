@@ -1,100 +1,100 @@
 # Module 4: Analytics Engineering
 
-Goal: Transforming the data loaded in DWH into Analytical Views developing a [dbt project](taxi_rides_ny/README.md).
+목표: DWH에 적재된 데이터를 [dbt 프로젝트](taxi_rides_ny/README.md)를 만들어가며 분석용 뷰(Analytical View)로 변환하기.
 
-### Prerequisites
+### 사전 준비
 
-The prerequisites depend on which setup path you choose:
+어떤 셋업 경로를 고르느냐에 따라 사전 준비가 달라집니다.
 
-**For Cloud Setup (BigQuery):**
+**Cloud Setup (BigQuery)의 경우:**
 
-- Completed [Module 3: Data Warehouse](../03-data-warehouse/) with:
-  - A GCP project with BigQuery enabled
-  - Service account with BigQuery permissions
-  - NYC taxi data loaded into BigQuery (yellow and green taxi data for 2019-2020)
+- [Module 3: Data Warehouse](../03-data-warehouse/) 완료. 다음이 갖춰져 있어야 합니다:
+  - BigQuery가 활성화된 GCP 프로젝트
+  - BigQuery 권한을 가진 service account
+  - BigQuery에 적재된 NYC taxi 데이터 (2019~2020년 yellow, green taxi 데이터)
 
-**For Local Setup (DuckDB):**
+**Local Setup (DuckDB)의 경우:**
 
-- No prerequisites! The local setup guide will walk you through downloading and loading the data.
+- 사전 준비 없음! local setup 가이드가 데이터 다운로드와 적재까지 안내합니다.
 
 > [!NOTE]
-> This module focuses on **yellow and green taxi data** (2019-2020). While Module 3 may have included FHV data, it is not used in this dbt project.
+> 이 모듈은 **yellow와 green taxi 데이터** (2019~2020)를 다룹니다. Module 3에서 FHV 데이터를 포함했을 수 있지만, 이 dbt 프로젝트에서는 사용하지 않습니다.
 
-## Setting up your environment
+## 환경 설정하기
 
-Choose your setup path:
+셋업 경로를 선택하세요:
 
 ### 🏠 [Local Setup](setup/local_setup.md)
 
-- **Stack**: DuckDB + dbt Core
-- **Cost**: Free
-- [→ Get Started](setup/local_setup.md)
+- **스택**: DuckDB + dbt Core
+- **비용**: 무료
+- [→ 시작하기](setup/local_setup.md)
 
 ### ☁️ [Cloud Setup](setup/cloud_setup.md)
 
-- **Stack**: BigQuery + dbt Cloud
-- **Cost**: Free tier available (dbt Cloud Developer), BigQuery costs vary
-- **Requires**: Completed Module 3 with BigQuery data
-- [→ Get Started](setup/cloud_setup.md)
+- **스택**: BigQuery + dbt Cloud
+- **비용**: 무료 티어 사용 가능 (dbt Cloud Developer), BigQuery 비용은 사용량에 따라 다름
+- **필요 조건**: BigQuery 데이터가 준비된 Module 3 완료
+- [→ 시작하기](setup/cloud_setup.md)
 
-## Content
+## 콘텐츠
 
-### Introduction to Analytics Engineering
+### Analytics Engineering 소개
 
 [![](images/thumbnail-HxMIsPrIyGQ.jpg)](https://www.youtube.com/watch?v=HxMIsPrIyGQ)
 
-### Introduction to data modeling
+### 데이터 모델링 소개
 
 [![](images/thumbnail-uF76d5EmdtU.jpg)](https://www.youtube.com/watch?v=uF76d5EmdtU&list=PL3MmuxUbc_hJed7dXYoJw8DoCuVHhGEQb&index=40)
 
-### What is dbt?
+### dbt란 무엇인가?
 
 [![](images/thumbnail-gsKuETFJr54.jpg)](https://www.youtube.com/watch?v=gsKuETFJr54&list=PLaNLNpjZpzwgneiI-Gl8df8GCsPYp_6Bs&index=5)
 
-### Differences between dbt Core and dbt Cloud
+### dbt Core와 dbt Cloud의 차이
 
 [![](images/thumbnail-auzcdLRyEIk.jpg)](https://www.youtube.com/watch?v=auzcdLRyEIk)
 
-### Project Setup
+### 프로젝트 셋업
 
-| Alternative A  | Alternative B   |
+| 대안 A  | 대안 B   |
 |-----------------------------|--------------------------------|
 | BigQuery + dbt Platform | DuckDB + dbt core |
 | [![](images/thumbnail-GFbwlrt6f54.jpg)](https://www.youtube.com/watch?v=GFbwlrt6f54) | [![](images/thumbnail-GoFAbJYfvlw.jpg)](https://www.youtube.com/watch?v=GoFAbJYfvlw) |
 
-### dbt Course
+### dbt 강의
 
-| dbt Project Structure | dbt Sources | dbt Models | Seeds and Macros |
+| dbt 프로젝트 구조 | dbt sources | dbt models | Seeds와 Macros |
 |-----------------------|-------------|------------|------------------|
 | [![](images/thumbnail-2dYDS4OQbT0.jpg)](https://www.youtube.com/watch?v=2dYDS4OQbT0) | [![](images/thumbnail-7CrrXazV_8k.jpg)](https://www.youtube.com/watch?v=7CrrXazV_8k) | [![](images/thumbnail-JQYz-8sl1aQ.jpg)](https://www.youtube.com/watch?v=JQYz-8sl1aQ) | [![](images/thumbnail-lT4fmTDEqVk.jpg)](https://www.youtube.com/watch?v=lT4fmTDEqVk) |
 
-| dbt Tests | Documentation | dbt Packages | dbt Commands |
+| dbt tests | 문서화 | dbt packages | dbt 명령어 |
 |-----------|---------------|----------------------|---------------|
 | [![](images/thumbnail-bvZ-rJm7uMU.jpg)](https://www.youtube.com/watch?v=bvZ-rJm7uMU) | [![](images/thumbnail-UqoWyMjcqrA.jpg)](https://www.youtube.com/watch?v=UqoWyMjcqrA) | [![](images/thumbnail-KfhUA9Kfp8Y.jpg)](https://www.youtube.com/watch?v=KfhUA9Kfp8Y) | [![](images/thumbnail-t4OeWHW3SsA.jpg)](https://www.youtube.com/watch?v=t4OeWHW3SsA) |
 
-## Troubleshooting
+## 문제 해결
 
-- [DuckDB Troubleshooting Guide](setup/duckdb_troubleshooting.md) — If you're getting OOM errors during `dbt build` with DuckDB
+- [DuckDB 문제 해결 가이드](setup/duckdb_troubleshooting.md) — DuckDB로 `dbt build` 실행 중 OOM 에러가 난다면
 
-## Extra resources
+## 추가 자료
 
 > [!NOTE]
-> If you find the videos above overwhelming, we recommend completing the [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals) course and then rewatching the module. It provides a solid foundation for all the key concepts you need in this module.
+> 위 영상들이 버겁게 느껴진다면, [dbt Fundamentals](https://learn.getdbt.com/courses/dbt-fundamentals) 과정을 먼저 수강한 뒤 이 모듈을 다시 보는 것을 권합니다. 이 모듈에 필요한 핵심 개념의 탄탄한 기초를 제공합니다.
 
-## SQL refresher
+## SQL 복습
 
-The homework for this module focuses heavily on window functions and CTEs. If you need a refresher on these topics, you can refer to these notes.
+이 모듈의 숙제는 window function과 CTE를 집중적으로 다룹니다. 이 주제를 복습할 필요가 있다면 아래 노트를 참고하세요.
 
-* [SQL refresher](refreshers/SQL.md)
+* [SQL 복습](refreshers/SQL.md)
 
-## Homework
+## 숙제
 
-* [2026 Homework](../cohorts/2026/04-analytics-engineering/homework.md)
+* [2026 숙제](../cohorts/2026/04-analytics-engineering/homework.md)
 
-# Community notes
+# 커뮤니티 노트
 
 <details>
-<summary>Did you take notes? You can share them here</summary>
+<summary>직접 정리한 노트가 있나요? 여기에 공유할 수 있습니다</summary>
 
 * [Slides used in previous years](https://docs.google.com/presentation/d/1xSll_jv0T8JF4rYZvLHfkJXYqUjPtThA/edit?usp=sharing&ouid=114544032874539580154&rtpof=true&sd=true)
 * [Notes by Alvaro Navas](https://github.com/ziritrion/dataeng-zoomcamp/blob/main/notes/4_analytics.md)
@@ -118,6 +118,6 @@ The homework for this module focuses heavily on window functions and CTEs. If yo
 * [2026 Notes by Sharad K. Gupta](https://github.com/sharadgupta27/data-engineering/blob/main/Notes/dbt_commands.md)
 * [Analytical Engineering overview](https://github.com/khanhnguyen7802/DataEngineer101/tree/main/week4-analytics-engineering#readme) 
 * [2026 Notes about dbt](https://github.com/khanhnguyen7802/DataEngineer101/blob/main/week4-analytics-engineering/dbt_installation.md) | [dbt + Duckdb setup using Docker](https://github.com/khanhnguyen7802/DataEngineer101/blob/main/week4-analytics-engineering/dbt_installation.md) by Khanh Nguyen
-* Add your notes here (above this line)
+* 이 줄 위에 여러분의 노트를 추가하세요
 
 </details>

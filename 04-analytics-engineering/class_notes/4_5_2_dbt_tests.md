@@ -1,17 +1,17 @@
 # DE Zoomcamp 4.5.2 — dbt Tests
 
-> 📄 Video: [dbt Tests](https://www.youtube.com/watch?v=bvZ-rJm7uMU)  
-> 📄 Official docs: [Data tests](https://docs.getdbt.com/docs/build/data-tests) | [Unit tests](https://docs.getdbt.com/docs/build/unit-tests) | [Model contracts](https://docs.getdbt.com/docs/mesh/govern/model-contracts)
+> 📄 영상: [dbt Tests](https://www.youtube.com/watch?v=bvZ-rJm7uMU)  
+> 📄 공식 문서: [Data tests](https://docs.getdbt.com/docs/build/data-tests) | [Unit tests](https://docs.getdbt.com/docs/build/unit-tests) | [Model contracts](https://docs.getdbt.com/docs/mesh/govern/model-contracts)
 
-Wrong KPIs in dashboards, bad numbers in reports — there are really only two causes: the underlying data wasn't what you expected, or you messed up the SQL. As an analytics engineer, if you can't tell which one it is, both are technically your fault. Tests are how you stay on top of this proactively. dbt ships with a pretty large suite of testing options, and this video walks through all of them.
+대시보드의 잘못된 KPI, 리포트의 이상한 숫자 — 원인은 사실 둘뿐입니다: 기반 데이터가 예상과 달랐거나, SQL을 잘못 짰거나. analytics engineer로서 둘 중 무엇인지 구분할 수 없다면, 엄밀히 말해 둘 다 여러분 잘못입니다. test는 이것을 선제적으로 관리하는 수단입니다. dbt는 꽤 큰 테스트 옵션 묶음을 제공하고, 이 영상은 그 전부를 훑습니다.
 
 ---
 
-## 1. Singular tests
+## 1. Singular test
 
-The simplest kind of test. You write a plain SQL query, stick it in the `tests/` directory, and that's it — it's now a test.
+가장 단순한 종류의 테스트입니다. 평범한 SQL 쿼리를 작성해 `tests/` 디렉토리에 넣으면 끝 — 그게 테스트가 됩니다.
 
-The logic is straightforward: **if the query returns any rows, the test fails.** You're writing a query that selects for the "bad" cases. Zero rows back means everything checks out.
+로직은 직관적입니다: **쿼리가 행을 하나라도 반환하면 테스트 실패.** "나쁜" 경우를 select하는 쿼리를 쓰는 것이죠. 0개 행이 돌아오면 모두 정상이라는 뜻입니다.
 
 ```sql
 -- tests/assert_positive_fare_amount.sql
@@ -24,17 +24,17 @@ from {{ ref('fct_trips') }}
 where fare_amount <= 0
 ```
 
-These are great for one-off business rules that are very specific to your organization — the kind of thing no generic test is going to cover out of the box.
+조직에 매우 특수한 일회성 비즈니스 규칙에 좋습니다 — 어떤 generic test도 기본으로 다뤄주지 않을 종류의 것들이죠.
 
 > 📄 [Singular data tests — docs](https://docs.getdbt.com/docs/build/data-tests#singular-data-tests)
 
 ---
 
-## 2. Source freshness tests
+## 2. Source freshness test
 
-These live in your source YAML, not in a separate file. You add a `freshness` block to a source and tell dbt which column indicates when data was last loaded. Then you run `dbt source freshness` and dbt checks whether that timestamp is recent enough.
+이것은 별도 파일이 아니라 source YAML 안에 들어갑니다. source에 `freshness` 블록을 추가하고 어떤 컬럼이 데이터가 마지막으로 적재된 시점을 나타내는지 dbt에게 알려줍니다. 그다음 `dbt source freshness`를 실행하면 그 timestamp가 충분히 최근인지 dbt가 검사합니다.
 
-You can set both `warn_after` and `error_after` thresholds — one to flag it, one to actually fail.
+`warn_after`와 `error_after` 임계값을 둘 다 설정할 수 있습니다 — 하나는 경고용, 하나는 실제 실패용.
 
 ```yaml
 version: 2
@@ -57,24 +57,24 @@ sources:
           error_after: {count: 12, period: hour}
 ```
 
-Not something you see everywhere, but for pipelines where stale data would cause real problems it's a lifesaver.
+어디서나 보이는 것은 아니지만, 데이터가 오래되면 실제 문제가 생기는 파이프라인에서는 생명줄입니다.
 
 > 📄 [Source freshness — docs](https://docs.getdbt.com/reference/resource-properties/freshness)
 
 ---
 
-## 3. Generic tests
+## 3. Generic test
 
-This is the big one — the most common type of test you'll see in dbt projects. Generic tests are defined in your YAML right alongside your column descriptions. They're parameterized and reusable, so you write the logic once and apply it across as many columns and models as you need.
+이것이 핵심입니다 — dbt 프로젝트에서 가장 흔히 보게 될 테스트 유형입니다. generic test는 컬럼 description 바로 옆 YAML에 정의합니다. 파라미터화되어 있고 재사용 가능해서, 로직을 한 번 쓰고 필요한 만큼 여러 컬럼과 model에 적용합니다.
 
-### The four built-in generic tests
+### 내장된 네 가지 generic test
 
-dbt ships with exactly four:
+dbt는 정확히 네 개를 제공합니다:
 
-- **unique** — no duplicate values in this column
-- **not_null** — no nulls allowed
-- **accepted_values** — column values must be within a defined list
-- **relationships** — every value in this column must exist in another model (referential integrity)
+- **unique** — 이 컬럼에 중복 값 없음
+- **not_null** — null 허용 안 함
+- **accepted_values** — 컬럼 값이 정의된 목록 안에 있어야 함
+- **relationships** — 이 컬럼의 모든 값이 다른 model에 존재해야 함 (참조 무결성)
 
 ```yaml
 version: 2
@@ -109,9 +109,9 @@ models:
 
 > 📄 [Generic data tests — docs](https://docs.getdbt.com/docs/build/data-tests#generic-data-tests)
 
-### Writing your own custom generic tests
+### 직접 custom generic test 작성하기
 
-Four tests won't cover everything. You can write your own — they're SQL files that live in `tests/generic/`. The syntax uses Jinja test blocks, and dbt will pick them up and make them available just like the built-ins.
+네 개로는 모든 것을 다룰 수 없습니다. 직접 작성할 수 있습니다 — `tests/generic/`에 두는 SQL 파일입니다. 문법은 Jinja test 블록을 쓰고, dbt가 이를 인식해 내장 test처럼 쓸 수 있게 해줍니다.
 
 ```sql
 -- tests/generic/test_positive_values.sql
@@ -124,7 +124,7 @@ where {{ column_name }} < 0
 {% endtest %}
 ```
 
-**Usage in schema.yml:**
+**schema.yml에서의 사용:**
 ```yaml
 models:
   - name: fct_trips
@@ -138,17 +138,17 @@ models:
           - positive_values
 ```
 
-And here's the thing — you probably don't need to write as many custom tests as you'd expect. The dbt community has already built a ton of them in open-source packages (dbt-utils, dbt-expectations, etc.). Worth checking those before rolling your own.
+그리고 한 가지 — 생각보다 custom test를 많이 쓸 필요는 없을 겁니다. dbt 커뮤니티가 이미 오픈소스 package(dbt-utils, dbt-expectations 등)에 엄청나게 많이 만들어 두었습니다. 직접 만들기 전에 확인해볼 만합니다.
 
 > 📄 [Writing custom generic tests — docs](https://docs.getdbt.com/best-practices/writing-custom-generic-tests)
 
 ---
 
-## 4. Unit tests
+## 4. Unit test
 
-Available from dbt v1.8 onwards (released in mid-2024). Unit tests let you test your SQL logic in isolation, without hitting the warehouse with real data.
+dbt v1.8부터 사용 가능합니다(2024년 중반 출시). unit test는 실제 데이터로 웨어하우스를 건드리지 않고 SQL 로직을 고립된 상태로 테스트하게 해줍니다.
 
-The idea: you define a small set of mock input rows and the expected output rows. dbt runs your model's SQL against those mocks and checks whether the output matches what you said it should be. This is especially handy for complex logic — rolling windows, regex, edge cases — because you can test for scenarios that haven't even shown up in your real data yet.
+발상은 이렇습니다: 작은 mock 입력 행 묶음과 기대 출력 행을 정의합니다. dbt가 그 mock에 대해 model의 SQL을 실행하고 출력이 명시한 것과 일치하는지 검사합니다. 복잡한 로직 — rolling window, 정규식, 엣지 케이스 — 에 특히 편리합니다. 실제 데이터에 아직 나타나지도 않은 시나리오를 테스트할 수 있기 때문입니다.
 
 ```yaml
 version: 2
@@ -170,19 +170,19 @@ unit_tests:
         - {tripid: '3', payment_type_description: 'Unknown'}
 ```
 
-Unit tests are defined in YAML in your `models/` directory, and currently only support SQL models. Since the inputs are static, there's no reason to run them in production — use them in development and CI.
+unit test는 `models/` 디렉토리의 YAML에 정의하며, 현재는 SQL model만 지원합니다. 입력이 정적이므로 프로덕션에서 돌릴 이유가 없습니다 — 개발과 CI에서 사용하세요.
 
-As of early 2026, unit tests have been available for about 18 months and are seeing increasing adoption, especially for teams with complex transformation logic or strict data quality requirements. They're particularly useful in CI/CD pipelines where you want to catch logic errors before they hit production data.
+2026년 초 기준으로 unit test는 약 18개월간 제공되어 왔고, 특히 변환 로직이 복잡하거나 데이터 품질 요구가 엄격한 팀에서 채택이 늘고 있습니다. 로직 오류가 프로덕션 데이터에 닿기 전에 잡고 싶은 CI/CD 파이프라인에서 특히 유용합니다.
 
 > 📄 [Unit tests — docs](https://docs.getdbt.com/docs/build/unit-tests)
 
 ---
 
-## 5. Model contracts
+## 5. Model contract
 
-The last type covered in this video, and a bit different from the others. Model contracts aren't about catching bad data after the fact — they're about **preventing your model from building at all** if it doesn't match a defined shape.
+이 영상에서 다루는 마지막 유형이고, 다른 것들과 조금 다릅니다. model contract는 나쁜 데이터를 사후에 잡아내는 것이 아니라, 정의된 형태와 맞지 않으면 **애초에 model이 빌드되지 않게 막는** 것입니다.
 
-You define the expected columns, data types, and optionally constraints in your YAML. Then you flip on `contract: enforced: true` in the model's config. From that point on, if your model's output doesn't match — wrong column name, wrong type, missing column — dbt will error out before anything gets materialized.
+기대하는 컬럼, 데이터 타입, 그리고 선택적으로 제약 조건을 YAML에 정의합니다. 그다음 model의 config에서 `contract: enforced: true`를 켭니다. 그때부터 model의 출력이 맞지 않으면 — 잘못된 컬럼명, 잘못된 타입, 누락된 컬럼 — dbt가 아무것도 materialize하기 전에 에러를 냅니다.
 
 ```yaml
 version: 2
@@ -211,6 +211,6 @@ models:
         data_type: numeric
 ```
 
-The idea behind this comes from the concept of **data contracts** — you sit down with your stakeholder, agree on what the output dataset should look like (column names, types, freshness expectations), and the contract enforces that agreement automatically. If someone changes the model in a way that breaks it, they'll know immediately.
+이 발상은 **data contract** 개념에서 왔습니다 — 이해관계자와 마주 앉아 출력 데이터셋이 어떤 모습이어야 하는지(컬럼명, 타입, freshness 기대치) 합의하고, contract가 그 합의를 자동으로 강제합니다. 누군가 그것을 깨는 방식으로 model을 바꾸면 즉시 알게 됩니다.
 
 > 📄 [Model contracts — docs](https://docs.getdbt.com/docs/mesh/govern/model-contracts)

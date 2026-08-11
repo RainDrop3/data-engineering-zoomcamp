@@ -1,111 +1,111 @@
-# DE Zoomcamp 4.1.2 — What is dbt?
+# DE Zoomcamp 4.1.2 — dbt란 무엇인가?
 
-> 📄 Video: [What is dbt?](https://www.youtube.com/watch?v=gsKuETFJr54)  
-> 📄 Official docs: [Introduction to dbt](https://docs.getdbt.com/docs/introduction)  
+> 📄 영상: [What is dbt?](https://www.youtube.com/watch?v=gsKuETFJr54)  
+> 📄 공식 문서: [Introduction to dbt](https://docs.getdbt.com/docs/introduction)  
 > 📄 dbt Cloud vs Core: [Choose your dbt](https://docs.getdbt.com/docs/cloud/about-cloud/dbt-cloud-features)
 
-This is the big-picture overview of dbt before we start building anything. What it is, what problems it solves, and how we'll be using it in the course. No hands-on work yet — just the framing.
+무언가를 만들기 시작하기 전에 dbt를 큰 그림에서 훑어보는 영상입니다. dbt가 무엇이고, 어떤 문제를 풀며, 이 강의에서 어떻게 쓸 것인지. 아직 실습은 없고 틀을 잡는 내용입니다.
 
 ---
 
-## What is dbt?
+## dbt란?
 
-dbt is a transformation workflow tool. It sits on top of your data warehouse and helps you turn raw data into something useful for downstream consumers (analysts, BI tools, ML pipelines, whatever needs clean, structured data).
+dbt는 변환 워크플로 도구입니다. 데이터 웨어하우스 위에 앉아서, raw 데이터를 하류 소비자(analyst, BI 도구, ML 파이프라인 등 깨끗하고 구조화된 데이터가 필요한 무엇이든)에게 쓸모 있는 형태로 바꿔줍니다.
 
-You write SQL (or Python) to define your transformations, and dbt handles the rest: compiling it, running it against the warehouse, managing dependencies, and persisting the results as tables or views.
+변환을 정의하는 SQL(또는 Python)을 작성하면, 나머지는 dbt가 처리합니다: 컴파일하고, 웨어하우스에 실행하고, 의존성을 관리하고, 결과를 테이블이나 뷰로 저장합니다.
 
-In a real company setup, you'd have data flowing in from all over the place — backend systems, frontend apps, third-party APIs like weather data. All of that gets loaded into your warehouse (BigQuery, Snowflake, Databricks, whatever), and dbt is the layer that transforms that raw data into something the business can actually consume.
-
----
-
-## What problems it solves
-
-The transformation step has always existed. What dbt brings to the table is **software engineering best practices for analytics code**. Things that software engineers have been doing for years but didn't have a clear path into the analytics world:
-
-- **Version control** — your transformations live in git, just like any other code
-- **Modularity** — break complex logic into reusable pieces instead of massive spaghetti queries
-- **Testing** — automated data quality checks that run with every deployment
-- **Documentation** — generated from your code, not a separate wiki that gets out of date
-- **Environments** — separate dev and prod. Each developer gets their own sandbox to work in without stepping on each other's toes
-- **CI/CD** — automated deployments with validation and rollback
-
-The result is higher-quality pipelines that are easier to maintain and less prone to breaking in production.
+실제 회사 환경이라면 데이터가 사방에서 흘러들어옵니다 — 백엔드 시스템, 프론트엔드 앱, 날씨 데이터 같은 서드파티 API. 이 모든 것이 웨어하우스(BigQuery, Snowflake, Databricks 등)에 적재되고, dbt는 그 raw 데이터를 비즈니스가 실제로 소비할 수 있는 것으로 변환하는 계층입니다.
 
 ---
 
-## How it works — the mechanics
+## dbt가 푸는 문제
 
-You write a SQL file. It looks like a normal `SELECT` statement. dbt takes that file, figures out where it should go in the warehouse (which schema, which dataset, what environment), wraps it in the necessary DDL/DML, compiles it with any Jinja templating you've used, and runs it.
+변환 단계는 늘 있어왔습니다. dbt가 새로 가져온 것은 **분석 코드를 위한 소프트웨어 엔지니어링 모범 사례**입니다. 소프트웨어 엔지니어들은 수년간 해왔지만 분석 세계로 들어올 뚜렷한 경로가 없던 것들이죠:
 
-When you run `dbt run`, it:
-1. Compiles your SQL (resolves `ref()` calls, `source()` calls, Jinja macros, everything)
-2. Sends the compiled SQL to your warehouse
-3. Materializes the result as a table, view, incremental table, or ephemeral CTE — whatever you configured
+- **버전 관리(Version control)** — 변환 코드가 다른 코드와 마찬가지로 git에 들어갑니다
+- **모듈화(Modularity)** — 거대한 스파게티 쿼리 대신 복잡한 로직을 재사용 가능한 조각으로 나눕니다
+- **테스트(Testing)** — 배포할 때마다 함께 도는 자동화된 데이터 품질 검사
+- **문서화(Documentation)** — 코드에서 생성됩니다. 금방 낡아버리는 별도 위키가 아닙니다
+- **환경(Environments)** — dev와 prod를 분리합니다. 개발자마다 서로 방해하지 않는 자기만의 샌드박스를 갖습니다
+- **CI/CD** — 검증과 롤백이 포함된 자동 배포
 
-You don't write `CREATE TABLE` statements yourself. You just write the `SELECT`, and dbt handles the rest.
+결과적으로 품질이 높고, 유지보수가 쉽고, 프로덕션에서 덜 깨지는 파이프라인이 됩니다.
+
+---
+
+## 동작 방식 — 메커니즘
+
+SQL 파일을 하나 작성합니다. 평범한 `SELECT` 문처럼 생겼습니다. dbt는 그 파일을 받아서, 웨어하우스의 어디에 들어가야 하는지(어떤 schema, 어떤 dataset, 어떤 환경) 판단하고, 필요한 DDL/DML로 감싸고, 사용한 Jinja 템플릿을 컴파일한 뒤 실행합니다.
+
+`dbt run`을 실행하면:
+1. SQL을 컴파일합니다 (`ref()` 호출, `source()` 호출, Jinja macro 등 모든 것을 해석)
+2. 컴파일된 SQL을 웨어하우스로 보냅니다
+3. 설정한 대로 결과를 table, view, incremental table, 또는 ephemeral CTE로 materialize합니다
+
+`CREATE TABLE` 문을 직접 쓰지 않습니다. `SELECT`만 작성하면 나머지는 dbt가 처리합니다.
 
 ---
 
 ## dbt Core vs dbt Cloud
 
-There are two ways to use dbt, and it's worth understanding the difference:
+dbt를 쓰는 두 가지 방법이 있고, 차이를 이해해둘 만합니다:
 
 ### dbt Core
 
-Open source. Free. You install it locally on your machine (or wherever) and run commands from the terminal. You're responsible for:
+오픈소스. 무료. 로컬 머신(또는 원하는 곳)에 설치해서 터미널에서 명령어를 실행합니다. 다음은 직접 책임져야 합니다:
 
-- Setting up your dev environment
-- Orchestrating production runs (Airflow, cron jobs, whatever you want)
-- Hosting documentation if you want it accessible
-- Managing logs and metadata
+- dev 환경 셋업
+- 프로덕션 실행 오케스트레이션 (Airflow, cron job 등 원하는 것)
+- 문서를 접근 가능하게 하려면 직접 호스팅
+- 로그와 메타데이터 관리
 
-It's the raw engine. You get full control, but you also have to build the surrounding infrastructure yourself.
+날것의 엔진입니다. 완전한 제어권을 얻는 대신 주변 인프라를 직접 만들어야 합니다.
 
 ### dbt Cloud
 
-SaaS product that runs dbt Core under the hood. It gives you:
+내부적으로 dbt Core를 돌리는 SaaS 제품. 다음을 제공합니다:
 
-- A web-based IDE for writing transformations (or you can use a Cloud CLI if you prefer local development)
-- Environment management — dev/staging/prod, all handled for you
-- Built-in orchestration (job scheduling, triggers, dependencies)
-- Hosted documentation (automatically generated and served)
-- Logging and observability
-- APIs for administration and metadata access
-- A semantic layer for metrics (if you need it)
+- 변환을 작성하는 웹 기반 IDE (로컬 개발을 선호하면 Cloud CLI도 가능)
+- 환경 관리 — dev/staging/prod를 알아서 처리
+- 내장 오케스트레이션 (job 스케줄링, 트리거, 의존성)
+- 호스팅되는 문서 (자동 생성 및 서빙)
+- 로깅과 관측성(observability)
+- 관리와 메타데이터 접근을 위한 API
+- 지표를 위한 semantic layer (필요하다면)
 
-There's a free Developer plan that works for small teams or individual learning. For anything bigger, it's a paid product.
-
----
-
-## The course setup — two paths
-
-The Zoomcamp gives you two options, and the videos will alternate between them (version A and version B):
-
-### Option A: BigQuery + dbt Cloud (recommended)
-
-- Data warehouse: BigQuery (assuming you set this up in previous weeks)
-- dbt: dbt Cloud Developer plan (free account, web IDE)
-- No local installation needed
-
-This is the path most of the videos will follow. It's the fastest way to get started and closest to how teams actually use dbt in production.
-
-### Option B: DuckDB + dbt Core
-
-- Data warehouse: DuckDB (local or however you've got it set up)
-- dbt: dbt Core installed locally
-- Dev environment: your own IDE (VS Code, etc.)
-- Orchestration: you'll need to handle this separately (Airflow, Prefect, whatever)
-
-This path gives you more hands-on control but requires more setup.
+소규모 팀이나 개인 학습에 쓸 수 있는 무료 Developer 플랜이 있습니다. 그보다 큰 규모는 유료입니다.
 
 ---
 
-## The project flow
+## 강의 셋업 — 두 가지 경로
 
-By the time we get to the end of the module, here's what we'll have built:
+Zoomcamp은 두 가지 선택지를 주고, 영상들이 둘 사이를 오갑니다 (버전 A와 버전 B):
 
-1. Raw data sitting in the warehouse — trip data from previous weeks, plus a lookup table to demonstrate joining multiple sources
-2. dbt transformations that turn that raw data into properly modeled tables following the dimensional modeling concepts from 4.1.1
-3. Dashboards that consume the final output and make it useful for business stakeholders
+### 옵션 A: BigQuery + dbt Cloud (권장)
 
-The next videos will walk through actually setting this up and building it out step by step.
+- 데이터 웨어하우스: BigQuery (이전 주차에 셋업했다고 가정)
+- dbt: dbt Cloud Developer 플랜 (무료 계정, 웹 IDE)
+- 로컬 설치 불필요
+
+대부분의 영상이 따라가는 경로입니다. 가장 빠르게 시작할 수 있고, 팀이 실제 프로덕션에서 dbt를 쓰는 방식에 가장 가깝습니다.
+
+### 옵션 B: DuckDB + dbt Core
+
+- 데이터 웨어하우스: DuckDB (로컬 또는 각자 셋업한 방식)
+- dbt: 로컬에 설치한 dbt Core
+- dev 환경: 각자의 IDE (VS Code 등)
+- 오케스트레이션: 별도로 처리해야 합니다 (Airflow, Prefect 등)
+
+직접 손대는 제어권은 더 많지만 셋업이 더 필요합니다.
+
+---
+
+## 프로젝트 흐름
+
+이 모듈이 끝날 즈음 만들어져 있을 것들:
+
+1. 웨어하우스에 있는 raw 데이터 — 이전 주차의 trip 데이터, 그리고 여러 소스를 join하는 것을 보여줄 lookup table
+2. 4.1.1의 dimensional modeling 개념을 따라 그 raw 데이터를 제대로 모델링된 테이블로 바꾸는 dbt 변환
+3. 최종 결과물을 소비해 비즈니스 이해관계자에게 유용하게 만드는 대시보드
+
+다음 영상들에서 이것을 실제로 셋업하고 단계별로 만들어 나갑니다.

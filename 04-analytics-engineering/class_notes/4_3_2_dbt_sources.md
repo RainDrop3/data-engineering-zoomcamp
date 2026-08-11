@@ -1,29 +1,29 @@
 # DE Zoomcamp 4.3.2 — dbt Sources
 
-> 📄 Video: [dbt Sources](https://www.youtube.com/watch?v=7CrrXazV_8k)  
-> 📄 Official docs: [Sources](https://docs.getdbt.com/docs/build/sources)  
-> 📄 Best practices: [How we structure our dbt projects — Staging](https://docs.getdbt.com/best-practices/how-we-structure/03-staging)
+> 📄 영상: [dbt Sources](https://www.youtube.com/watch?v=7CrrXazV_8k)  
+> 📄 공식 문서: [Sources](https://docs.getdbt.com/docs/build/sources)  
+> 📄 모범 사례: [How we structure our dbt projects — Staging](https://docs.getdbt.com/best-practices/how-we-structure/03-staging)
 
-This video is about telling dbt where your raw data actually lives. Sources are how dbt knows which tables to pull from before any transformation happens. Everything in this video takes place inside the `models/staging/` folder that we set up in 4.3.1.
+이 영상은 raw 데이터가 실제로 어디에 있는지 dbt에게 알려주는 방법을 다룹니다. source는 변환이 일어나기 전에 어떤 테이블에서 데이터를 가져올지 dbt가 아는 수단입니다. 이 영상의 모든 내용은 4.3.1에서 셋업한 `models/staging/` 폴더 안에서 이뤄집니다.
 
 ---
 
-## Defining Sources
+## Source 정의하기
 
 ### `sources.yml`
-- A **YAML file** inside `models/staging/` that tells dbt where your raw data is
-- The **name** of the file is arbitrary — common choices are `sources.yml`, `_sources.yml` (underscore so it sorts to the top), or something named after the origin like `bigquery_sources.yml`
-- You give your source a **name** — this is arbitrary too. Think of it as a label: `raw`, `raw_data`, or something more descriptive like `google_analytics_data` or `finance_data`
-- Then you provide three fields that are **not** arbitrary — they must exactly match your warehouse:
-  - **database** — the database name or GCP project
-  - **schema** — the schema inside that database or BigQuery dataset
-  - **tables** — the individual tables you want to reference
+- raw 데이터가 어디에 있는지 dbt에게 알려주는 `models/staging/` 안의 **YAML 파일**
+- 파일 **이름**은 임의입니다 — 흔한 선택은 `sources.yml`, `_sources.yml`(맨 위로 정렬되도록 밑줄), 또는 출처를 딴 `bigquery_sources.yml` 같은 이름입니다
+- source에 **name**을 붙이는데 이것도 임의입니다. 라벨이라고 생각하세요: `raw`, `raw_data`, 또는 `google_analytics_data`나 `finance_data`처럼 더 서술적인 이름
+- 그다음 임의가 **아닌** 세 필드를 제공합니다 — 웨어하우스와 정확히 일치해야 합니다:
+  - **database** — 데이터베이스 이름 또는 GCP 프로젝트
+  - **schema** — 해당 데이터베이스 안의 schema 또는 BigQuery dataset
+  - **tables** — 참조하려는 개별 테이블들
 
 ```yaml
 sources:
   - name: nytaxi
-    database: taxi_rides_ny # Or name of your GCP project
-    schema: prod # Or name of your BigQuery dataset
+    database: taxi_rides_ny # 또는 여러분의 GCP 프로젝트 이름
+    schema: prod # 또는 여러분의 BigQuery dataset 이름
     
     tables:
       - name: green_tripdata
@@ -32,61 +32,61 @@ sources:
 
 > 📄 [Sources — full reference](https://docs.getdbt.com/docs/build/sources)
 
-### Local (DuckDB) vs BigQuery — what goes where
+### 로컬(DuckDB) vs BigQuery — 무엇이 어디에 들어가는가
 
-The meaning of database, schema, and tables changes depending on your setup:
+database, schema, tables의 의미는 셋업에 따라 달라집니다:
 
-| Field | Local (DuckDB) | BigQuery |
+| 필드 | 로컬 (DuckDB) | BigQuery |
 |---|---|---|
-| **database** | `taxi_rides_ny` | Your GCP Project ID |
-| **schema** | `main` | Your BigQuery Dataset name (e.g. `trips_data_all`) |
-| **tables** | `green_tripdata`, `yellow_tripdata` | Same table names |
+| **database** | `taxi_rides_ny` | 여러분의 GCP Project ID |
+| **schema** | `main` | 여러분의 BigQuery Dataset 이름 (예: `trips_data_all`) |
+| **tables** | `green_tripdata`, `yellow_tripdata` | 동일한 테이블 이름 |
 
-- If you followed the default local setup, these names should be exactly right out of the box
-- If you're on BigQuery, just double-check that your table names match what you actually have in your dataset
+- 기본 로컬 셋업을 따랐다면 이 이름들은 그대로 정확할 것입니다
+- BigQuery를 쓴다면 테이블 이름이 실제 dataset에 있는 것과 맞는지 한 번 더 확인하세요
 
 ---
 
-## Using Sources in Your Models
+## Model에서 Source 사용하기
 
-### The `source()` function
-- Instead of hard-coding the full path to your table (e.g. `FROM production.trips_data_all.green_tripdata`), you use the **`source()`** function
-- It's a **Jinja macro** — you'll recognize it by the double curly brackets `{{ }}`
-- It takes two arguments:
-  - The **source name** — the one you defined in your YAML (e.g. `staging`)
-  - The **table name** — must match exactly what you put under `tables` in the YAML
-- As long as there's a YAML file somewhere in your project with a matching source declaration, this will resolve correctly at compile time
+### `source()` 함수
+- 테이블의 전체 경로를 하드코딩하는 대신(예: `FROM production.trips_data_all.green_tripdata`) **`source()`** 함수를 사용합니다
+- **Jinja macro**입니다 — 이중 중괄호 `{{ }}`로 알아볼 수 있습니다
+- 두 개의 인자를 받습니다:
+  - **source 이름** — YAML에 정의한 것 (예: `staging`)
+  - **테이블 이름** — YAML의 `tables` 아래에 넣은 것과 정확히 일치해야 함
+- 프로젝트 어딘가에 일치하는 source 선언이 담긴 YAML 파일이 있으면 컴파일 시점에 올바르게 해석됩니다
 
 ```sql
 select * from {{ source('staging', 'green_tripdata') }}
 ```
 
-- Run a preview and you should see the raw table data come back
-- If it works, that's the foundation — everything else builds on this
+- preview를 실행하면 raw 테이블 데이터가 돌아오는 것을 볼 수 있습니다
+- 이게 동작한다면 기반이 갖춰진 것입니다 — 나머지 모든 것이 이 위에 쌓입니다
 
 ---
 
-## Building a Proper Staging Model
+## 제대로 된 Staging Model 만들기
 
-### Naming convention
-- Prefix your staging model files with **`stg_`** to make it clear what layer they belong to
-- So `green_tripdata.sql` becomes `stg_green_tripdata.sql`
-- Other common prefixes: `int_` for intermediate, and sometimes nothing at all for final mart models
+### 명명 규칙
+- staging model 파일명 앞에 **`stg_`**를 붙여 어느 계층에 속하는지 분명히 하세요
+- 그래서 `green_tripdata.sql`은 `stg_green_tripdata.sql`이 됩니다
+- 다른 흔한 접두사: intermediate는 `int_`, 최종 mart model은 아무것도 안 붙이기도 합니다
 
-### Rename and reorder columns
-- List out every column explicitly and give them **cleaner aliases**
-- Be purposeful about the **order** — it should follow a logical grouping:
-  - **Identifiers first** — `vendor_id`, `trip_id`, anything that's an ID
-  - **Timestamps next** — `pickup_datetime`, `dropoff_datetime`
-  - **Trip details** — `passenger_count`, `trip_distance`, `trip_type`
-  - **Payment info last** — `fare_amount`, `extra`, `mta_tax`, `tip_amount`, `tolls_amount`, `total_amount`, `payment_type`
+### 컬럼 이름 바꾸고 순서 정리하기
+- 모든 컬럼을 명시적으로 나열하고 **더 깔끔한 alias**를 부여하세요
+- **순서**에 의도를 담으세요 — 논리적인 묶음을 따라야 합니다:
+  - **식별자 먼저** — `vendor_id`, `trip_id` 등 ID인 것들
+  - **timestamp 다음** — `pickup_datetime`, `dropoff_datetime`
+  - **trip 상세** — `passenger_count`, `trip_distance`, `trip_type`
+  - **결제 정보 마지막** — `fare_amount`, `extra`, `mta_tax`, `tip_amount`, `tolls_amount`, `total_amount`, `payment_type`
 
-### Cast data types explicitly
-- Don't rely on whatever the source gave you — cast everything to the type you actually want:
-  - IDs → `integer`
-  - Timestamps → `timestamp`
-  - Counts → `integer`
-  - Monetary values → `numeric` or `float` (depends on your platform)
+### 데이터 타입을 명시적으로 cast하기
+- source가 준 타입에 의존하지 말고, 실제로 원하는 타입으로 전부 cast하세요:
+  - ID → `integer`
+  - Timestamp → `timestamp`
+  - 개수(Count) → `integer`
+  - 금액 → `numeric` 또는 `float` (플랫폼에 따라 다름)
 
 ```sql
 with tripdata as (
@@ -132,17 +132,17 @@ select * from renamed
 
 ---
 
-## A Note on Filtering
+## 필터링에 대한 한마디
 
-- The general recommendation is to keep staging models as **1:1 copies** of the source — same number of rows, same number of columns, just cleaned up
-- That said, this dataset has some data quality issues (we'll cover those later), so it makes sense to filter out rows where **`vendor_id IS NULL`** right here in staging
-- It's a deviation from convention, but a practical one for this project
+- 일반적인 권장은 staging model을 source의 **1:1 복사본**으로 유지하는 것입니다 — 같은 행 수, 같은 컬럼 수, 정리만 된 상태
+- 다만 이 데이터셋에는 데이터 품질 이슈가 몇 가지 있어서(나중에 다룹니다), **`vendor_id IS NULL`**인 행을 여기 staging에서 걸러내는 것이 합리적입니다
+- 관례에서 벗어나는 것이지만, 이 프로젝트에서는 실용적인 선택입니다
 
 ---
 
-## Your Exercise
+## 연습 과제
 
-Do the same thing for the **yellow tripdata** table. The columns are almost identical to green, so it shouldn't be too painful. By the end you should have:
-- A `sources.yml` that declares both tables
-- A `stg_green_tripdata.sql` staging model
-- A `stg_yellow_tripdata.sql` staging model
+**yellow tripdata** 테이블에 대해 같은 작업을 하세요. 컬럼이 green과 거의 동일하므로 그리 고통스럽지 않을 것입니다. 끝나면 다음이 갖춰져 있어야 합니다:
+- 두 테이블을 선언한 `sources.yml`
+- `stg_green_tripdata.sql` staging model
+- `stg_yellow_tripdata.sql` staging model

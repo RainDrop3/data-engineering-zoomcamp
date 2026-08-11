@@ -1,75 +1,75 @@
-# Troubleshooting DuckDB Out of Memory Errors
+# DuckDB Out of Memory 에러 문제 해결
 
-If you're getting `Out of Memory` errors while running dbt build commands, don't panic. This is a common issue, especially on machines with limited RAM. This guide explains why it happens and what you can do about it.
+dbt build 명령을 실행하다 `Out of Memory` 에러가 난다면 당황하지 마세요. RAM이 제한된 머신에서 특히 흔한 문제입니다. 이 가이드는 왜 그런 일이 일어나는지, 그리고 무엇을 할 수 있는지 설명합니다.
 
-## Why does this happen?
+## 왜 이런 일이 일어나나?
 
-DuckDB is an **in-process database**, which means it runs inside your computer's memory (RAM) rather than on a remote server. The NYC taxi dataset we use in this project contains **tens of millions of rows** across 24 months of yellow and green taxi data. When dbt builds models, DuckDB needs to load, transform, and write this data (all using your local RAM).
+DuckDB는 **in-process 데이터베이스**입니다. 원격 서버가 아니라 여러분 컴퓨터의 메모리(RAM) 안에서 돌아간다는 뜻입니다. 이 프로젝트에서 쓰는 NYC taxi 데이터셋은 24개월치 yellow와 green taxi 데이터에 걸쳐 **수천만 행**을 담고 있습니다. dbt가 model을 빌드할 때 DuckDB는 이 데이터를 로드하고, 변환하고, 써야 합니다 (전부 로컬 RAM을 사용해서요).
 
-Some operations are more memory-intensive than others:
+어떤 연산은 다른 것보다 메모리를 더 많이 씁니다:
 
-| Operation | Why it's expensive | Where it happens |
+| 연산 | 비싼 이유 | 발생 위치 |
 |---|---|---|
-| `QUALIFY` with window functions | Requires sorting and partitioning the entire dataset in memory | `int_trips.sql` (deduplication) |
-| `UNION ALL` on large tables | Combines two large datasets into one | `int_trips_unioned.sql` |
-| Surrogate key generation (`generate_surrogate_key`) | Computes hashes across the full dataset | `int_trips.sql` |
-| `JOIN` on large fact tables | Expands memory footprint when enriching trips with zones | `fct_trips.sql` |
+| window function과 함께 쓰는 `QUALIFY` | 전체 데이터셋을 메모리에서 정렬하고 파티셔닝해야 함 | `int_trips.sql` (중복 제거) |
+| 큰 테이블에 대한 `UNION ALL` | 두 개의 큰 데이터셋을 하나로 결합 | `int_trips_unioned.sql` |
+| Surrogate key 생성 (`generate_surrogate_key`) | 전체 데이터셋에 대해 해시 계산 | `int_trips.sql` |
+| 큰 fact table에 대한 `JOIN` | trip을 zone으로 풍부하게 만들 때 메모리 사용량 증가 | `fct_trips.sql` |
 
-## Check your available RAM
+## 사용 가능한 RAM 확인하기
 
-Before troubleshooting, know what you're working with. You can generally find this in your settings menu.
+문제 해결에 앞서 무엇을 가지고 작업하는지 파악하세요. 보통 설정 메뉴에서 확인할 수 있습니다.
 
-As a rule of thumb:
+대략적인 기준:
 
-- **4 GB RAM**: You will very likely hit OOM. Consider using GitHub Codespaces or the Cloud Setup instead.
-- **8 GB RAM**: You might hit OOM on some models. Adjust memory settings or use GitHub Codespaces.
-- **16+ GB RAM**: You should be fine with default settings.
+- **4 GB RAM**: OOM이 날 가능성이 매우 높습니다. GitHub Codespaces나 Cloud Setup을 고려하세요.
+- **8 GB RAM**: 일부 model에서 OOM이 날 수 있습니다. 메모리 설정을 조정하거나 GitHub Codespaces를 사용하세요.
+- **16 GB 이상**: 기본 설정으로 괜찮을 것입니다.
 
-## Option A: Use GitHub Codespaces or Cloud Setup
+## 옵션 A: GitHub Codespaces나 Cloud Setup 사용
 
-If your local machine doesn't have enough RAM, the easiest solution is to avoid running DuckDB locally altogether.
+로컬 머신에 RAM이 부족하다면, 가장 쉬운 해결책은 DuckDB를 로컬에서 돌리는 것 자체를 피하는 것입니다.
 
 ### GitHub Codespaces
 
-Run the project in a **GitHub Codespace**. The free tier includes machines with **4 cores / 8 GB RAM**, and **8 cores / 16 GB RAM** is available within the free monthly quota for personal accounts. A 16 GB machine can comfortably run this entire project without any of the workarounds below.
+프로젝트를 **GitHub Codespace**에서 실행하세요. 무료 티어에 **4코어 / 8 GB RAM** 머신이 포함되고, 개인 계정의 월 무료 할당량 내에서 **8코어 / 16 GB RAM**도 사용 가능합니다. 16 GB 머신이면 아래의 우회책 없이도 이 프로젝트 전체를 편안히 돌릴 수 있습니다.
 
-To get started:
+시작하려면:
 
-1. Go to the [course repository on GitHub](https://github.com/DataTalksClub/data-engineering-zoomcamp).
-2. Click **Code** > **Codespaces** > **Create codespace on main**.
-3. Select the **8-core** machine type for the best experience.
+1. GitHub의 [강의 저장소](https://github.com/DataTalksClub/data-engineering-zoomcamp)로 이동합니다.
+2. **Code** > **Codespaces** > **Create codespace on main**을 클릭합니다.
+3. 최적의 경험을 위해 **8코어** 머신 타입을 선택합니다.
 
-Codespaces come with Python, pip, and git pre-installed, so setup is minimal.
+Codespaces에는 Python, pip, git이 미리 설치되어 있어 셋업이 최소한으로 끝납니다.
 
 ### Cloud Setup (BigQuery)
 
-Alternatively, use the **Cloud Setup (BigQuery)** path. BigQuery runs on Google's servers, so your local RAM doesn't matter. See the [Cloud Setup Guide](cloud_setup.md).
+또는 **Cloud Setup (BigQuery)** 경로를 사용하세요. BigQuery는 Google 서버에서 돌아가므로 로컬 RAM은 중요하지 않습니다. [Cloud Setup 가이드](cloud_setup.md)를 참고하세요.
 
-## Option B: Make it work on your local machine
+## 옵션 B: 로컬 머신에서 돌아가게 만들기
 
-If you prefer to run the project locally, follow the steps below to reduce memory usage.
+프로젝트를 로컬에서 돌리고 싶다면 아래 단계를 따라 메모리 사용량을 줄이세요.
 
-### Step 1: Adjust DuckDB memory settings in `profiles.yml`
+### Step 1: `profiles.yml`에서 DuckDB 메모리 설정 조정
 
-Your `~/.dbt/profiles.yml` controls how much memory DuckDB can use. Here's what you can tune:
+`~/.dbt/profiles.yml`이 DuckDB가 쓸 수 있는 메모리 양을 제어합니다. 조정할 수 있는 것들:
 
-- **`memory_limit`**: By default, DuckDB will try to use up to 80% of your system's RAM. That sounds reasonable, but your operating system, browser, IDE, and other apps also need memory. If DuckDB claims too much, the OS may kill the process — that's your OOM error. Setting an explicit limit (roughly **50% of your total RAM**) leaves enough room for everything else. So if you have 8 GB, try `'4GB'`.
-- **`threads`**: This controls how many **dbt models** are built in parallel. Lowering `threads` to `1` means fewer concurrent models, which reduces overall memory pressure.
-- **`preserve_insertion_order: false`**: Tells DuckDB it doesn't need to maintain row order, which saves memory.
+- **`memory_limit`**: 기본적으로 DuckDB는 시스템 RAM의 최대 80%까지 쓰려고 합니다. 합리적으로 들리지만 운영체제, 브라우저, IDE, 다른 앱들도 메모리가 필요합니다. DuckDB가 너무 많이 차지하면 OS가 프로세스를 죽일 수 있습니다 — 그게 바로 OOM 에러입니다. 명시적 한도(대략 **전체 RAM의 50%**)를 설정하면 나머지에 충분한 여유가 남습니다. 8 GB라면 `'4GB'`를 시도해 보세요.
+- **`threads`**: 몇 개의 **dbt model**을 병렬로 빌드할지 제어합니다. `threads`를 `1`로 낮추면 동시에 도는 model이 줄어 전체 메모리 압박이 줄어듭니다.
+- **`preserve_insertion_order: false`**: 행 순서를 유지할 필요가 없다고 DuckDB에 알려 메모리를 절약합니다.
 
-### Step 2: Use `dbt retry` after a failure
+### Step 2: 실패 후에는 `dbt retry` 사용
 
-If your `dbt build` fails partway through, you **don't need to rebuild everything from scratch**. Use:
+`dbt build`가 도중에 실패했다면 **전부 처음부터 다시 빌드할 필요가 없습니다.** 다음을 사용하세요:
 
 ```bash
 dbt retry
 ```
 
-This command picks up where the last run left off, only running the models that failed or were skipped. This is very useful when an OOM error kills a single model — fix the issue, then retry without re-running the models that already succeeded.
+이 명령은 마지막 실행이 멈춘 지점부터 이어받아, 실패했거나 건너뛴 model만 실행합니다. OOM 에러가 model 하나를 죽였을 때 매우 유용합니다 — 문제를 고친 뒤, 이미 성공한 model을 다시 돌리지 않고 재시도하면 됩니다.
 
-### Step 3: Build models selectively with `--select`
+### Step 3: `--select`로 선택적으로 빌드
 
-Instead of building the entire project at once, build one model at a time to reduce peak memory usage:
+프로젝트 전체를 한 번에 빌드하는 대신 model을 하나씩 빌드해 최대 메모리 사용량을 줄이세요:
 
 ```bash
 dbt build --select stg_yellow_tripdata --target prod
@@ -79,22 +79,22 @@ dbt build --select int_trips --target prod
 dbt build --select fct_trips --target prod
 ```
 
-This way, DuckDB only needs to handle one model at a time.
+이렇게 하면 DuckDB가 한 번에 한 model만 다루면 됩니다.
 
-### Step 4: Leverage incremental models
+### Step 4: incremental model 활용
 
-The `fct_trips` model in this project is already configured as **incremental**. This means that after the first full build, subsequent runs only process **new records** instead of reprocessing the entire dataset.
+이 프로젝트의 `fct_trips` model은 이미 **incremental**로 설정되어 있습니다. 첫 전체 빌드 이후에는 전체 데이터셋을 다시 처리하는 대신 **새 레코드만** 처리한다는 뜻입니다.
 
-If your first full build fails due to OOM but some models succeeded, use `dbt retry` (Step 2). Once `fct_trips` is built for the first time, future runs will be much lighter on memory.
+첫 전체 빌드가 OOM으로 실패했지만 일부 model이 성공했다면 `dbt retry`(Step 2)를 사용하세요. `fct_trips`가 한 번 빌드되고 나면 이후 실행은 메모리 부담이 훨씬 가벼워집니다.
 
-## DuckDB performance best practices
+## DuckDB 성능 모범 사례
 
-These tips come from [DuckDB's official performance guide](https://duckdb.org/docs/guides/performance/environment.html):
+다음 팁은 [DuckDB 공식 성능 가이드](https://duckdb.org/docs/guides/performance/environment.html)에서 왔습니다:
 
-1. **Close other applications**: Browsers, IDEs, and other apps compete for RAM. Close what you don't need before running `dbt build`.
-2. **Use an SSD**: DuckDB spills to disk when it runs out of memory. An SSD makes this spill-to-disk process much faster than an HDD.
-3. **Avoid running inside Docker** (if possible): Docker containers have memory limits that may be lower than your system's total RAM. If you must use Docker, increase the container's memory limit.
+1. **다른 애플리케이션을 닫으세요**: 브라우저, IDE, 다른 앱들이 RAM을 두고 경쟁합니다. `dbt build` 전에 필요 없는 것을 닫으세요.
+2. **SSD를 사용하세요**: DuckDB는 메모리가 부족하면 디스크로 spill합니다. SSD는 이 spill-to-disk 과정을 HDD보다 훨씬 빠르게 만듭니다.
+3. **가능하면 Docker 안에서 실행하지 마세요**: Docker 컨테이너에는 시스템 전체 RAM보다 낮을 수 있는 메모리 한도가 있습니다. Docker를 꼭 써야 한다면 컨테이너의 메모리 한도를 올리세요.
 
-## Still stuck?
+## 그래도 막힌다면?
 
-If you've tried everything above and still can't build the project, ask for help in the [course Slack channel](https://datatalks-club.slack.com/). Include your RAM, OS, and the exact error message.
+위의 모든 것을 시도했는데도 프로젝트를 빌드할 수 없다면 [강의 Slack 채널](https://datatalks-club.slack.com/)에 도움을 요청하세요. RAM, OS, 그리고 정확한 에러 메시지를 함께 적어주세요.
