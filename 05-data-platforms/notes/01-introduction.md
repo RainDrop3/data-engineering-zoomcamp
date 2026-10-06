@@ -1,28 +1,28 @@
-# 5.1 - Introduction to Bruin
+# 5.1 - Bruin 소개
 
-## What is Bruin?
+## Bruin이란?
 
-Bruin is an end-to-end data platform that combines ingestion, transformations, orchestration, data quality checks, metadata, and lineage into a single tool.
+Bruin은 수집(ingestion), 변환(transformation), 오케스트레이션, 데이터 품질 체크, 메타데이터, lineage를 하나의 도구로 합친 end-to-end 데이터 플랫폼입니다.
 
-Instead of using five or six different tools configured separately, Bruin lets you have your code logic, configurations, dependencies, and quality checks all in the same place.
+대여섯 개의 서로 다른 도구를 각각 따로 설정해 쓰는 대신, Bruin에서는 코드 로직, 설정, 의존성, 품질 체크를 모두 한곳에 둘 수 있습니다.
 
-## The modern data stack
+## 모던 데이터 스택
 
-A typical data stack involves several components:
+일반적인 데이터 스택은 여러 구성 요소로 이루어집니다:
 
-- Extract/ingest data from third-party sources or databases into a data warehouse or data lake
-- Run transformations: clean data, create reports, push results to a warehouse, lake, or third-party application
-- Orchestrate: tell different scripts and services when to run, how to run, and how to communicate with each other
-- Data quality and governance: ensure accuracy, completeness, and consistency of data before delivering it to consumers
+- 추출/수집: 서드파티 소스나 데이터베이스에서 데이터 웨어하우스나 데이터 레이크로 데이터를 가져옴
+- 변환 실행: 데이터를 정제하고, 리포트를 만들고, 결과를 웨어하우스·레이크·서드파티 애플리케이션으로 내보냄
+- 오케스트레이션: 여러 스크립트와 서비스에게 언제 실행할지, 어떻게 실행할지, 서로 어떻게 통신할지 알려줌
+- 데이터 품질과 거버넌스: 데이터를 소비자에게 전달하기 전에 정확성, 완전성, 일관성을 보장함
 
-Bruin brings all of these together so you don't need to be a DevOps person, data infrastructure engineer, and data architect just to build a pipeline.
+Bruin은 이 모든 것을 하나로 묶어, 파이프라인 하나 만들려고 DevOps 담당자, 데이터 인프라 엔지니어, 데이터 아키텍트를 모두 겸할 필요가 없게 해줍니다.
 
-## Learning goals for the tutorial series
+## 튜토리얼 시리즈의 학습 목표
 
-- Bruin project structure
-- What is a pipeline and what are assets
-- How to configure pipelines
-- Materialization strategies supported by Bruin
-- Lineage and how to build dependencies between assets
-- Metadata created automatically and manually
-- Parameterizing pipelines with custom variables
+- Bruin 프로젝트 구조
+- pipeline이란 무엇이고 asset이란 무엇인가
+- pipeline 설정하는 법
+- Bruin이 지원하는 materialization 전략
+- lineage와 asset 간 의존성을 만드는 법
+- 자동으로, 그리고 수동으로 생성되는 메타데이터
+- 커스텀 변수로 pipeline 파라미터화하기

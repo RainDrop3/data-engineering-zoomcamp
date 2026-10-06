@@ -1,155 +1,155 @@
-# 5.6 - Core Concepts: Commands
+# 5.6 - 핵심 개념: Commands
 
 🎥 [Bruin Core Concepts | Commands](https://www.youtube.com/watch?v=3nykPEs_V7E) (6:46)
 
-## Bruin CLI Commands
+## Bruin CLI 명령어
 
-Commands are how you interact with your Bruin project - running pipelines, validating configurations, querying data, and more.
+명령어는 Bruin 프로젝트와 상호작용하는 수단입니다 — pipeline 실행, 설정 검증, 데이터 조회 등.
 
-## `bruin run` - Execute a Pipeline
+## `bruin run` - Pipeline 실행
 
-Creates a **single execution instance** (a "run") of your pipeline.
+pipeline의 **단일 실행 인스턴스**("run")를 만듭니다.
 
-### Basic Usage
+### 기본 사용법
 
 ```bash
 bruin run ./pipelines/nyc-taxi/pipeline.yml
 ```
 
-### Run Scope Options
+### 실행 범위 옵션
 
-| Option | Description |
+| 옵션 | 설명 |
 |--------|-------------|
-| Entire pipeline | Runs all assets in dependency order |
-| Single asset | `--asset staging.trips_summary` |
-| With upstream | `--asset X --upstream` - Runs X plus all dependencies |
-| With downstream | `--asset X --downstream` - Runs X plus all dependents |
+| pipeline 전체 | 모든 asset을 의존성 순서대로 실행 |
+| 단일 asset | `--asset staging.trips_summary` |
+| 상류 포함 | `--asset X --upstream` - X와 그 의존 대상 전부 실행 |
+| 하류 포함 | `--asset X --downstream` - X와 X에 의존하는 것 전부 실행 |
 
-### Common Run Flags
+### 자주 쓰는 run 플래그
 
-| Flag | Description |
+| 플래그 | 설명 |
 |------|-------------|
-| `--start-date DATE` | Set execution start date |
-| `--end-date DATE` | Set execution end date |
-| `--full-refresh` | Drop and recreate tables (overrides incremental) |
-| `--exclusive-end-date` | End date is exclusive (default: inclusive) |
-| `--environment ENV` | Use specific environment (dev/prod) |
-| `--var KEY=VALUE` | Override custom variables |
+| `--start-date DATE` | 실행 시작 날짜 설정 |
+| `--end-date DATE` | 실행 종료 날짜 설정 |
+| `--full-refresh` | 테이블을 drop하고 다시 생성 (incremental을 무시) |
+| `--exclusive-end-date` | 종료 날짜를 exclusive로 (기본값: inclusive) |
+| `--environment ENV` | 특정 environment 사용 (dev/prod) |
+| `--var KEY=VALUE` | 커스텀 변수 덮어쓰기 |
 
-### Example Run Commands
+### 실행 명령 예시
 
 ```bash
-# Simple run
+# 단순 실행
 bruin run ./pipelines/nyc-taxi/pipeline.yml
 
-# With date range
+# 날짜 범위 지정
 bruin run ./pipelines/nyc-taxi/pipeline.yml \
   --start-date 2020-01-01 \
   --end-date 2020-01-31
 
-# Full refresh with variables
+# 변수와 함께 full refresh
 bruin run ./pipelines/nyc-taxi/pipeline.yml \
   --full-refresh \
   --var taxi_types=["yellow","green"] \
   --environment default
 ```
 
-## `bruin validate` - Validate Pipeline
+## `bruin validate` - Pipeline 검증
 
-Checks for configuration issues before running:
+실행 전에 설정 문제를 검사합니다:
 
 ```bash
 bruin validate ./pipelines/nyc-taxi/pipeline.yml
 ```
 
-**Validates:**
-- No circular dependencies in lineage
-- Asset definitions are correct
-- Connections exist and are properly configured
-- No broken references
+**검증 항목:**
+- lineage에 순환 의존성이 없는지
+- asset 정의가 올바른지
+- connection이 존재하고 제대로 설정되어 있는지
+- 깨진 참조가 없는지
 
-**Always validate before running!**
+**실행 전에는 항상 검증하세요!**
 
-## `bruin lineage` - View Dependency Graph
+## `bruin lineage` - 의존성 그래프 보기
 
-Visualize how assets are connected:
+asset들이 어떻게 연결되어 있는지 시각화합니다:
 
 ```bash
 bruin lineage ./pipelines/nyc-taxi/pipeline.yml
 ```
 
-Shows upstream and downstream relationships between assets.
+asset 간의 상류·하류 관계를 보여줍니다.
 
-## `bruin query` - Query Data
+## `bruin query` - 데이터 조회
 
-Run ad-hoc queries against your connections:
+connection에 ad-hoc 쿼리를 실행합니다:
 
 ```bash
 bruin query --connection duckdb-default \
   --query "SELECT * FROM ingestion.trips LIMIT 10"
 ```
 
-## What is a "Run"?
+## "Run"이란?
 
-A **run** is a single instance of pipeline execution:
-- Has unique start/end times
-- May run all assets or a subset
-- Has its own variable values
-- Creates execution logs and results
+**run**은 pipeline 실행의 단일 인스턴스입니다:
+- 고유한 시작/종료 시간을 가짐
+- 모든 asset을 실행할 수도, 일부만 실행할 수도 있음
+- 자체 변수 값을 가짐
+- 실행 로그와 결과를 생성
 
-## Putting It All Together
+## 전체 그림
 
-The complete Bruin workflow:
+Bruin 워크플로 전체:
 
 ```
-1. Project (root, initialized)
-   └── .bruin.yml (environments, connections)
+1. Project (루트, 초기화됨)
+   └── .bruin.yml (environment, connection)
 
-2. Pipeline (scheduled grouping)
-   └── pipeline.yml (schedule, default connection, variables)
+2. Pipeline (스케줄 단위 그룹)
+   └── pipeline.yml (스케줄, 기본 connection, 변수)
 
-3. Assets (the actual work)
-   ├── Python (ingestion, processing)
-   ├── SQL (transformations)
-   └── YAML/Seed (static data)
+3. Assets (실제 작업)
+   ├── Python (수집, 처리)
+   ├── SQL (변환)
+   └── YAML/Seed (정적 데이터)
 
-4. Commands (make it happen)
-   ├── bruin run (execute)
-   ├── bruin validate (check)
-   └── bruin query (inspect)
+4. Commands (실행시키기)
+   ├── bruin run (실행)
+   ├── bruin validate (검사)
+   └── bruin query (조회)
 ```
 
-## Quick Reference
+## 빠른 참조
 
 ```bash
-# Initialize new project
+# 새 프로젝트 초기화
 bruin init zoomcamp my-pipeline
 
-# Validate before running
+# 실행 전 검증
 bruin validate ./pipeline/pipeline.yml
 
-# Run entire pipeline
+# pipeline 전체 실행
 bruin run ./pipeline/pipeline.yml
 
-# Run with date range
+# 날짜 범위 지정 실행
 bruin run ./pipeline/pipeline.yml \
   --start-date 2020-01-01 \
   --end-date 2020-01-31
 
-# Run single asset with downstream
+# 단일 asset을 하류와 함께 실행
 bruin run ./pipeline/pipeline.yml \
   --asset raw.trips \
   --downstream
 
-# View lineage
+# lineage 보기
 bruin lineage ./pipeline/pipeline.yml
 
-# Query a table
+# 테이블 조회
 bruin query --connection duckdb-default \
   --query "SELECT COUNT(*) FROM staging.trips"
 ```
 
-## Further Reading
+## 더 읽을거리
 
-- [Bruin Documentation - CLI Reference](https://getbruin.com/docs/bruin/commands/overview.html)
-- [Bruin GitHub Repository](https://github.com/bruin-data/bruin)
+- [Bruin 문서 - CLI 레퍼런스](https://getbruin.com/docs/bruin/commands/overview.html)
+- [Bruin GitHub 저장소](https://github.com/bruin-data/bruin)

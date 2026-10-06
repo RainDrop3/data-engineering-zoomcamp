@@ -1,36 +1,36 @@
-# 5.6 - Core Concepts: Assets
+# 5.6 - 핵심 개념: Assets
 
 🎥 [Bruin Core Concepts | Assets](https://www.youtube.com/watch?v=ZElY5SoqrwI) (6:11)
 
-## What is an Asset?
+## Asset이란?
 
-An **Asset** is a single file that performs a specific task, almost always related to creating or updating a table or view in the destination database.
+**Asset**은 특정 작업을 수행하는 단일 파일입니다. 거의 언제나 목적지 데이터베이스의 테이블이나 뷰를 생성하거나 갱신하는 일과 관련됩니다.
 
-Each asset file contains two parts:
+각 asset 파일은 두 부분으로 이루어집니다:
 
-1. **Definition** (Configuration) - Metadata, name, type, connection
-2. **Content** (Code) - The actual SQL, Python, or R code to execute
+1. **Definition** (설정) - 메타데이터, 이름, 유형, connection
+2. **Content** (코드) - 실제로 실행할 SQL, Python, R 코드
 
-## Asset Types
+## Asset 유형
 
-| Type | Description | Use Case |
+| 유형 | 설명 | 사용 사례 |
 |------|-------------|----------|
-| **Python** | Python scripts | Ingestion, data processing, ML models |
-| **SQL** | SQL queries | Transformations, aggregations |
-| **YAML/Seed** | File-based tables | Reference data, static lookups |
-| **R** | R scripts | Statistical analysis, R-specific workflows |
+| **Python** | Python 스크립트 | 수집, 데이터 처리, ML 모델 |
+| **SQL** | SQL 쿼리 | 변환, 집계 |
+| **YAML/Seed** | 파일 기반 테이블 | 참조 데이터, 정적 lookup |
+| **R** | R 스크립트 | 통계 분석, R 전용 워크플로 |
 
-## Asset Naming
+## Asset 이름
 
-The asset name can be:
-1. **Explicitly defined** in the decorator
-2. **Inferred from file path** (default behavior)
+asset 이름은 다음 중 하나로 정해집니다:
+1. 데코레이터에서 **명시적으로 정의**
+2. **파일 경로로부터 추론** (기본 동작)
 
-**Convention:** Group assets by schema/dataset:
-- `assets/raw/trips_raw.py` → Creates table `raw.trips_raw`
-- `assets/staging/trips_summary.sql` → Creates table `staging.trips_summary`
+**관례:** asset을 schema/dataset 단위로 묶습니다:
+- `assets/raw/trips_raw.py` → `raw.trips_raw` 테이블 생성
+- `assets/staging/trips_summary.sql` → `staging.trips_summary` 테이블 생성
 
-## SQL Asset Example
+## SQL Asset 예시
 
 ```sql
 @bruin.asset(
@@ -50,16 +50,16 @@ WHERE pickup_date >= '{{ start_date }}'
 GROUP BY pickup_date
 ```
 
-### Materialization Strategies
+### Materialization 전략
 
-| Strategy | Behavior |
+| 전략 | 동작 |
 |----------|----------|
-| `table` | Recreates the table on each run |
-| `view` | Creates a view (no data stored) |
-| `insert` | Appends new data to existing table |
-| `incremental` | Smart merge based on key columns |
+| `table` | 매 실행마다 테이블을 다시 생성 |
+| `view` | 뷰를 생성 (데이터는 저장하지 않음) |
+| `insert` | 기존 테이블에 새 데이터를 덧붙임 |
+| `incremental` | 키 컬럼 기준의 똑똑한 merge |
 
-## Python Asset Example (Ingestion)
+## Python Asset 예시 (수집)
 
 ```python
 @bruin.asset(
@@ -71,16 +71,16 @@ def ingest_trips():
     import requests
     import pandas as pd
 
-    # Connect to API, fetch data
+    # API에 접속해 데이터 가져오기
     response = requests.get("https://api.example.com/trips")
     data = response.json()
 
-    # Return pandas DataFrame
-    # Bruin handles materialization to database
+    # pandas DataFrame 반환
+    # 데이터베이스로의 materialization은 Bruin이 처리
     return pd.DataFrame(data)
 ```
 
-## YAML/Seed Asset Example
+## YAML/Seed Asset 예시
 
 ```yaml
 @bruin.asset(
@@ -92,39 +92,39 @@ def ingest_trips():
 path: reference_data/taxi_types.csv
 ```
 
-Simply loads a local CSV file and creates a table in the destination database.
+로컬 CSV 파일을 읽어 목적지 데이터베이스에 테이블을 만들기만 합니다.
 
-## Lineage & Dependencies
+## Lineage와 의존성
 
-Assets automatically define dependencies based on what they read:
+asset은 자신이 무엇을 읽는지에 따라 의존성을 자동으로 정의합니다:
 
-- If Asset B reads from Asset A's table, **B depends on A**
-- Visualized in VS Code extension
-- Used for execution ordering during runs
+- Asset B가 Asset A의 테이블을 읽으면, **B는 A에 의존**합니다
+- VS Code 확장에서 시각화됨
+- 실행 시 순서를 정하는 데 사용됨
 
 ```sql
--- This asset depends on raw.trips_raw
+-- 이 asset은 raw.trips_raw에 의존합니다
 @bruin.asset(name="staging.trips_summary", type="sql")
-SELECT * FROM raw.trips_raw  -- Creates dependency
+SELECT * FROM raw.trips_raw  -- 의존성을 만듦
 ```
 
-## Quick Reference
+## 빠른 참조
 
 ```bash
-# Run a specific asset
+# 특정 asset 실행
 bruin run ./pipeline.yml --asset raw.trips_raw
 
-# Run asset with all downstream dependencies
+# asset과 그 하류 의존성 전부 실행
 bruin run ./pipeline.yml --asset raw.trips_raw --downstream
 
-# Run asset with all upstream dependencies
+# asset과 그 상류 의존성 전부 실행
 bruin run ./pipeline.yml --asset staging.trips_summary --upstream
 
-# View lineage for an asset
+# asset의 lineage 보기
 bruin lineage ./pipeline.yml --asset raw.trips_raw
 ```
 
-## Further Reading
+## 더 읽을거리
 
-- [Bruin Documentation - Assets](https://getbruin.com/docs/bruin/assets/definition-schema.html)
-- [Materialization Strategies](https://getbruin.com/docs/bruin/assets/materialization.html)
+- [Bruin 문서 - Assets](https://getbruin.com/docs/bruin/assets/definition-schema.html)
+- [Materialization 전략](https://getbruin.com/docs/bruin/assets/materialization.html)

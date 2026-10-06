@@ -1,25 +1,25 @@
-# 5.3 - Building an End-to-End Pipeline with NYC Taxi Data
+# 5.3 - NYC Taxi 데이터로 End-to-End 파이프라인 구축하기
 
-## Architecture
+## 아키텍처
 
-Three-layered pipeline using DuckDB as a locally hosted database:
+로컬 호스팅 데이터베이스로 DuckDB를 사용하는 3계층 pipeline:
 
-1. Ingestion layer: extract data and store in raw format
-2. Staging layer: pre-process, clean, transform, join with lookup tables
-3. Reports layer: aggregate data and run calculations
+1. Ingestion 계층: 데이터를 추출해 raw 형태로 저장
+2. Staging 계층: 전처리, 정제, 변환, lookup 테이블과 join
+3. Reports 계층: 데이터를 집계하고 계산 수행
 
-All assets have dependencies that create the data lineage Bruin uses for orchestration.
+모든 asset에는 의존성이 있으며, 이것이 Bruin이 오케스트레이션에 사용하는 데이터 lineage를 만듭니다.
 
-## Project setup
+## 프로젝트 셋업
 
-Initialize from the zoomcamp template:
+zoomcamp 템플릿으로 초기화:
 
 ```bash
 bruin init zoomcamp my-taxi-pipeline
 cd my-taxi-pipeline
 ```
 
-Project structure:
+프로젝트 구조:
 
 ```text
 zoomcamp/
@@ -68,15 +68,15 @@ variables:
     default: ["yellow"]
 ```
 
-- `start_date`: when running a full refresh, process data starting from this date
-- Custom variables: `taxi_types` lets you control which taxi types to ingest (yellow, green, or both)
-- Variables can be overridden at runtime with `--var`
+- `start_date`: full refresh로 실행할 때 이 날짜부터 데이터를 처리합니다
+- 커스텀 변수: `taxi_types`로 어떤 taxi 유형을 수집할지(yellow, green, 또는 둘 다) 제어합니다
+- 변수는 실행 시점에 `--var`로 덮어쓸 수 있습니다
 
-## Ingestion layer
+## Ingestion 계층
 
 ### Python asset: trips.py
 
-The Python asset connects to the NYC taxi API and extracts data.
+이 Python asset은 NYC taxi API에 접속해 데이터를 추출합니다.
 
 ```python
 """@bruin
@@ -106,21 +106,21 @@ def materialize():
     end_date = os.environ["BRUIN_END_DATE"]
     taxi_types = json.loads(os.environ["BRUIN_VARS"]).get("taxi_types", ["yellow"])
 
-    # Generate list of months between start and end dates
-    # Fetch parquet files from:
+    # 시작일과 종료일 사이의 월 목록 생성
+    # 다음 주소에서 parquet 파일 가져오기:
     # https://d37ci6vzurychx.cloudfront.net/trip-data/{taxi_type}_tripdata_{year}-{month}.parquet
 
     return final_dataframe
 ```
 
-- `materialize()` returns a DataFrame; Bruin handles inserting it into the destination
-- `append` strategy: each run inserts data without touching existing rows
-- Uses `BRUIN_START_DATE` / `BRUIN_END_DATE` environment variables for the time window
-- Uses `BRUIN_VARS` to read the `taxi_types` pipeline variable
+- `materialize()`는 DataFrame을 반환하고, 목적지에 삽입하는 일은 Bruin이 처리합니다
+- `append` 전략: 매 실행마다 기존 행은 건드리지 않고 데이터를 삽입합니다
+- 시간 구간에는 `BRUIN_START_DATE` / `BRUIN_END_DATE` 환경 변수를 사용합니다
+- `taxi_types` pipeline 변수는 `BRUIN_VARS`에서 읽습니다
 
-### Seed file: payment_lookup.asset.yml
+### Seed 파일: payment_lookup.asset.yml
 
-Seed files ingest data from local CSV files into the database.
+seed 파일은 로컬 CSV 파일의 데이터를 데이터베이스로 수집합니다.
 
 ```yaml
 name: ingestion.payment_lookup
@@ -155,7 +155,7 @@ payment_type_id,payment_type_name
 6,voided_trip
 ```
 
-Quality checks (`not_null`, `unique`) run automatically after the asset finishes.
+품질 체크(`not_null`, `unique`)는 asset이 끝난 뒤 자동으로 실행됩니다.
 
 ### requirements.txt
 
@@ -166,9 +166,9 @@ pyarrow
 python-dateutil
 ```
 
-Bruin handles the environment and installs dependencies locally within the pipeline.
+Bruin이 환경을 관리하고 pipeline 안에서 로컬로 의존성을 설치합니다.
 
-## Staging layer
+## Staging 계층
 
 ### SQL asset: staging/trips.sql
 
@@ -222,12 +222,12 @@ QUALIFY ROW_NUMBER() OVER (
 ) = 1
 ```
 
-- `time_interval` strategy: deletes rows in the time window, then inserts the query result
-- The `WHERE` clause must filter to the same time window to avoid duplicates
-- `QUALIFY ROW_NUMBER()` deduplicates using a composite key
-- Dependencies on both `ingestion.trips` and `ingestion.payment_lookup` ensure this runs after ingestion
+- `time_interval` 전략: 해당 시간 구간의 행을 삭제한 다음 쿼리 결과를 삽입합니다
+- 중복을 피하려면 `WHERE` 절이 같은 시간 구간으로 필터링해야 합니다
+- `QUALIFY ROW_NUMBER()`가 복합 키로 중복을 제거합니다
+- `ingestion.trips`와 `ingestion.payment_lookup` 양쪽에 대한 의존성이 있어 수집이 끝난 뒤에 실행됩니다
 
-## Reports layer
+## Reports 계층
 
 ### SQL asset: reports/trips_report.sql
 
@@ -274,35 +274,35 @@ WHERE pickup_datetime >= '{{ start_datetime }}'
 GROUP BY 1, 2, 3
 ```
 
-## Running the full pipeline
+## 전체 pipeline 실행하기
 
 ```bash
-# Validate structure and definitions
+# 구조와 정의 검증
 bruin validate ./pipeline/pipeline.yml
 
-# Run with a small date range for testing
+# 테스트용으로 짧은 날짜 범위로 실행
 bruin run ./pipeline/pipeline.yml --start-date 2022-01-01 --end-date 2022-02-01
 
-# Full refresh
+# full refresh
 bruin run ./pipeline/pipeline.yml --full-refresh
 
-# Query results
+# 결과 조회
 bruin query --connection duckdb-default --query "SELECT COUNT(*) FROM ingestion.trips"
 ```
 
-Open the pipeline YAML file in the Bruin panel and view the lineage tab to see all assets and their dependencies. Execution order:
+Bruin 패널에서 pipeline YAML 파일을 열고 lineage 탭을 보면 모든 asset과 그 의존성을 확인할 수 있습니다. 실행 순서:
 
-1. Ingestion assets run first (trips + lookup, in parallel)
-2. Staging asset runs after both ingestion assets complete
-3. Report asset runs after staging completes
+1. ingestion asset이 먼저 실행됨 (trips + lookup, 병렬로)
+2. 두 ingestion asset이 모두 끝나면 staging asset이 실행됨
+3. staging이 끝나면 report asset이 실행됨
 
-## Materialization strategies summary
+## Materialization 전략 요약
 
-| Strategy | Behavior |
+| 전략 | 동작 |
 |----------|----------|
-| `table` | Drop and recreate the table each time |
-| `append` | Insert new data without touching existing rows |
-| `merge` | Upsert based on key columns |
-| `time_interval` | Delete rows in date range, then re-insert |
-| `delete+insert` | Delete matching rows, then insert |
-| `create+replace` | Create or replace the table |
+| `table` | 매번 테이블을 drop하고 다시 생성 |
+| `append` | 기존 행은 건드리지 않고 새 데이터를 삽입 |
+| `merge` | 키 컬럼 기준으로 upsert |
+| `time_interval` | 날짜 범위의 행을 삭제한 뒤 다시 삽입 |
+| `delete+insert` | 일치하는 행을 삭제한 뒤 삽입 |
+| `create+replace` | 테이블을 생성하거나 교체 |

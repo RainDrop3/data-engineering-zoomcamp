@@ -1,29 +1,29 @@
-# 5.6 - Core Concepts: Projects
+# 5.6 - 핵심 개념: Projects
 
 🎥 [Bruin Core Concepts | Projects](https://www.youtube.com/watch?v=YWDjnSxbBtY) (3:03)
 
-## What is a Project?
+## Project란?
 
-A **Project** is the root directory where you create your entire Bruin data pipeline. It serves as the foundation for organizing all your data assets, configurations, and connections.
+**Project**는 Bruin 데이터 pipeline 전체를 만드는 루트 디렉토리입니다. 모든 데이터 asset, 설정, connection을 정리하는 토대 역할을 합니다.
 
-## Project Initialization
+## 프로젝트 초기화
 
-The project must be initialized with `bruin init` so the CLI tool can understand the directory structure and navigate files correctly.
+CLI 도구가 디렉토리 구조를 이해하고 파일을 올바르게 탐색할 수 있도록 프로젝트는 `bruin init`으로 초기화해야 합니다.
 
 ```bash
 bruin init zoomcamp my-pipeline
 cd my-pipeline
 ```
 
-## The `.bruin.yml` File
+## `.bruin.yml` 파일
 
-Located at the root of your project, this file defines environments, connections, and secrets.
+프로젝트 루트에 있는 이 파일은 environment, connection, secret을 정의합니다.
 
-**Important:** This file is always added to `.gitignore` to protect secrets. It stays local only and should never be pushed to your repo.
+**중요:** secret을 보호하기 위해 이 파일은 항상 `.gitignore`에 추가됩니다. 로컬에만 두고 절대 저장소에 push해서는 안 됩니다.
 
 ### Environments
 
-Define different environments for various stages:
+여러 단계에 맞춰 서로 다른 environment를 정의합니다:
 
 ```yaml
 default_environment: default
@@ -46,43 +46,43 @@ environments:
           dataset: production
 ```
 
-**Benefits:**
-- Run pipelines locally or on servers without exposing production credentials
-- Different teams can have different connection access
-- Default to `dev` environment to prevent accidental production runs
+**이점:**
+- 프로덕션 자격 증명을 노출하지 않고 로컬이나 서버에서 pipeline 실행
+- 팀마다 서로 다른 connection 접근 권한을 가질 수 있음
+- 기본값을 `dev` environment로 두어 실수로 프로덕션에서 실행되는 것을 방지
 
-### Connection Types
+### Connection 유형
 
-Built-in connections include:
+내장 connection:
 - DuckDB, MotherDuck
 - PostgreSQL, MySQL
 - BigQuery, Redshift, Snowflake
-- Custom connections (for API keys, secrets, etc.)
+- 커스텀 connection (API 키, secret 등용)
 
-### Default Environment
+### 기본 Environment
 
-Set which environment is used by default:
+기본으로 사용할 environment를 지정합니다:
 
 ```yaml
 default_environment: dev
 ```
 
-This ensures pipelines run on development unless explicitly told to use production.
+이렇게 하면 명시적으로 프로덕션을 지정하지 않는 한 pipeline이 개발 환경에서 실행됩니다.
 
-## Quick Reference
+## 빠른 참조
 
 ```bash
-# Initialize a new project
+# 새 프로젝트 초기화
 bruin init zoomcamp my-pipeline
 
-# Navigate to your project
+# 프로젝트로 이동
 cd my-pipeline
 
-# Check project is valid
+# 프로젝트가 유효한지 확인
 bruin validate .
 ```
 
-## Further Reading
+## 더 읽을거리
 
-- [Bruin Documentation - Projects](https://getbruin.com/docs/bruin/core-concepts/project.html)
+- [Bruin 문서 - Projects](https://getbruin.com/docs/bruin/core-concepts/project.html)
 - [Bruin GitHub - Templates](https://github.com/bruin-data/bruin/tree/main/templates)

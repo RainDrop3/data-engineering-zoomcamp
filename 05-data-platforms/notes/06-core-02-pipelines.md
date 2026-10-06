@@ -1,22 +1,22 @@
-# 5.6 - Core Concepts: Pipelines
+# 5.6 - 핵심 개념: Pipelines
 
 🎥 [Bruin Core Concepts | Pipelines](https://www.youtube.com/watch?v=uzp_DiR4Sok) (3:13)
 
-## What is a Pipeline?
+## Pipeline이란?
 
-A **Pipeline** is a grouping mechanism for organizing assets based on their execution schedule and configuration requirements. Within a project, you can have multiple pipelines.
+**Pipeline**은 실행 스케줄과 설정 요구 사항을 기준으로 asset을 정리하는 그룹화 메커니즘입니다. 한 project 안에 여러 pipeline을 둘 수 있습니다.
 
-## Key Characteristics
+## 주요 특징
 
-### Single Schedule
+### 하나의 스케줄
 
-Each pipeline has **one schedule** - this is the primary reason to group assets together:
-- Assets with the same schedule belong in the same pipeline
-- Common schedules: `hourly`, `daily`, `monthly`, or cron expressions
+각 pipeline은 **하나의 스케줄**을 가집니다 — 이것이 asset을 함께 묶는 가장 큰 이유입니다:
+- 스케줄이 같은 asset은 같은 pipeline에 속합니다
+- 흔한 스케줄: `hourly`, `daily`, `monthly`, 또는 cron 표현식
 
-### Pipeline Structure
+### Pipeline 구조
 
-Each pipeline has its own folder containing a `pipeline.yml` file:
+각 pipeline은 `pipeline.yml` 파일이 들어 있는 자체 폴더를 가집니다:
 
 ```text
 project/
@@ -30,7 +30,7 @@ project/
 │       └── assets/
 ```
 
-## The `pipeline.yml` File
+## `pipeline.yml` 파일
 
 ```yaml
 name: nyc_taxi
@@ -40,40 +40,40 @@ default_connections:
   duckdb: duckdb-default
 ```
 
-### Configuration Options
+### 설정 옵션
 
-| Setting | Description |
+| 설정 | 설명 |
 |---------|-------------|
-| `name` | Pipeline identifier |
-| `schedule` | When to run (cron, daily, monthly, etc.) |
-| `start_date` | When the pipeline starts being active |
-| `default_connections` | Which connections to use |
-| `variables` | Custom variables for the pipeline |
+| `name` | pipeline 식별자 |
+| `schedule` | 언제 실행할지 (cron, daily, monthly 등) |
+| `start_date` | pipeline이 활성화되기 시작하는 시점 |
+| `default_connections` | 어떤 connection을 사용할지 |
+| `variables` | pipeline의 커스텀 변수 |
 
-### Connection Scoping
+### Connection 범위 지정
 
-Even though connections are defined at the project level (`.bruin.yml`), each pipeline specifies **which connections it uses**.
+connection은 project 수준(`.bruin.yml`)에서 정의되지만, 각 pipeline은 **자신이 어떤 connection을 사용하는지** 지정합니다.
 
-**Why this matters:**
-- In large organizations, different teams may need different credentials
-- Prevents unnecessary exposure of secrets
-- Only initializes connections needed for the specific pipeline run
-- Security isolation between departments
+**이것이 중요한 이유:**
+- 큰 조직에서는 팀마다 다른 자격 증명이 필요할 수 있음
+- secret의 불필요한 노출을 방지
+- 해당 pipeline run에 필요한 connection만 초기화
+- 부서 간 보안 격리
 
-## Quick Reference
+## 빠른 참조
 
 ```bash
-# Validate a pipeline
+# pipeline 검증
 bruin validate ./pipelines/nyc-taxi/pipeline.yml
 
-# View pipeline lineage
+# pipeline lineage 보기
 bruin lineage ./pipelines/nyc-taxi/pipeline.yml
 
-# Run the entire pipeline
+# pipeline 전체 실행
 bruin run ./pipelines/nyc-taxi/pipeline.yml
 ```
 
-## Further Reading
+## 더 읽을거리
 
-- [Bruin Documentation - Pipelines](https://getbruin.com/docs/bruin/pipelines/definition.html)
-- [Pipeline Configuration Reference](https://getbruin.com/docs/bruin/pipelines/definition.html)
+- [Bruin 문서 - Pipelines](https://getbruin.com/docs/bruin/pipelines/definition.html)
+- [Pipeline 설정 레퍼런스](https://getbruin.com/docs/bruin/pipelines/definition.html)

@@ -1,60 +1,60 @@
-# 5.5 - Deploying to Bruin Cloud
+# 5.5 - Bruin Cloud에 배포하기
 
-## What is Bruin Cloud?
+## Bruin Cloud란?
 
-Bruin Cloud is a fully managed infrastructure for your data pipelines. It is powered by the same open-source CLI tool you use locally for development. Everything lives in the same place:
+Bruin Cloud는 데이터 pipeline을 위한 완전 관리형 인프라입니다. 로컬 개발에 쓰는 것과 같은 오픈소스 CLI 도구로 동작합니다. 모든 것이 한곳에 있습니다:
 
-- Ingestions and transformations
-- Quality checks and monitoring
-- Lineage and metadata
-- Data governance
-- AI-powered features (automatic metadata generation, conversational data analysis)
+- 수집과 변환
+- 품질 체크와 모니터링
+- lineage와 메타데이터
+- 데이터 거버넌스
+- AI 기반 기능 (메타데이터 자동 생성, 대화형 데이터 분석)
 
-## Registration
+## 가입
 
-1. Go to [Bruin Cloud](https://getbruin.com/) and sign up
-2. Fill out your name, email, and set a password
-3. Verify your email by clicking the link in the verification email
-4. Choose to join an existing team or create a new organization
-5. Give your organization a name
+1. [Bruin Cloud](https://getbruin.com/)에 가서 가입
+2. 이름, 이메일을 입력하고 비밀번호 설정
+3. 인증 메일의 링크를 눌러 이메일 인증
+4. 기존 팀에 합류할지 새 organization을 만들지 선택
+5. organization 이름 정하기
 
-## Connecting your GitHub repository
+## GitHub 저장소 연결하기
 
-You have two options:
+두 가지 방법이 있습니다:
 
-1. **Direct GitHub connection** (recommended) — connect your GitHub account directly and select your repo from a dropdown
-2. **Personal Access Token** — provide a GitHub personal access token and your repo link manually
+1. **GitHub 직접 연결** (권장) — GitHub 계정을 직접 연결하고 드롭다운에서 저장소 선택
+2. **Personal Access Token** — GitHub personal access token과 저장소 링크를 직접 입력
 
-## Setting up connections
+## Connection 설정하기
 
-After connecting your repo, set up your data warehouse connections. These are the same connections you configure locally in `.bruin.yml`, but stored securely in the cloud.
+저장소를 연결한 다음에는 데이터 웨어하우스 connection을 설정합니다. 로컬의 `.bruin.yml`에서 설정하는 것과 같은 connection이지만, 클라우드에 안전하게 저장됩니다.
 
-1. Go to the connections page
-2. Select your connection type (MotherDuck, BigQuery, Redshift, etc.)
-3. Give it the same connection name you use locally
-4. Provide the required credentials (e.g., service token, database name)
-5. The connection will be validated and tested automatically
+1. connections 페이지로 이동
+2. connection 유형 선택 (MotherDuck, BigQuery, Redshift 등)
+3. 로컬에서 쓰는 것과 같은 connection 이름 지정
+4. 필요한 자격 증명 입력 (예: service token, 데이터베이스 이름)
+5. connection이 자동으로 검증되고 테스트됨
 
-Read the Bruin documentation for details on how secrets are stored securely.
+secret이 어떻게 안전하게 저장되는지는 Bruin 문서를 참고하세요.
 
-## Deploying pipelines
+## Pipeline 배포하기
 
-1. Navigate to the **Pipelines** page to see the list of pipelines from your repository
-2. Bruin will validate every asset and ensure lineage and connections work (this takes a moment)
-3. Once ready, **enable** the pipeline
+1. **Pipelines** 페이지로 가서 저장소의 pipeline 목록 확인
+2. Bruin이 모든 asset을 검증하고 lineage와 connection이 동작하는지 확인 (잠시 걸림)
+3. 준비되면 pipeline을 **enable**
 
-When you enable a pipeline with a schedule, Bruin automatically creates a run for the last interval. For example, a monthly pipeline will immediately process the previous month's data.
+스케줄이 있는 pipeline을 enable하면 Bruin이 직전 interval에 대한 run을 자동으로 만듭니다. 예를 들어 monthly pipeline은 지난달 데이터를 바로 처리합니다.
 
-## Monitoring
+## 모니터링
 
-After a pipeline runs:
+pipeline이 실행된 뒤:
 
-- Check the status of each asset (success/failure)
-- Review quality check results
-- View lineage across all assets
-- Use AI-powered features to analyze data or ask questions about your pipelines
+- 각 asset의 상태 확인 (성공/실패)
+- 품질 체크 결과 검토
+- 모든 asset에 걸친 lineage 보기
+- AI 기반 기능으로 데이터를 분석하거나 pipeline에 대해 질문
 
-## Getting help
+## 도움 받기
 
-- Join the [Bruin Slack community](https://getbruin.com/) for questions and feature requests
-- Submit issues on [GitHub](https://github.com/bruin-data/bruin)
+- 질문이나 기능 요청은 [Bruin Slack 커뮤니티](https://getbruin.com/)에 참여하세요
+- 이슈는 [GitHub](https://github.com/bruin-data/bruin)에 제출하세요
