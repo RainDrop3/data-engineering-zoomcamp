@@ -1,51 +1,51 @@
-## Running Spark in the Cloud
+## 클라우드에서 Spark 실행하기
 
-### Connecting to Google Cloud Storage 
+### Google Cloud Storage 연결하기 
 
-Uploading data to GCS:
+GCS에 데이터 업로드:
 
 ```bash
 gsutil -m cp -r pq/ gs://dtc_data_lake_de-zoomcamp-nytaxi/pq
 ```
 
-Download the jar for connecting to GCS to any location (e.g. the `lib` folder):
+GCS 연결용 jar를 원하는 위치(예: `lib` 폴더)에 다운로드하세요:
 
-**Note**: For other versions of GCS connector for Hadoop see [Cloud Storage connector ](https://cloud.google.com/dataproc/docs/concepts/connectors/cloud-storage#connector-setup-on-non-dataproc-clusters).
+**참고**: Hadoop용 GCS connector의 다른 버전은 [Cloud Storage connector ](https://cloud.google.com/dataproc/docs/concepts/connectors/cloud-storage#connector-setup-on-non-dataproc-clusters)를 참고하세요.
 
 ```bash
 gsutil cp gs://hadoop-lib/gcs/gcs-connector-hadoop3-2.2.5.jar ./lib/
 ```
 
-See the notebook with configuration in [09_spark_gcs.ipynb](09_spark_gcs.ipynb)
+설정이 담긴 노트북은 [09_spark_gcs.ipynb](09_spark_gcs.ipynb)를 보세요
 
-(Thanks Alvin Do for the instructions!)
+(안내해 준 Alvin Do에게 감사드립니다!)
 
 
-### Local Cluster and Spark-Submit
+### 로컬 클러스터와 Spark-Submit
 
-Creating a stand-alone cluster ([docs](https://spark.apache.org/docs/latest/spark-standalone.html)):
+stand-alone 클러스터 만들기 ([문서](https://spark.apache.org/docs/latest/spark-standalone.html)):
 
 ```bash
 ./sbin/start-master.sh
 ```
 
-Creating a worker:
+worker 만들기:
 
 ```bash
 URL="spark://de-zoomcamp.europe-west1-b.c.de-zoomcamp-nytaxi.internal:7077"
 ./sbin/start-slave.sh ${URL}
 
-# for newer versions of spark use that:
+# 최신 버전의 spark에서는 이것을 사용:
 #./sbin/start-worker.sh ${URL}
 ```
 
-Turn the notebook into a script:
+노트북을 스크립트로 변환:
 
 ```bash
 jupyter nbconvert --to=script 06_spark_sql.ipynb
 ```
 
-Edit the script and then run it:
+스크립트를 수정한 다음 실행:
 
 ```bash 
 python 06_spark_sql.py \
@@ -54,7 +54,7 @@ python 06_spark_sql.py \
     --output=data/report-2020
 ```
 
-Use `spark-submit` for running the script on the cluster
+클러스터에서 스크립트를 실행하려면 `spark-submit`을 사용하세요
 
 ```bash
 URL="spark://de-zoomcamp.europe-west1-b.c.de-zoomcamp-nytaxi.internal:7077"
@@ -67,23 +67,23 @@ spark-submit \
         --output=data/report-2021
 ```
 
-### Data Proc
+### Dataproc
 
-Upload the script to GCS:
+스크립트를 GCS에 업로드:
 
 ```bash
 gsutil -m cp -r 06_spark_sql.py gs://dtc_data_lake_de-zoomcamp-nytaxi/code/06_spark_sql.py
 ```
 
-Params for the job:
+job 파라미터:
 
 * `--input_green=gs://dtc_data_lake_de-zoomcamp-nytaxi/pq/green/2021/*/`
 * `--input_yellow=gs://dtc_data_lake_de-zoomcamp-nytaxi/pq/yellow/2021/*/`
 * `--output=gs://dtc_data_lake_de-zoomcamp-nytaxi/report-2021`
 
 
-Using Google Cloud SDK for submitting to dataproc
-([link](https://cloud.google.com/dataproc/docs/guides/submit-job#dataproc-submit-job-gcloud))
+Google Cloud SDK로 dataproc에 제출하기
+([링크](https://cloud.google.com/dataproc/docs/guides/submit-job#dataproc-submit-job-gcloud))
 
 ```bash
 gcloud dataproc jobs submit pyspark \
@@ -96,15 +96,15 @@ gcloud dataproc jobs submit pyspark \
         --output=gs://dtc_data_lake_de-zoomcamp-nytaxi/report-2020
 ```
 
-### Big Query
+### BigQuery
 
-Upload the script to GCS:
+스크립트를 GCS에 업로드:
 
 ```bash
 gsutil -m cp -r 06_spark_sql_big_query.py gs://dtc_data_lake_de-zoomcamp-nytaxi/code/06_spark_sql_big_query.py
 ```
 
-Write results to big query ([docs](https://cloud.google.com/dataproc/docs/tutorials/bigquery-connector-spark-example#pyspark)):
+결과를 BigQuery에 쓰기 ([문서](https://cloud.google.com/dataproc/docs/tutorials/bigquery-connector-spark-example#pyspark)):
 
 ```bash
 gcloud dataproc jobs submit pyspark \
@@ -118,7 +118,7 @@ gcloud dataproc jobs submit pyspark \
         --output=trips_data_all.reports-2020
 ```
 
-There can be issue with latest Spark version and the Big query connector. Download links to the jar file for respective Spark versions can be found at:
-[Spark and Big query connector](https://github.com/GoogleCloudDataproc/spark-bigquery-connector)
+최신 Spark 버전과 BigQuery connector 사이에 문제가 있을 수 있습니다. Spark 버전별 jar 파일 다운로드 링크는 여기서 찾을 수 있습니다:
+[Spark와 BigQuery connector](https://github.com/GoogleCloudDataproc/spark-bigquery-connector)
 
-**Note**: Dataproc on GCE 2.1+ images pre-install Spark BigQquery connector: [DataProc Release 2.2](https://cloud.google.com/dataproc/docs/concepts/versioning/dataproc-release-2.2). Therefore, no need to include the jar file in the job submission.
+**참고**: Dataproc on GCE 2.1+ 이미지에는 Spark BigQuery connector가 미리 설치되어 있습니다: [DataProc Release 2.2](https://cloud.google.com/dataproc/docs/concepts/versioning/dataproc-release-2.2). 따라서 job 제출 시 jar 파일을 포함할 필요가 없습니다.
