@@ -9,7 +9,7 @@
 
 이 모듈은 **두 갈래로 갈리며, 첫 단추를 잘못 끼우면 되돌리기 번거롭습니다.** 나머지 모든 단계가 이 선택에 달려 있으니 여기부터 결정하세요.
 
-- [ ] 아래 표를 보고 경로 선택
+- [x] 아래 표를 보고 경로 선택
 
 | | 🏠 Local (DuckDB + dbt Core) | ☁️ Cloud (BigQuery + dbt Platform) |
 |---|---|---|
@@ -19,7 +19,7 @@
 | RAM 요구 | 16GB 권장, 8GB는 OOM 위험 | 무관 |
 | 강의 영상 | 강의 기본 경로 | 대안 영상 별도 제공 |
 
-- [ ] **Local을 골랐다면** → 1번 건너뛰고 [2. Local Setup](#2-local-setup으로-가는-경우)로
+- [x] **Local을 골랐다면** → 1번 건너뛰고 [2. Local Setup](#2-local-setup으로-가는-경우)로
 - [ ] **Cloud를 골랐다면** → [1. 데이터 적재](#1-cloud-경로-데이터-적재-cloud만)부터
 
 > 💡 판단 기준: RAM이 16GB 미만이면 Cloud가 편합니다. 반대로 BigQuery 과금이 부담되거나 dbt Core의 동작 원리를 제대로 보고 싶다면 Local입니다. 강의는 Local(DuckDB + dbt Core)을 기본으로 진행합니다.
@@ -44,15 +44,15 @@
 
 ## 2. Local Setup으로 가는 경우
 
-- [ ] [local_setup.md](setup/local_setup.md) 읽기
-- [ ] DuckDB 설치 (CLI 또는 `pip install duckdb`)
-- [ ] `pip install dbt-duckdb` — dbt-core와 DuckDB adapter가 함께 설치됨
-- [ ] `~/.dbt/profiles.yml` 작성 (dev/prod 두 target)
-  - [ ] RAM에 맞춰 `memory_limit` 조정 — 전체 RAM의 약 50%
-- [ ] 적재 스크립트 실행 — yellow+green 2019~2020을 받아 parquet 변환 후 DuckDB `prod` schema에 적재
-- [ ] `dbt debug`로 연결 확인
-- [ ] (VS Code) **dbt Power User by AltimateAI** 확장 설치
-  - [ ] ⚠️ dbt Labs 공식 확장은 Fusion 전용이라 dbt Core에서 안 됨
+- [x] [local_setup.md](setup/local_setup.md) 읽기
+- [x] DuckDB 설치 (CLI 또는 `pip install duckdb`)
+- [x] `pip install dbt-duckdb` — dbt-core와 DuckDB adapter가 함께 설치됨
+- [x] `~/.dbt/profiles.yml` 작성 (dev/prod 두 target)
+  - [x] RAM에 맞춰 `memory_limit` 조정 — 전체 RAM의 약 50%
+- [x] 적재 스크립트 실행 — yellow+green 2019~2020을 받아 parquet 변환 후 DuckDB `prod` schema에 적재
+- [x] `dbt debug`로 연결 확인
+- [x] (VS Code) **dbt Power User by AltimateAI** 확장 설치
+  - [x] ⚠️ dbt Labs 공식 확장은 Fusion 전용이라 dbt Core에서 안 됨
 
 ## 2'. Cloud Setup으로 가는 경우
 
@@ -74,93 +74,93 @@
 
 ## 3. 개념 잡기 (코딩 전)
 
-- [ ] [Analytics Engineering 소개](https://www.youtube.com/watch?v=HxMIsPrIyGQ) 영상 시청
-- [ ] [데이터 모델링 소개](https://www.youtube.com/watch?v=uF76d5EmdtU) 영상 시청 → [4_1_1 노트](class_notes/4_1_1_analytics_engineering_basics.md)
-  - [ ] analytics engineer가 메우는 "공백"이 무엇인지 정리
-  - [ ] ETL vs ELT 차이 — dbt는 ELT의 어디에 있는가
-  - [ ] Fact(동사) vs Dimension(명사), star schema
-  - [ ] 주방 비유: 저장고(staging) → 주방(processing) → 홀(presentation)
-- [ ] [dbt란?](https://www.youtube.com/watch?v=gsKuETFJr54) 영상 시청 → [4_1_2 노트](class_notes/4_1_2_what_is_dbt.md)
-  - [ ] `dbt run`이 내부에서 하는 3단계 이해하기
-- [ ] [dbt Core vs Cloud](https://www.youtube.com/watch?v=auzcdLRyEIk) 영상 시청 → [4_2_1 노트](class_notes/4_2_1_dbt_core_vs_dbt_cloud.md)
-  - [ ] dbt Fusion이 뭔지, 왜 DuckDB는 아직 지원 안 되는지
+- [x] [Analytics Engineering 소개](https://www.youtube.com/watch?v=HxMIsPrIyGQ) 영상 시청
+- [x] [데이터 모델링 소개](https://www.youtube.com/watch?v=uF76d5EmdtU) 영상 시청 → [4_1_1 노트](class_notes/4_1_1_analytics_engineering_basics.md)
+  - [x] analytics engineer가 메우는 "공백"이 무엇인지 정리
+  - [x] ETL vs ELT 차이 — dbt는 ELT의 어디에 있는가
+  - [x] Fact(동사) vs Dimension(명사), star schema
+  - [x] 주방 비유: 저장고(staging) → 주방(processing) → 홀(presentation)
+- [x] [dbt란?](https://www.youtube.com/watch?v=gsKuETFJr54) 영상 시청 → [4_1_2 노트](class_notes/4_1_2_what_is_dbt.md)
+  - [x] `dbt run`이 내부에서 하는 3단계 이해하기
+- [x] [dbt Core vs Cloud](https://www.youtube.com/watch?v=auzcdLRyEIk) 영상 시청 → [4_2_1 노트](class_notes/4_2_1_dbt_core_vs_dbt_cloud.md)
+  - [x] dbt Fusion이 뭔지, 왜 DuckDB는 아직 지원 안 되는지
 
 ## 4. 프로젝트 구조와 Sources
 
-- [ ] [dbt 프로젝트 구조](https://www.youtube.com/watch?v=2dYDS4OQbT0) 영상 시청 → [4_3_1 노트](class_notes/4_3_1_dbt_project_structure.md)
-  - [ ] `dbt_project.yml`이 왜 가장 중요한 파일인지
-  - [ ] staging / intermediate / marts 세 계층의 역할 구분
-  - [ ] seeds와 snapshots는 각각 어떤 문제의 우회책인가
-- [ ] [dbt Sources](https://www.youtube.com/watch?v=7CrrXazV_8k) 영상 시청 → [4_3_2 노트](class_notes/4_3_2_dbt_sources.md)
-- [ ] `models/staging/sources.yml` 작성 — database / schema / tables
-  - [ ] ⚠️ Local이면 database=`taxi_rides_ny`, schema=`main` / Cloud면 GCP 프로젝트 ID와 dataset 이름
-- [ ] `{{ source() }}`로 raw 테이블 조회해보기 (preview로 데이터가 나오는지)
-- [ ] `stg_green_tripdata.sql` 작성
-  - [ ] 컬럼 명시적 나열 + alias
-  - [ ] 순서: 식별자 → timestamp → trip 정보 → 결제 정보
-  - [ ] 타입 명시적 cast
-- [ ] `stg_yellow_tripdata.sql` 작성 (연습 과제)
+- [x] [dbt 프로젝트 구조](https://www.youtube.com/watch?v=2dYDS4OQbT0) 영상 시청 → [4_3_1 노트](class_notes/4_3_1_dbt_project_structure.md)
+  - [x] `dbt_project.yml`이 왜 가장 중요한 파일인지
+  - [x] staging / intermediate / marts 세 계층의 역할 구분
+  - [x] seeds와 snapshots는 각각 어떤 문제의 우회책인가
+- [x] [dbt Sources](https://www.youtube.com/watch?v=7CrrXazV_8k) 영상 시청 → [4_3_2 노트](class_notes/4_3_2_dbt_sources.md)
+- [x] `models/staging/sources.yml` 작성 — database / schema / tables
+  - [x] ⚠️ Local이면 database=`taxi_rides_ny`, schema=`main` / Cloud면 GCP 프로젝트 ID와 dataset 이름
+- [x] `{{ source() }}`로 raw 테이블 조회해보기 (preview로 데이터가 나오는지)
+- [x] `stg_green_tripdata.sql` 작성
+  - [x] 컬럼 명시적 나열 + alias
+  - [x] 순서: 식별자 → timestamp → trip 정보 → 결제 정보
+  - [x] 타입 명시적 cast
+- [x] `stg_yellow_tripdata.sql` 작성 (연습 과제)
 
 ## 5. Models — 계층 쌓기
 
-- [ ] [dbt Models](https://www.youtube.com/watch?v=JQYz-8sl1aQ) 영상 시청 → [4_4_1 노트](class_notes/4_4_1_dbt_models.md)
-- [ ] **`source()` vs `ref()` 구분 확실히 하기** — 이 모듈의 핵심 분기점
-  - [ ] `ref()`가 의존성 그래프를 자동으로 만든다는 점 이해
-- [ ] `int_trips_unioned.sql` 작성 — green + yellow union
-- [ ] union 에러 만나고 고치기 (컬럼 수 불일치)
-  - [ ] `trip_type` → yellow에 `1` 하드코딩 (길거리 호출만 가능하므로)
-  - [ ] `ehail_fee` → yellow에 `0` 하드코딩
-  - [ ] 왜 이런 차이가 나는지 **비즈니스 맥락**으로 설명해보기
-- [ ] `int_trips.sql` 확인 — 중복 제거 로직
+- [x] [dbt Models](https://www.youtube.com/watch?v=JQYz-8sl1aQ) 영상 시청 → [4_4_1 노트](class_notes/4_4_1_dbt_models.md)
+- [x] **`source()` vs `ref()` 구분 확실히 하기** — 이 모듈의 핵심 분기점
+  - [x] `ref()`가 의존성 그래프를 자동으로 만든다는 점 이해
+- [x] `int_trips_unioned.sql` 작성 — green + yellow union
+- [x] union 에러 만나고 고치기 (컬럼 수 불일치)
+  - [x] `trip_type` → yellow에 `1` 하드코딩 (길거리 호출만 가능하므로)
+  - [x] `ehail_fee` → yellow에 `0` 하드코딩
+  - [x] 왜 이런 차이가 나는지 **비즈니스 맥락**으로 설명해보기
+- [x] `int_trips.sql` 확인 — 중복 제거 로직
 
 ## 6. Seeds와 Macros
 
-- [ ] [Seeds and Macros](https://www.youtube.com/watch?v=lT4fmTDEqVk) 영상 시청 → [4_4_2 노트](class_notes/4_4_2_dbt_seeds_and_macros.md)
-- [ ] `dbt seed` 실행 — `taxi_zone_lookup.csv`, `payment_type_lookup.csv`
-- [ ] `dim_zones.sql` 작성 — seed를 `ref()`로 참조
-- [ ] macro 이해하기 — `get_vendor_data`, `safe_cast`, `get_trip_duration_minutes`
+- [x] [Seeds and Macros](https://www.youtube.com/watch?v=lT4fmTDEqVk) 영상 시청 → [4_4_2 노트](class_notes/4_4_2_dbt_seeds_and_macros.md)
+- [x] `dbt seed` 실행 — `taxi_zone_lookup.csv`, `payment_type_lookup.csv`
+- [x] `dim_zones.sql` 작성 — seed를 `ref()`로 참조
+- [x] macro 이해하기 — `get_vendor_data`, `safe_cast`, `get_trip_duration_minutes`
   - [ ] CASE WHEN 인라인 대비 macro의 이점 3가지 정리
-- [ ] `dim_vendors.sql` 확인
-- [ ] **`fct_trips.sql` 작성** (연습 과제 — 이 모듈의 산)
+- [x] `dim_vendors.sql` 확인
+- [x] **`fct_trips.sql` 작성** (연습 과제 — 이 모듈의 산)
   - [ ] trip당 한 행
   - [ ] 고유한 `trip_id` (primary key) 부여
   - [ ] 중복 찾아내고 원인 파악해서 제거
   - [ ] `payment_type` 을 seed로 enrich
-- [ ] `fct_monthly_zone_revenue.sql` — reporting 모델
+- [x] `fct_monthly_zone_revenue.sql` — reporting 모델
 
 ## 7. Tests
 
-- [ ] [dbt Tests](https://www.youtube.com/watch?v=bvZ-rJm7uMU) 영상 시청 → [4_5_2 노트](class_notes/4_5_2_dbt_tests.md)
-- [ ] 다섯 가지 테스트 유형 구분해서 정리
+- [x] [dbt Tests](https://www.youtube.com/watch?v=bvZ-rJm7uMU) 영상 시청 → [4_5_2 노트](class_notes/4_5_2_dbt_tests.md)
+- [x] 다섯 가지 테스트 유형 구분해서 정리
   - [ ] singular — `tests/`에 SQL, 행이 반환되면 실패
   - [ ] source freshness — source YAML의 `freshness` 블록
   - [ ] generic — 내장 4종 (`unique` / `not_null` / `accepted_values` / `relationships`)
   - [ ] unit — mock 입력과 기대 출력 (dbt 1.8+)
   - [ ] model contract — 형태가 안 맞으면 빌드 자체를 차단
-- [ ] `schema.yml`에 generic test 추가
-- [ ] singular test 하나 직접 작성해보기
-- [ ] `dbt test` 실행해서 통과/실패 확인
+- [x] `schema.yml`에 generic test 추가
+- [x] singular test 하나 직접 작성해보기
+- [x] `dbt test` 실행해서 통과/실패 확인
 
 ## 8. 문서화와 Packages
 
-- [ ] [Documentation](https://www.youtube.com/watch?v=UqoWyMjcqrA) 영상 시청 → [4_5_1 노트](class_notes/4_5_1_documentation.md)
-- [ ] `schema.yml`에 model·컬럼 description 채우기
-- [ ] `dbt docs generate` 실행
-- [ ] `dbt docs serve` 실행 후 **lineage 그래프** 확인 (Cloud는 자동)
-- [ ] [dbt Packages](https://www.youtube.com/watch?v=KfhUA9Kfp8Y) 영상 시청 → [4_5_3 노트](class_notes/4_5_3_dbt_packages.md)
-- [ ] `packages.yml` 확인 후 `dbt deps` 실행
-- [ ] `dbt_utils.generate_surrogate_key` 사용해보기
-- [ ] 알아둘 package 정리: dbt-utils / dbt-codegen / dbt-expectations
+- [x] [Documentation](https://www.youtube.com/watch?v=UqoWyMjcqrA) 영상 시청 → [4_5_1 노트](class_notes/4_5_1_documentation.md)
+- [x] `schema.yml`에 model·컬럼 description 채우기
+- [x] `dbt docs generate` 실행
+- [x] `dbt docs serve` 실행 후 **lineage 그래프** 확인 (Cloud는 자동)
+- [x] [dbt Packages](https://www.youtube.com/watch?v=KfhUA9Kfp8Y) 영상 시청 → [4_5_3 노트](class_notes/4_5_3_dbt_packages.md)
+- [x] `packages.yml` 확인 후 `dbt deps` 실행
+- [x] `dbt_utils.generate_surrogate_key` 사용해보기
+- [x] 알아둘 package 정리: dbt-utils / dbt-codegen / dbt-expectations
 
 ## 9. 명령어 총정리
 
-- [ ] [dbt Commands](https://www.youtube.com/watch?v=t4OeWHW3SsA) 영상 시청 → [4_6_1 노트](class_notes/4_6_1_dbt_commands.md)
-- [ ] `dbt compile` — 공짜로 Jinja 에러 잡기, 컴파일된 SQL 직접 열어보기
-- [ ] `dbt build` — run+test+seed+snapshot, DAG 인식
-- [ ] `dbt retry` — 실패 지점부터 재개
-- [ ] `--select` graph 연산자 연습
+- [x] [dbt Commands](https://www.youtube.com/watch?v=t4OeWHW3SsA) 영상 시청 → [4_6_1 노트](class_notes/4_6_1_dbt_commands.md)
+- [x] `dbt compile` — 공짜로 Jinja 에러 잡기, 컴파일된 SQL 직접 열어보기
+- [x] `dbt build` — run+test+seed+snapshot, DAG 인식
+- [x] `dbt retry` — 실패 지점부터 재개
+- [x] `--select` graph 연산자 연습
   - [ ] `+model` (상류) / `model+` (하류) / `+model+` (양방향)
-- [ ] `--target prod` / `--full-refresh` / `--fail-fast` 용도 정리
+- [x] `--target prod` / `--full-refresh` / `--fail-fast` 용도 정리
 
 ## 10. 숙제
 

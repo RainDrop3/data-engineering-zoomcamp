@@ -187,11 +187,12 @@ def web_to_gcs(year, service):
         upload_to_gcs_with_progress(BUCKET, object_name, parquet_file_name)
 
 
-web_to_gcs("2019", "green")
-web_to_gcs("2020", "green")
-web_to_gcs(
-    "2021", "green"
-)  # will fail when reaching 08 (normal, file does not exists in github :)
-# web_to_gcs("2019", "yellow")
+# 강의 SQL(big_query.sql)이 yellow 데이터를 쓰므로 yellow만 받는다.
+# 강사 버킷 gs://nyc-tl-data 가 죽어서(403, 소유 프로젝트 결제 비활성) 직접 적재해야 함.
+# 2019년 12개월이면 파티션 효과를 확인하기에 충분하다.
+web_to_gcs("2019", "yellow")
 # web_to_gcs("2020", "yellow")
 # web_to_gcs("2021", "yellow") # will fail when reaching 08 (normal, file does not exists in github :)
+# web_to_gcs("2019", "green")
+# web_to_gcs("2020", "green")
+# web_to_gcs("2021", "green") # will fail when reaching 08 (normal, file does not exists in github :)

@@ -7,19 +7,19 @@
 
 ## 0. 사전 준비
 
-- [ ] Module 1, 2 완료 확인 — GCP 프로젝트, 서비스 계정 키, `GOOGLE_APPLICATION_CREDENTIALS` 설정
-- [ ] IAM 역할 확인: BigQuery Admin, Storage Admin, Storage Object Admin
-- [ ] `gcloud auth login` / `bq --version`으로 CLI 동작 확인
-- [ ] GCS 버킷과 BigQuery 데이터셋이 살아있는지 확인 (없으면 Module 1의 Terraform이나 콘솔에서 생성)
-- [ ] [슬라이드](https://docs.google.com/presentation/d/1a3ZoBAXFk8-EhUsd7rAZd-5p_HpltkzSeujjRGB2TAI/edit?usp=sharing) 훑어보기
-- [ ] [README.md](README.md) 훑어보기 — 전체 흐름 파악
+- [x] Module 1, 2 완료 확인 — GCP 프로젝트, 서비스 계정 키, `GOOGLE_APPLICATION_CREDENTIALS` 설정
+- [x] IAM 역할 확인: BigQuery Admin, Storage Admin, Storage Object Admin
+- [x] `gcloud auth login` / `bq --version`으로 CLI 동작 확인
+- [x] GCS 버킷과 BigQuery 데이터셋이 살아있는지 확인 (없으면 Module 1의 Terraform이나 콘솔에서 생성)
+- [x] [슬라이드](https://docs.google.com/presentation/d/1a3ZoBAXFk8-EhUsd7rAZd-5p_HpltkzSeujjRGB2TAI/edit?usp=sharing) 훑어보기
+- [x] [README.md](README.md) 훑어보기 — 전체 흐름 파악
 
 ## 1. Data Warehouse와 BigQuery
 
-- [ ] [Data Warehouse와 BigQuery](https://youtu.be/jrHljAoD6nM) 영상 시청
-  - [ ] OLTP vs OLAP 차이 정리
-  - [ ] Data Lake vs Data Warehouse 차이 정리
-  - [ ] BigQuery의 서버리스 구조와 요금 모델(스캔한 바이트 기준) 이해하기
+- [x] [Data Warehouse와 BigQuery](https://youtu.be/jrHljAoD6nM) 영상 시청
+  - [x] OLTP vs OLAP 차이 정리
+  - [x] Data Lake vs Data Warehouse 차이 정리
+  - [x] BigQuery의 서버리스 구조와 요금 모델(스캔한 바이트 기준) 이해하기
 - [ ] [big_query.sql](big_query.sql) 따라 실행하기 (BigQuery 콘솔에서)
   - [ ] 공개 데이터셋 조회 (`bigquery-public-data.new_york_citibike`)
   - [ ] GCS 파일을 참조하는 **external table** 생성

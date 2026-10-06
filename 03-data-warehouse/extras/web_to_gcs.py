@@ -94,9 +94,11 @@ def web_to_gcs(year, service):
         print(f"GCS: {service}/{file_name}")
 
 
-web_to_gcs("2019", "green")
-web_to_gcs("2020", "green")
-web_to_gcs("2021", "green")  # fail when reach 08 (normal, file not in github :)
-# web_to_gcs("2019", "yellow")
+# 이 스크립트는 재시작 시 이어받기가 안 되고 CSV를 통째로 메모리에 올린다.
+# 12개월치 yellow(월 690MB 내외)를 받을 거라면 web_to_gcs_with_progress_bar.py 를 쓰는 게 낫다.
+web_to_gcs("2019", "yellow")
 # web_to_gcs("2020", "yellow")
 # web_to_gcs("2021", "yellow") # fail when reach 08 (normal, file not in github :)
+# web_to_gcs("2019", "green")
+# web_to_gcs("2020", "green")
+# web_to_gcs("2021", "green")  # fail when reach 08 (normal, file not in github :)
