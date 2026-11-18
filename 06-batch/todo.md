@@ -9,7 +9,31 @@
 
 Windows에서는 Spark를 **어디서 돌릴지**가 이 모듈의 첫 관문입니다. 나머지 단계가 모두 여기에 달려 있으니 먼저 정하세요.
 
-- [ ] 아래 표를 보고 환경 선택
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- [x] 아래 표를 보고 환경 선택
 
 | | 🪟 Windows 네이티브 (Git Bash) | 🐧 WSL (Ubuntu) |
 |---|---|---|
@@ -20,66 +44,66 @@ Windows에서는 Spark를 **어디서 돌릴지**가 이 모듈의 첫 관문입
 | 파일 쓰기 (parquet 저장) | `winutils.exe` / `HADOOP_HOME` 관련 에러가 흔히 보고됨 | 문제 없음 |
 
 - [ ] **Windows 네이티브를 골랐다면** → [2. 설치](#2-설치)의 Windows 항목대로
-- [ ] **WSL을 골랐다면** → [2. 설치](#2-설치)의 WSL 항목대로
+- [x] **WSL을 골랐다면** → [2. 설치](#2-설치)의 WSL 항목대로
 
 > 💡 판단 기준: 강의 영상과 예제 스크립트는 Linux 기준입니다. 6.6의 로컬 클러스터까지 따라 하려면 WSL이 편합니다. 숙제만 빠르게 끝낼 거라면 Windows 네이티브로도 충분하고, parquet 저장에서 막히면 그때 WSL로 넘어가도 됩니다.
 
 ## 1. 개념 잡기
 
-- [ ] [README.md](README.md) 훑어보기 — 전체 흐름 파악
-- [ ] [6.1.1 Batch Processing 소개](https://youtu.be/dcHe5Fl3MF8) 영상 시청
+- [x] [README.md](README.md) 훑어보기 — 전체 흐름 파악
+- [x] [6.1.1 Batch Processing 소개](https://youtu.be/dcHe5Fl3MF8) 영상 시청
   - [ ] batch vs streaming 차이 정리 (Module 7과 대비)
   - [ ] batch job을 무엇으로 만들고 어떻게 스케줄링하는지 (Python, SQL, Spark + Airflow 등)
   - [ ] batch의 장단점: 다루기 쉽고 재실행이 쉬움 ↔ 지연(latency)
-- [ ] [6.1.2 Spark 소개](https://youtu.be/FhaqbEOuQ8U) 영상 시청
+- [x] [6.1.2 Spark 소개](https://youtu.be/FhaqbEOuQ8U) 영상 시청
   - [ ] Spark가 무엇이고 언제 쓰는지 — SQL로 표현하기 어려운 처리, data lake 위의 처리
   - [ ] Spark vs SQL 엔진(BigQuery 등)의 쓰임새 구분
 
 ## 2. 설치
 
-- [ ] [6.2.1 Spark 설치 (Linux)](https://youtu.be/hqUbB9c8sKg) 영상 시청 (선택 — 영상은 Spark 3.x 기준, 가이드는 4.x 기준)
-- [ ] Java 확인
+- [x] [6.2.1 Spark 설치 (Linux)](https://youtu.be/hqUbB9c8sKg) 영상 시청 (선택 — 영상은 Spark 3.x 기준, 가이드는 4.x 기준)
+- [x] Java 확인
   - [ ] 이 PC에는 이미 **JDK 21**이 있음 (`JAVA_HOME=C:\Program Files\Java\jdk-21.0.10`) — Spark 4.x는 Java 17/21을 지원하므로([linux.md](setup/linux.md) 기준) 그대로 써볼 수 있음
   - [ ] (WSL) WSL 안에는 따로 `sudo apt install default-jdk` 필요
-- [ ] PySpark 설치 — `uv init` → `uv add pyspark` (Spark가 번들로 함께 설치됨, 별도 다운로드 불필요)
+- [x] PySpark 설치 — `uv init` → `uv add pyspark` (Spark가 번들로 함께 설치됨, 별도 다운로드 불필요)
   - [ ] ⚠️ 이 PC의 기본 Python은 3.14 — PySpark 버전에 따라 미지원일 수 있으니, 문제가 생기면 `uv python pin 3.12`로 낮추기
-- [ ] ⚠️ 예전 Spark 3.x의 `SPARK_HOME`이 남아 있다면 삭제 (남아 있으면 PySpark 4.x가 예전 JAR를 불러와 실패)
-- [ ] `test_spark.py` 실행해서 `spark.version`과 `df.show()` 출력 확인
+- [x] ⚠️ 예전 Spark 3.x의 `SPARK_HOME`이 남아 있다면 삭제 (남아 있으면 PySpark 4.x가 예전 JAR를 불러와 실패)
+- [x] `test_spark.py` 실행해서 `spark.version`과 `df.show()` 출력 확인
   - [ ] (Windows) 방화벽 허용 팝업 → 허용
   - [ ] `jdk.incubator.vector` 경고는 무시
-- [ ] Jupyter 준비 — `uv add jupyter` 후 `uv run jupyter notebook` (강의 실습이 대부분 노트북)
+- [x] Jupyter 준비 — `uv add jupyter` 후 `uv run jupyter notebook` (강의 실습이 대부분 노트북)
 - [ ] ⚠️ Git Bash에는 `wget`이 없음 → 가이드의 `wget URL`은 `curl -LO URL`로 바꿔 실행
 - [ ] 설치가 끝내 안 되면 [Google Colab](https://medium.com/gitconnected/launch-spark-on-google-colab-and-connect-to-sparkui-342cad19b304) 대안 (단, 로컬 셋업을 먼저 시도할 것)
 
 ## 3. Spark SQL과 DataFrame
 
-- [ ] [6.3.1 Spark/PySpark 첫걸음](https://youtu.be/r_Sf6fCB40c) 영상 시청 → [04_pyspark.ipynb](code/04_pyspark.ipynb)
+- [x] [6.3.1 Spark/PySpark 첫걸음](https://youtu.be/r_Sf6fCB40c) 영상 시청 → [04_pyspark.ipynb](code/04_pyspark.ipynb)
   - [ ] `SparkSession` 만들기, CSV 읽기
   - [ ] schema 직접 지정하기 (`StructType`) — pandas로 추론하거나 `inferSchema=true`
   - [ ] `repartition()` 후 parquet으로 저장 — partition 수 = 출력 파일 수
   - [ ] **Spark UI (`localhost:4040`)** 에서 job/stage 확인
-- [ ] [6.3.2 Spark DataFrame](https://youtu.be/ti3aC1m3rE8) 영상 시청
+- [x] [6.3.2 Spark DataFrame](https://youtu.be/ti3aC1m3rE8) 영상 시청
   - [ ] **transformation(lazy) vs action(eager)** 구분 — `select`/`filter`는 실행 안 됨, `show`/`write`에서 실행
   - [ ] `select`, `filter`, `withColumn`
   - [ ] UDF 만들어 쓰기 — SQL로 표현하기 어려운 로직
-- [ ] [6.3.3 (선택) Yellow/Green 데이터 준비](https://youtu.be/CI3P4tAtru4) 영상 시청 → [05_taxi_schema.ipynb](code/05_taxi_schema.ipynb)
+- [x] [6.3.3 (선택) Yellow/Green 데이터 준비](https://youtu.be/CI3P4tAtru4) 영상 시청 → [05_taxi_schema.ipynb](code/05_taxi_schema.ipynb)
   - [ ] [download_data.sh](code/download_data.sh)로 2020·2021 yellow/green CSV 받기 (`bash download_data.sh yellow 2020` 형식)
   - [ ] ⚠️ 스크립트가 `wget`을 쓰므로 Git Bash라면 `curl -L -o ${LOCAL_PATH} ${URL}`로 수정해서 실행
   - [ ] schema 지정해 parquet으로 변환 → `data/pq/{yellow,green}/{year}/{month}/`
-- [ ] [6.3.4 Spark에서 SQL 쓰기](https://youtu.be/uAlp2VuZZPY) 영상 시청 → [06_spark_sql.ipynb](code/06_spark_sql.ipynb)
+- [x] [6.3.4 Spark에서 SQL 쓰기](https://youtu.be/uAlp2VuZZPY) 영상 시청 → [06_spark_sql.ipynb](code/06_spark_sql.ipynb)
   - [ ] green + yellow 컬럼 맞춰 union (Module 4의 `int_trips_unioned`와 같은 작업)
   - [ ] `createOrReplaceTempView` → `spark.sql()`로 쿼리 (강의 코드의 `registerTempTable`은 deprecated된 예전 API)
   - [ ] `coalesce()`로 출력 파일 수 줄이기
 
 ## 4. Spark 내부 구조
 
-- [ ] [6.4.1 Spark 클러스터의 구조](https://youtu.be/68CipcZt7ZA) 영상 시청
+- [x] [6.4.1 Spark 클러스터의 구조](https://youtu.be/68CipcZt7ZA) 영상 시청
   - [ ] driver / master / executor 역할 정리
   - [ ] 데이터 지역성(data locality)과 클라우드 스토리지(GCS/S3)를 쓰면서 달라진 점
-- [ ] [6.4.2 GroupBy](https://youtu.be/9qrDsY_2COo) 영상 시청 → [07_groupby_join.ipynb](code/07_groupby_join.ipynb)
+- [x] [6.4.2 GroupBy](https://youtu.be/9qrDsY_2COo) 영상 시청 → [07_groupby_join.ipynb](code/07_groupby_join.ipynb)
   - [ ] GroupBy가 2개 stage로 나뉘는 이유 — 파티션별 부분 집계 → **shuffle** → 최종 집계
   - [ ] Spark UI에서 stage와 shuffle 크기 확인
-- [ ] [6.4.3 Join](https://youtu.be/lu7TrqAWuH4) 영상 시청
+- [x] [6.4.3 Join](https://youtu.be/lu7TrqAWuH4) 영상 시청
   - [ ] 큰 테이블끼리 join → sort-merge join (shuffle 발생)
   - [ ] 큰 테이블 + 작은 테이블 join → **broadcast join** (shuffle 없음, zones lookup이 예시)
 
