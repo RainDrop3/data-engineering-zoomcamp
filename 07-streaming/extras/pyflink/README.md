@@ -1,17 +1,17 @@
 # Apache Flink Training
 Apache Flink Streaming Pipelines
 
-## :pushpin: Getting started 
+## :pushpin: 시작하기 
 
-### :whale: Installations
+### :whale: 설치
 
-To run this repo, the following components will need to be installed:
+이 저장소를 실행하려면 다음 구성 요소를 설치해야 합니다.
 
-1. [Docker](https://docs.docker.com/get-docker/) (required)
-2. [Docker compose](https://docs.docker.com/compose/install/#installation-scenarios) (required)
-3. Make (recommended) -- see below
-    - On most Linux distributions and macOS, `make` is typically pre-installed by default. To check if `make` is installed on your system, you can run the `make --version` command in your terminal or command prompt. If it's installed, it will display the version information. 
-    - Otherwise, you can try following the instructions below, or you can just copy+paste the commands from the `Makefile` into your terminal or command prompt and run manually.
+1. [Docker](https://docs.docker.com/get-docker/) (필수)
+2. [Docker compose](https://docs.docker.com/compose/install/#installation-scenarios) (필수)
+3. Make (권장) -- 아래를 참고하세요
+    - 대부분의 Linux 배포판과 macOS에는 `make`가 기본으로 설치되어 있습니다. 시스템에 `make`가 설치되어 있는지 확인하려면 터미널이나 명령 프롬프트에서 `make --version` 명령을 실행하세요. 설치되어 있다면 버전 정보가 표시됩니다. 
+    - 설치되어 있지 않다면 아래 안내를 따라 해 보거나, `Makefile`의 명령을 터미널이나 명령 프롬프트에 복사해 붙여넣어 직접 실행해도 됩니다.
 
         ```bash
         # On Ubuntu or Debian:
@@ -28,17 +28,17 @@ To run this repo, the following components will need to be installed:
         choco install make # uses Chocolatey, https://chocolatey.org/install
         ```
 
-### :computer: Local setup
+### :computer: 로컬 설정
 
-Make sure you're in the `pyflick` folder:
+`pyflick` 폴더에 있는지 확인하세요.
 
 ```bash
 cd 07-streaming/pyflink
 ```
 
-## :boom: Running the pipeline
+## :boom: pipeline 실행
 
-1. Build the Docker image and deploy the services in the `docker-compose.yml` file, including the PostgreSQL database and Flink cluster. This will (should) also create the sink table, `processed_events`, where Flink will write the Kafka messages to.
+1. Docker image를 빌드하고 `docker-compose.yml` 파일에 정의된 서비스(PostgreSQL 데이터베이스와 Flink cluster 포함)를 배포합니다. 이 과정에서 Flink가 Kafka 메시지를 기록할 sink 테이블 `processed_events`도 함께 생성됩니다(생성되어야 합니다).
 
     ```bash
     make up
@@ -47,15 +47,15 @@ cd 07-streaming/pyflink
     # docker compose up --build --remove-orphans  -d
     ```
 
-    **:star: Wait until the Flink UI is running at [http://localhost:8081/](http://localhost:8081/) before proceeding to the next step.** _Note the first time you build the Docker image it can take anywhere from 5 to 30 minutes. Future builds should only take a few second, assuming you haven't deleted the image since._
+    **:star: 다음 단계로 넘어가기 전에 Flink UI가 [http://localhost:8081/](http://localhost:8081/) 에서 실행될 때까지 기다리세요.** _Docker image를 처음 빌드할 때는 5분에서 30분까지 걸릴 수 있습니다. image를 삭제하지 않았다면 이후 빌드는 몇 초면 끝납니다._
 
-    :information_source: After the image is built, Docker will automatically start up the job manager and task manager services. This will take a minute or so. Check the container logs in Docker desktop and when you see the line below, you know you're good to move onto the next step.
+    :information_source: image 빌드가 끝나면 Docker가 job manager와 task manager 서비스를 자동으로 시작합니다. 1분 정도 걸립니다. Docker desktop에서 컨테이너 로그를 확인하여 아래 줄이 보이면 다음 단계로 넘어가도 됩니다.
 
     ```
     taskmanager Successful registration at resource manager akka.tcp://flink@jobmanager:6123/user/rpc/resourcemanager_* under registration id <id_number>
     ```
 
-2. Now that the Flink cluster is up and running, it's time to finally run the PyFlink job! :smile:
+2. 이제 Flink cluster가 실행 중이니 드디어 PyFlink job을 실행할 차례입니다! :smile:
 
     ```bash
     make job
@@ -64,10 +64,10 @@ cd 07-streaming/pyflink
     # docker-compose exec jobmanager ./bin/flink run -py /opt/job/start_job.py -d
     ```
 
-    After about a minute, you should see a prompt that the job's been submitted (e.g., `Job has been submitted with JobID <job_id_number>`). Now go back to the [Flink UI](http://localhost:8081/#/job/running) to see the job running! :tada:
+    약 1분 후 job이 제출되었다는 메시지(예: `Job has been submitted with JobID <job_id_number>`)가 표시됩니다. 이제 [Flink UI](http://localhost:8081/#/job/running)로 돌아가 job이 실행 중인 것을 확인하세요! :tada:
 
 
-3. When you're done, you can stop and/or clean up the Docker resources by running the commands below.
+3. 작업을 마치면 아래 명령으로 Docker 리소스를 중지하거나 정리할 수 있습니다.
 
     ```bash
     make stop # to stop running services in docker compose
@@ -75,17 +75,17 @@ cd 07-streaming/pyflink
     make clean # to remove the docker container and dangling images
     ```
 
-    :grey_exclamation: Note the `/var/lib/postgresql/data` directory inside the PostgreSQL container is mounted to the `./postgres-data` directory on your local machine. This means the data will persist across container restarts or removals, so even if you stop/remove the container, you won't lose any data written within the container.
+    :grey_exclamation: PostgreSQL 컨테이너 안의 `/var/lib/postgresql/data` 디렉터리는 로컬 머신의 `./postgres-data` 디렉터리에 마운트되어 있습니다. 즉 컨테이너를 재시작하거나 삭제해도 데이터가 유지되므로, 컨테이너를 중지하거나 삭제하더라도 컨테이너 안에 기록한 데이터를 잃지 않습니다.
 
 ------
 
-:information_source: To see all the make commands that're available and what they do, run:
+:information_source: 사용 가능한 모든 make 명령과 그 기능을 보려면 다음을 실행하세요.
 
 ```bash
 make help
 ```
 
-As of the time of writing this, the available commands are:
+이 글을 작성하던 시점에 사용 가능한 명령은 다음과 같습니다.
 
 ```bash
 

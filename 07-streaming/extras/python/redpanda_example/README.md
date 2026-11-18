@@ -1,6 +1,6 @@
-# Basic PubSub example with Redpanda
+# Redpanda를 사용한 기본 PubSub 예제
 
-The aim of this module is to have a good grasp on the foundation of these Kafka/Redpanda concepts, to be able to submit a capstone project using streaming:
+이 모듈의 목표는 streaming을 사용하는 capstone project를 제출할 수 있도록 다음 Kafka/Redpanda 개념의 기초를 충분히 이해하는 것입니다.
 - clusters
 - brokers
 - topics
@@ -12,44 +12,44 @@ The aim of this module is to have a good grasp on the foundation of these Kafka/
 - consumer-groups
 - 
 
-## 1. Pre-requisites
+## 1. 사전 준비
 
-If you have been following the [module-07](./../../../07-streaming/README.md) videos, you might already have installed the `kafka-python` library, so you can move on to [Docker](#2-docker) section.
+[module-07](./../../../07-streaming/README.md) 동영상을 따라 해 왔다면 이미 `kafka-python` 라이브러리를 설치했을 수 있으니 [Docker](#2-docker) 섹션으로 넘어가도 됩니다.
 
-If you have not, this is the only package you need to install in your virtual environment for this Redpanda lesson. 
+설치하지 않았다면, 이 Redpanda 강의를 위해 virtual environment에 설치해야 하는 패키지는 이것 하나뿐입니다. 
 
-1. activate your environment
+1. 환경을 활성화합니다
 2. `pip install kafka-python`
 
 ## 2. Docker
 
-Start a Redpanda cluster. Redpanda is a single binary image, so it is very easy to start learning kafka concepts with Redpanda.
+Redpanda cluster를 시작합니다. Redpanda는 단일 binary image이므로 Redpanda로 kafka 개념을 배우기 시작하기가 매우 쉽습니다.
 
 ```bash
 cd 07-streaming/python/redpanda_example/
 docker-compose up -d
 ```
 
-## 3. Set RPK alias
+## 3. RPK alias 설정
 
-Redpanda has a console command `rpk` which means `Redpanda keeper`, the CLI tool that ships with Redpanda and is already available in the Docker image. 
+Redpanda에는 `Redpanda keeper`를 뜻하는 콘솔 명령 `rpk`가 있습니다. 이는 Redpanda와 함께 제공되는 CLI 도구이며 Docker image에 이미 들어 있습니다. 
 
-Set the following `rpk` alias so we can use it from our terminal, without having to open a Docker interactive terminal. We can use this `rpk` alias directly in our terminal. 
+Docker 대화형 터미널을 열지 않고도 터미널에서 `rpk`를 사용할 수 있도록 다음 `rpk` alias를 설정하세요. 이 `rpk` alias는 터미널에서 바로 사용할 수 있습니다. 
 
 ```bash
 alias rpk="docker exec -ti redpanda-1 rpk"
 rpk version
 ```
 
-At this time, the verion is shown as `v23.2.26 (rev 328d83a06e)`. The important version munber is the major one `v23` following the versioning semantics `major.minor[.build[.revision]]`, to ensure that you get the same results as whatever is shared in this document.
+현재 버전은 `v23.2.26 (rev 328d83a06e)`로 표시됩니다. 이 문서에 공유된 결과와 같은 결과를 얻으려면, `major.minor[.build[.revision]]` 버전 체계에서 중요한 버전 번호는 주 버전인 `v23`입니다.
 
 > [!TIP]
-> If you're reading this after Mar, 2024 and want to update the Docker file to use the latest Redpanda images, just visit [Docker hub](https://hub.docker.com/r/vectorized/redpanda/tags), and paste the new version number.
+> 2024년 3월 이후에 이 글을 읽고 있고 Docker 파일을 최신 Redpanda image를 사용하도록 업데이트하고 싶다면, [Docker hub](https://hub.docker.com/r/vectorized/redpanda/tags)에 방문해 새 버전 번호를 붙여넣으세요.
 
 
-## 4. Kafka Producer - Consumer Examples
+## 4. Kafka Producer - Consumer 예제
 
-To run the producer-consumer examples, open 2 shell terminals in 2 side-by-side tabs and run following commands. Be sure to activate your virtual environment in each terminal.
+producer-consumer 예제를 실행하려면 나란히 있는 2개의 탭에서 shell 터미널 2개를 열고 다음 명령을 실행하세요. 각 터미널에서 virtual environment를 활성화해야 합니다.
 
 ```bash
 # Start consumer script, in 1st terminal tab
@@ -58,16 +58,16 @@ python -m consumer.py
 python -m producer.py
 ```
 
-Run the `python -m producer.py` command again (and again) to observe that the `consumer` worker tab would automatically consume messages in real-time when new `events` occur
+`python -m producer.py` 명령을 다시(그리고 계속) 실행하면, 새로운 `events`가 발생할 때 `consumer` worker 탭이 메시지를 실시간으로 자동 consume하는 것을 볼 수 있습니다.
 
 ## 5. Redpanda UI
 
-You can also see the clusters, topics, etc from the Redpanda Console UI via your browser at [http://localhost:8080](http://localhost:8080)
+브라우저에서 [http://localhost:8080](http://localhost:8080) 으로 접속하면 Redpanda Console UI에서 cluster, topic 등도 볼 수 있습니다.
 
 
-## 6. rpk commands glossary
+## 6. rpk 명령 용어집
 
-Visit [get-started-rpk blog post](https://redpanda.com/blog/get-started-rpk-manage-streaming-data-clusters) for more.
+자세한 내용은 [get-started-rpk 블로그 글](https://redpanda.com/blog/get-started-rpk-manage-streaming-data-clusters)을 참고하세요.
 
 ```bash
 # set alias for rpk
@@ -96,13 +96,13 @@ rpk group list
 rpk group describe my-group
 ```
 
-## 7. Additional Resources
+## 7. 추가 자료
 
-Redpanda Univerity (needs a Redpanda account and it is free to enrol and do the course(s))
+Redpanda University (Redpanda 계정이 필요하며, 무료로 가입해 강의를 들을 수 있습니다)
 - [RP101: Getting Started with Redpanda](https://university.redpanda.com/courses/hands-on-redpanda-getting-started)
 - [RP102: Stream Processing with Redpanda](https://university.redpanda.com/courses/take/hands-on-redpanda-stream-processing/lessons/37830192-intro)
 - [SF101: Streaming Fundamentals](https://university.redpanda.com/courses/streaming-fundamentals)
 - [SF102: Kafka building blocks](https://university.redpanda.com/courses/kafka-building-blocks)
 
-If you feel that you already have a good foundational basis on Streaming and Kafka, feel free to skip these supplementary courses.
+Streaming과 Kafka에 대한 기초가 이미 충분하다고 생각한다면 이 보충 강의는 건너뛰어도 좋습니다.
 

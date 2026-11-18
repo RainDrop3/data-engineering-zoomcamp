@@ -1,5 +1,5 @@
-## KSQL DB Examples
-### Create streams
+## KSQL DB 예제
+### stream 생성
 ```sql
 CREATE STREAM ride_streams (
     VendorId varchar, 
@@ -9,20 +9,20 @@ CREATE STREAM ride_streams (
         VALUE_FORMAT='JSON');
 ```
 
-### Query stream
+### stream 조회
 ```sql
 select * from RIDE_STREAMS 
 EMIT CHANGES;
 ```
 
-### Query stream count
+### stream count 조회
 ```sql
 SELECT VENDORID, count(*) FROM RIDE_STREAMS 
 GROUP BY VENDORID
 EMIT CHANGES;
 ```
 
-### Query stream with filters
+### 필터를 사용한 stream 조회
 ```sql
 SELECT payment_type, count(*) FROM RIDE_STREAMS 
 WHERE payment_type IN ('1', '2')
@@ -30,7 +30,7 @@ GROUP BY payment_type
 EMIT CHANGES;
 ```
 
-### Query stream with window functions
+### window 함수를 사용한 stream 조회
 ```sql
 CREATE TABLE payment_type_sessions AS
   SELECT payment_type,
@@ -41,7 +41,7 @@ CREATE TABLE payment_type_sessions AS
   EMIT CHANGES;
 ```
 
-## KSQL documentation for details
+## 자세한 내용은 KSQL 문서 참고
 [KSQL DB Documentation](https://docs.ksqldb.io/en/latest/developer-guide/ksqldb-reference/quick-reference/)
 
 [KSQL DB Java client](https://docs.ksqldb.io/en/latest/developer-guide/ksqldb-clients/java-client/)
